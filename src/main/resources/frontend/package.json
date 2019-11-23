@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-	  "start-dev": "ng serve --disable-host-check --proxy-config proxy.conf.js",
-    "build": "ng build",
+    "start-dev": "ng serve --disable-host-check --proxy-config proxy.conf.js",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
