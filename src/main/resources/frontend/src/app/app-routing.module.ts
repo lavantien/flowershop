@@ -11,7 +11,8 @@ const routes: Routes = [
 	{path: 'test', loadChildren: () => import('./test/test.module').then(m => m.TestModule)},
 	{path: 'store', loadChildren: () => import('./store/store.module').then(m => m.StoreModule)},
 	{path: 'contact', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule)},
-	{path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)}
+	{path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)},
+	{path: 'info', loadChildren: () => import('./info/info.module').then(m => m.InfoModule)}
 ];
 
 @NgModule({

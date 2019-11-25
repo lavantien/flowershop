@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
 	selector: 'app-root',
@@ -10,13 +11,17 @@ export class AppComponent implements OnInit {
 	isTest = true;
 	isLoggedIn = true;
 
-	constructor() {
+	constructor(private translate: TranslateService) {
+		translate.addLangs(['en', 'vi']);
+		translate.setDefaultLang('en');
+		const browserLang = translate.getBrowserLang();
+		translate.use(browserLang.match(/en|vi/) ? browserLang : 'en');
 	}
 
 	ngOnInit() {
 	}
 
-	reloadPage() {
+	scrollTop() {
 		window.scrollTo(0, 0);
 	}
 }

@@ -1,0 +1,13 @@
+{
+	"MAIN": {
+		"SHOP": "Shop",
+		"INFO": "Info",
+		"CONTACT": "Contact",
+		"ADMIN": "Admin",
+		"TEST": "Test",
+		"SEARCH": "Search",
+		"LOGIN": "Login",
+		"LOGOUT": "Logout",
+		"SEARCH_EVERYTHING": "Search everything..."
+	}
+}

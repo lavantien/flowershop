@@ -1,0 +1,13 @@
+{
+	"MAIN": {
+		"SHOP": "Cửa hàng",
+		"INFO": "Thông tin",
+		"CONTACT": "Liên hệ",
+		"ADMIN": "Nhân viên",
+		"TEST": "Kiểm tra",
+		"SEARCH": "Tìm kiếm",
+		"LOGIN": "Đăng nhập",
+		"LOGOUT": "Đăng xuất",
+		"SEARCH_EVERYTHING": "Tìm bất cứ thứ gì..."
+	}
+}

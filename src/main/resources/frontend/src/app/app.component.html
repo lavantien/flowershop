@@ -10,26 +10,39 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
-						<a class="nav-link" routerLink="/store" routerLinkActive="active">Store</a>
+						<a class="nav-link" routerLink="/store" routerLinkActive="active">{{'MAIN.SHOP' | translate}}</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" routerLink="/contact" routerLinkActive="active">Contact</a>
+						<a [tabindex]="isLoggedIn ? null : -1" class="nav-link {{isLoggedIn ? '' : 'disabled'}}" routerLink="/info"
+						   routerLinkActive="active">{{'MAIN.INFO' | translate}}</a>
 					</li>
 					<li class="nav-item">
 						<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/admin"
-						   routerLinkActive="active">Admin</a>
+						   routerLinkActive="active">{{'MAIN.ADMIN' | translate}}</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" routerLink="/contact" routerLinkActive="active">{{'MAIN.CONTACT' | translate}}</a>
 					</li>
 					<li *ngIf="isTest" class="nav-item">
-						<a class="nav-link" routerLink="/test" routerLinkActive="active">Test</a>
+						<a class="nav-link" routerLink="/test" routerLinkActive="active">{{'MAIN.TEST' | translate}}</a>
 					</li>
 				</ul>
-				<button *ngIf="!isLoggedIn" class="btn btn-outline-success my-2 my-sm-0">Login</button>
-				<button *ngIf="isLoggedIn" class="btn btn-outline-success my-2 my-sm-0">Logout</button>
+				<form class="form-inline my-2">
+					<input aria-label="Search" class="form-control" placeholder="{{'MAIN.SEARCH_EVERYTHING' | translate}}"
+					       type="search">
+					<button class="btn btn-outline-success" type="submit">{{'MAIN.SEARCH' | translate}}</button>
+					<button *ngIf="!isLoggedIn" class="btn btn-outline-primary">{{'MAIN.LOGIN' | translate}}</button>
+					<button *ngIf="isLoggedIn" class="btn btn-outline-danger">{{'MAIN.LOGOUT' | translate}}</button>
+					<select #langSelect (change)="translate.use(langSelect.value)" aria-label="Lang">
+						<option *ngFor="let lang of translate.getLangs()" [selected]="lang === translate.currentLang"
+						        [value]="lang">{{ lang }}</option>
+					</select>
+				</form>
 			</div>
 		</nav>
 	</div>
 	<div class="wrapper-router">
 		<router-outlet></router-outlet>
 	</div>
-	<button (click)="reloadPage()" class="btn btn-outline-info fixed-bottom">↑</button>
+	<button (click)="scrollTop()" class="btn btn-outline-info fixed-bottom">↑</button>
 </div>
