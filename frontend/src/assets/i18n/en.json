@@ -1,13 +1,17 @@
 {
 	"MAIN": {
-		"SHOP": "Shop",
-		"INFO": "Info",
-		"CONTACT": "Contact",
-		"ADMIN": "Admin",
-		"TEST": "Test",
-		"SEARCH": "Search",
-		"LOGIN": "Login",
-		"LOGOUT": "Logout",
+		"FLOWER_SHOP": "Flower Shop",
 		"SEARCH_EVERYTHING": "Search everything..."
+	},
+	"ADMIN": {
+		"NAME": "Name",
+		"DESCRIPTION": "Description",
+		"PRICE": "Price",
+		"IMAGE": "Image",
+		"QUANTITY": "Quantity",
+		"SALE_AMOUNT": "Sale amount",
+		"TYPE": "Type",
+		"CATEGORY": "Category",
+		"ACTION": "Action"
 	}
 }

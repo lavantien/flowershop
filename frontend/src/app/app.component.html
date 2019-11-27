@@ -1,7 +1,10 @@
 <div class="wrapper-main">
 	<div class="wrapper-navbar">
-		<nav class="navbar navbar-expand-sm navbar-light bg-light">
-			<a class="navbar-brand" routerLink=""><img alt="Bình Yên" height="30" src="../assets/images/brand.png"/></a>
+		<nav class="navbar navbar-expand navbar-light bg-light">
+			<a class="navbar-brand" routerLink="">
+				<img alt="Bình Yên Shop" height="30" src="../assets/images/brand.png"/>
+				<span class="rainbow-text">&nbsp;&nbsp;{{'MAIN.FLOWER_SHOP' | translate}}</span>
+			</a>
 			<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
 			        class="navbar-toggler"
 			        data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
@@ -10,39 +13,56 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
-						<a class="nav-link" routerLink="/store" routerLinkActive="active">{{'MAIN.SHOP' | translate}}</a>
+						<a class="nav-link" routerLink="/shop" routerLinkActive="active">
+							<fa-icon [icon]="faStore"></fa-icon>
+						</a>
 					</li>
 					<li class="nav-item">
 						<a [tabindex]="isLoggedIn ? null : -1" class="nav-link {{isLoggedIn ? '' : 'disabled'}}" routerLink="/info"
-						   routerLinkActive="active">{{'MAIN.INFO' | translate}}</a>
+						   routerLinkActive="active">
+							<fa-icon [icon]="faUser"></fa-icon>
+						</a>
 					</li>
 					<li class="nav-item">
 						<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/admin"
-						   routerLinkActive="active">{{'MAIN.ADMIN' | translate}}</a>
+						   routerLinkActive="active">
+							<fa-icon [icon]="faWarehouse"></fa-icon>
+						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" routerLink="/contact" routerLinkActive="active">{{'MAIN.CONTACT' | translate}}</a>
+						<a class="nav-link" routerLink="/contact" routerLinkActive="active">
+							<fa-icon [icon]="faHandshake"></fa-icon>
+						</a>
 					</li>
 					<li *ngIf="isTest" class="nav-item">
-						<a class="nav-link" routerLink="/test" routerLinkActive="active">{{'MAIN.TEST' | translate}}</a>
+						<a class="nav-link" routerLink="/test" routerLinkActive="active">
+							<fa-icon [icon]="faCubes"></fa-icon>
+						</a>
 					</li>
 				</ul>
-				<form class="form-inline my-2">
-					<input aria-label="Search" class="form-control" placeholder="{{'MAIN.SEARCH_EVERYTHING' | translate}}"
-					       type="search">
-					<button class="btn btn-outline-success" type="submit">{{'MAIN.SEARCH' | translate}}</button>
-					<button *ngIf="!isLoggedIn" class="btn btn-outline-primary">{{'MAIN.LOGIN' | translate}}</button>
-					<button *ngIf="isLoggedIn" class="btn btn-outline-danger">{{'MAIN.LOGOUT' | translate}}</button>
-					<select #langSelect (change)="translate.use(langSelect.value)" aria-label="Lang">
-						<option *ngFor="let lang of translate.getLangs()" [selected]="lang === translate.currentLang"
-						        [value]="lang">{{ lang }}</option>
-					</select>
-				</form>
+				<!--				<form class="form-inline my-2">-->
+				<!--					<input aria-label="Search" class="form-control" placeholder="{{'MAIN.SEARCH_EVERYTHING' | translate}}"-->
+				<!--					       type="search">-->
+				<!--					<button class="btn btn-outline-success" type="submit"><fa-icon [icon]="faSearch"></fa-icon></button>-->
+				<!--				</form>-->
+				<select #langSelect (change)="translate.use(langSelect.value)" aria-label="Lang"
+				        class="btn btn-outline-primary btn-lang">
+					<option *ngFor="let lang of translate.getLangs()" [selected]="lang === translate.currentLang"
+					        [value]="lang">{{ lang }}</option>
+				</select>
+				<button *ngIf="!isLoggedIn" class="btn btn-outline-primary">
+					<fa-icon [icon]="faSignInAlt"></fa-icon>
+				</button>
+				<button *ngIf="isLoggedIn" class="btn btn-outline-danger">
+					<fa-icon [icon]="faSignOutAlt"></fa-icon>
+				</button>
 			</div>
 		</nav>
 	</div>
 	<div class="wrapper-router">
 		<router-outlet></router-outlet>
 	</div>
-	<button (click)="scrollTop()" class="btn btn-outline-info fixed-bottom">↑</button>
+	<button (click)="scrollTop()" class="btn btn-outline-primary fixed-bottom btn-scroll-top">
+		<fa-icon [icon]="faArrowUp"></fa-icon>
+	</button>
 </div>

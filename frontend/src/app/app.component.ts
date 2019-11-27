@@ -1,5 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
+import {
+	faArrowUp,
+	faCubes,
+	faHandshake,
+	faSearch,
+	faSignInAlt,
+	faSignOutAlt,
+	faStore,
+	faUser,
+	faWarehouse
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'app-root',
@@ -10,6 +21,15 @@ export class AppComponent implements OnInit {
 	isAdmin = true;
 	isTest = true;
 	isLoggedIn = true;
+	faArrowUp = faArrowUp;
+	faStore = faStore;
+	faUser = faUser;
+	faWarehouse = faWarehouse;
+	faHandshake = faHandshake;
+	faCubes = faCubes;
+	faSearch = faSearch;
+	faSignInAlt = faSignInAlt;
+	faSignOutAlt = faSignOutAlt;
 
 	constructor(public translate: TranslateService) {
 		translate.addLangs(['en', 'vi']);

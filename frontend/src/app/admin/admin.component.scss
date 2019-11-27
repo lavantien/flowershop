@@ -1,6 +1,26 @@
 .admin-wrapper {
 	margin: 10px;
 
+	.wrapper-filter {
+		width: 1324px;
+		@media only screen and (min-width: 1920px) {
+			width: 1875px;
+		}
+
+		.product-filter {
+			margin-bottom: 10px;
+
+			.form-group {
+				margin-bottom: 0;
+				height: 43px;
+
+				.btn-create {
+					margin-left: 10px;
+				}
+			}
+		}
+	}
+
 	table {
 		th, td {
 			text-align: center;
@@ -13,45 +33,41 @@
 	}
 
 	.product-img {
-		max-height: 100px;
-	}
-
-	.product-filter {
-		margin: 5px;
-
-		.form-group {
-			margin-bottom: 0;
-			height: 43px;
-		}
+		max-height: 50px;
 	}
 
 	.table-product {
+		width: 1329px;
+		@media only screen and (min-width: 1920px) {
+			width: 1880px;
+		}
+
 		.col-index {
 			width: 5%;
 		}
 
 		.col-name {
-			width: 10%;
+			width: 12%;
 		}
 
 		.col-description {
-			width: 25%;
+			width: 20%;
 		}
 
 		.col-price {
-			width: 10%;
+			width: 8%;
 		}
 
 		.col-image {
-			width: 10%;
+			width: 6%;
 		}
 
 		.col-quantity {
-			width: 5%;
+			width: 8%;
 		}
 
 		.col-sale-amount {
-			width: 5%;
+			width: 9%;
 		}
 
 		.col-type {
@@ -59,11 +75,11 @@
 		}
 
 		.col-category {
-			width: 10%;
+			width: 7%;
 		}
 
 		.col-actions {
-			width: 10%;
+			width: 15%;
 		}
 	}
 }

@@ -1,6 +1,8 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {faPen, faPlusSquare, faSearch, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
 	selector: 'app-admin',
@@ -8,16 +10,17 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 	styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-
 	modalRef: BsModalRef;
 	data: Product[] = [];
 	products: Product[] = [];
+	productsDescription: string[] = [];
 	categories: Category[] = [];
 	types: Type[] = [];
 	pagination = {
 		totalItem: 0,
-		itemPerPage: 4,
-		currentPage: 1
+		itemPerPage: 10,
+		currentPage: 1,
+		maxSize: 8
 	};
 	createForm = {
 		name: '',
@@ -45,8 +48,12 @@ export class AdminComponent implements OnInit {
 		typeName: ''
 	};
 	currentId = 0;
+	faSearch = faSearch;
+	faPlusSquare = faPlusSquare;
+	faPen = faPen;
+	faTrash = faTrash;
 
-	constructor(private http: HttpClient, private modalService: BsModalService) {
+	constructor(private http: HttpClient, private modalService: BsModalService, public translate: TranslateService) {
 	}
 
 	ngOnInit() {
@@ -60,10 +67,10 @@ export class AdminComponent implements OnInit {
 			this.data = data;
 			this.data.forEach(product => {
 				product.imgUrl = product.imgUrl ? atob(product.imgUrl) : '';
+				this.productsDescription.push(product.description.substr(0, 60) + (product.description.length > 60 ? '...' : ''));
 			});
-			this.pagination.totalItem = data.length;
-			this.products = this.data.slice((this.pagination.currentPage - 1) * this.pagination.itemPerPage,
-				this.pagination.currentPage * this.pagination.itemPerPage);
+			this.pagination.totalItem = this.data.length;
+			this.repaging(data);
 		});
 	}
 
@@ -85,6 +92,28 @@ export class AdminComponent implements OnInit {
 				this.searchForm.typeName = this.types[0].name;
 			}
 		});
+	}
+
+	repaging(data: Product[]) {
+		this.products = data.slice((this.pagination.currentPage - 1) * this.pagination.itemPerPage,
+			this.pagination.currentPage * this.pagination.itemPerPage);
+	}
+
+	onSearch() {
+		let searchResults: Product[] = [];
+		this.productsDescription.length = 0;
+		this.data.forEach(product => {
+			if (this.searchForm.name === '' && this.searchForm.typeName === product.typeName && this.searchForm.categoryName === product.categoryName) {
+				searchResults.push(product);
+				this.productsDescription.push(product.description.substr(0, 60) + (product.description.length > 60 ? '...' : ''));
+			} else if (this.searchForm.name !== '' && product.name.includes(this.searchForm.name)) {
+				searchResults.push(product);
+				this.productsDescription.push(product.description.substr(0, 60) + (product.description.length > 60 ? '...' : ''));
+			}
+		});
+		this.pagination.totalItem = searchResults.length;
+		this.repaging(searchResults);
+		this.searchForm.name = '';
 	}
 
 	onCreate() {
@@ -112,11 +141,6 @@ export class AdminComponent implements OnInit {
 			this.getProducts();
 			alert('Deleted!');
 		});
-	}
-
-	onSearch() {
-		// TODO: implement onSearch
-		alert(this.searchForm);
 	}
 
 	onRefreshCreateForm() {
@@ -162,7 +186,6 @@ export class AdminComponent implements OnInit {
 	trackByFn(index, item) {
 		return index;
 	}
-
 }
 
 interface Product {

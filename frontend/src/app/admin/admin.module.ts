@@ -3,8 +3,7 @@ import {CommonModule} from '@angular/common';
 
 import {AdminRoutingModule} from './admin-routing.module';
 import {AdminComponent} from './admin.component';
-import {FormsModule} from "@angular/forms";
-import {ModalModule, PaginationModule} from "ngx-bootstrap";
+import {SharedModule} from "../shared.module";
 
 
 @NgModule({
@@ -12,9 +11,7 @@ import {ModalModule, PaginationModule} from "ngx-bootstrap";
 	imports: [
 		CommonModule,
 		AdminRoutingModule,
-		FormsModule,
-		ModalModule.forRoot(),
-		PaginationModule.forRoot()
+		SharedModule
 	]
 })
 export class AdminModule {

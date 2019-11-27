@@ -1,13 +1,17 @@
 {
 	"MAIN": {
-		"SHOP": "Cửa hàng",
-		"INFO": "Thông tin",
-		"CONTACT": "Liên hệ",
-		"ADMIN": "Nhân viên",
-		"TEST": "Kiểm tra",
-		"SEARCH": "Tìm kiếm",
-		"LOGIN": "Đăng nhập",
-		"LOGOUT": "Đăng xuất",
+		"FLOWER_SHOP": "Cửa hàng Hoa",
 		"SEARCH_EVERYTHING": "Tìm bất cứ thứ gì..."
+	},
+	"ADMIN": {
+		"NAME": "Tên",
+		"DESCRIPTION": "Mô tả",
+		"PRICE": "Giá",
+		"IMAGE": "Ảnh",
+		"QUANTITY": "Tồn kho",
+		"SALE_AMOUNT": "Đã bán",
+		"TYPE": "Dạng",
+		"CATEGORY": "Loại",
+		"ACTION": "Hành động"
 	}
 }

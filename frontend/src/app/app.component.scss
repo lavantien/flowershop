@@ -1,4 +1,21 @@
 .wrapper-main {
+	.wrapper-navbar {
+		nav {
+			padding: 0 1rem;
+
+			a {
+				.rainbow-text {
+					background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+					-webkit-background-clip: text;
+				}
+			}
+
+			.btn-lang {
+				margin-right: 15px;
+			}
+		}
+	}
+
 	.wrapper-router {
 		padding: 10px;
 	}
