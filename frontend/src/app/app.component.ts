@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 	isTest = true;
 	isLoggedIn = true;
 
-	constructor(private translate: TranslateService) {
+	constructor(public translate: TranslateService) {
 		translate.addLangs(['en', 'vi']);
 		translate.setDefaultLang('en');
 		const browserLang = translate.getBrowserLang();

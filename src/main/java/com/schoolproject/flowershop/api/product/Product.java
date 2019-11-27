@@ -10,7 +10,7 @@ import javax.persistence.Id;
 @Entity
 public class Product {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	@Length(max = 2000)
@@ -19,20 +19,22 @@ public class Product {
 	private String imgUrl;
 	private Double price;
 	private Long quantity;
-	private Long saleAmount;
-	private Long categoryId;
+	private Long saleAmount = 0L;
+	private String typeName;
+	private String categoryName;
 
 	public Product() {
 	}
 
-	public Product(String name, @Length(max = 2000) String description, @Length(max = 2000) String imgUrl, Double price, Long quantity, Long saleAmount, Long categoryId) {
+	public Product(String name, @Length(max = 2000) String description, @Length(max = 2000) String imgUrl, Double price, Long quantity, Long saleAmount, String typeName, String categoryName) {
 		this.name = name;
 		this.description = description;
 		this.imgUrl = imgUrl;
 		this.price = price;
 		this.quantity = quantity;
 		this.saleAmount = saleAmount;
-		this.categoryId = categoryId;
+		this.typeName = typeName;
+		this.categoryName = categoryName;
 	}
 
 	@Override
@@ -45,7 +47,8 @@ public class Product {
 			", price=" + price +
 			", quantity=" + quantity +
 			", saleAmount=" + saleAmount +
-			", categoryId=" + categoryId +
+			", typeName='" + typeName + '\'' +
+			", categoryName='" + categoryName + '\'' +
 			'}';
 	}
 
@@ -105,11 +108,19 @@ public class Product {
 		this.saleAmount = saleAmount;
 	}
 
-	public Long getCategoryId() {
-		return categoryId;
+	public String getTypeName() {
+		return typeName;
 	}
 
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 }

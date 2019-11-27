@@ -66,8 +66,8 @@
 				<configuration>
 					<nodeVersion>v13.2.0</nodeVersion>
 					<npmVersion>6.13.1</npmVersion>
-					<installDirectory>src/main/resources/frontend</installDirectory>
-					<workingDirectory>src/main/resources/frontend</workingDirectory>
+					<installDirectory>frontend</installDirectory>
+					<workingDirectory>frontend</workingDirectory>
 				</configuration>
 				<executions>
 					<execution>

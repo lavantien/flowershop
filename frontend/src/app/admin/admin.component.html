@@ -1,0 +1,215 @@
+<div class="admin-wrapper">
+	<div>
+		<div class="product-filter form-row">
+			<div class="form-group col-md-2">
+				<input [(ngModel)]="searchForm.name" class="form-control" placeholder="Product Name" type="text">
+			</div>
+			<div class="form-group col-md-2">
+				<select [(ngModel)]="searchForm.categoryName" class="form-control">
+					<option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
+				</select>
+			</div>
+			<div class="form-group col-md-2">
+				<select [(ngModel)]="searchForm.typeName" class="form-control">
+					<ng-container *ngFor="let type of types">
+						<option *ngIf="type.categoryName === searchForm.categoryName"
+						        [value]="type.name">{{type.name}}</option>
+					</ng-container>
+				</select>
+			</div>
+			<div class="form-group col-md-1">
+				<button (click)="onSearch()" class="btn btn-primary">Search</button>
+			</div>
+			<div class="form-group col-md-1">
+				<button (click)="openCreateModal(createTemplate)" class="btn btn-primary">Create</button>
+			</div>
+			<div class="form-group col-md-4">
+				<pagination (pageChanged)="onPageChanged($event)"
+				            [(ngModel)]="pagination.currentPage"
+				            [boundaryLinks]="true"
+				            [itemsPerPage]="pagination.itemPerPage"
+				            [maxSize]="5"
+				            [totalItems]="pagination.totalItem"
+				            firstText="&laquo;" lastText="&raquo;" nextText="&rsaquo;" previousText="&lsaquo;">
+				</pagination>
+			</div>
+		</div>
+	</div>
+	<table class="table table-striped table-hover table-sm table-responsive table-product">
+		<thead>
+		<tr>
+			<th class="col-index" scope="col">#</th>
+			<th class="col-name" scope="col">Name</th>
+			<th class="col-description" scope="col">Description</th>
+			<th class="col-price" scope="col">Price</th>
+			<th class="col-image" scope="col">Image</th>
+			<th class="col-quantity" scope="col">Quantity</th>
+			<th class="col-sale-amount" scope="col">Sale Amount</th>
+			<th class="col-type" scope="col">Type</th>
+			<th class="col-category" scope="col">Category</th>
+			<th class="col-actions" scope="col">Actions</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr *ngFor="let product of products; trackBy: trackByFn">
+			<th scope="row">{{product.id}}</th>
+			<td>{{product.name}}</td>
+			<td>{{product.description}}</td>
+			<td>{{product.price}}</td>
+			<td>
+				<img [alt]="product.name" [src]="product.imgUrl" class="product-img">
+			</td>
+			<td>{{product.quantity}}</td>
+			<td>{{product.saleAmount}}</td>
+			<td>{{product.typeName}}</td>
+			<td>{{product.categoryName}}</td>
+			<td>
+				<button (click)="openEditModal(editTemplate, product.id)" class="btn btn-info btn-edit">Edit</button>
+				<button (click)="onDelete(product.id)" class="btn btn-warning btn-edit">Delete</button>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+<ng-template #createTemplate>
+	<div class="modal-header">
+		<h4 class="modal-title pull-left">Create new product</h4>
+		<button (click)="modalRef.hide()" aria-label="Close" class="close pull-right">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputName"><b>Name</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="createForm.name" class="form-control" id="inputName" type="text">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputDescription"><b>Description</b></label>
+			<div class="col-sm-9">
+				<textarea [(ngModel)]="createForm.description" class="form-control" id="inputDescription"
+				          rows="3"></textarea>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputPrice"><b>Price</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="createForm.price" class="form-control" id="inputPrice" type="text">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputImage"><b>Image URL</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="createForm.imgUrl" class="form-control" id="inputImage" type="text">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputQuantity"><b>Quantity</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="createForm.quantity" class="form-control" id="inputQuantity" type="number">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputSaleAmount"><b>Sale Amount</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="createForm.saleAmount" class="form-control" id="inputSaleAmount" type="number">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputCategory"><b>Category</b></label>
+			<div class="col-sm-9">
+				<select [(ngModel)]="createForm.categoryName" class="form-control" id="inputCategory">
+					<option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputType"><b>Type</b></label>
+			<div class="col-sm-9">
+				<select [(ngModel)]="createForm.typeName" class="form-control" id="inputType">
+					<ng-container *ngFor="let type of types">
+						<option *ngIf="type.categoryName === createForm.categoryName"
+						        [value]="type.name">{{type.name}}</option>
+					</ng-container>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button (click)="onCreate()" class="btn btn-success pull-right">Save</button>
+		<button (click)="onRefreshCreateForm()" class="btn btn-secondary pull-right">Refresh</button>
+	</div>
+</ng-template>
+
+<ng-template #editTemplate>
+	<div class="modal-header">
+		<h4 class="modal-title pull-left">Edit this product</h4>
+		<button (click)="modalRef.hide()" aria-label="Close" class="close pull-right">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputNameE"><b>Name</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="editForm.name" class="form-control" id="inputNameE" type="text">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputDescriptionE"><b>Description</b></label>
+			<div class="col-sm-9">
+				<textarea [(ngModel)]="editForm.description" class="form-control" id="inputDescriptionE"
+				          rows="3"></textarea>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputPriceE"><b>Price</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="editForm.price" class="form-control" id="inputPriceE" type="text">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputImageE"><b>Image URL</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="editForm.imgUrl" class="form-control" id="inputImageE" type="text">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputQuantityE"><b>Quantity</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="editForm.quantity" class="form-control" id="inputQuantityE" type="number">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputSaleAmountE"><b>Sale Amount</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="editForm.saleAmount" class="form-control" id="inputSaleAmountE" type="number">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputCategoryE"><b>Category</b></label>
+			<div class="col-sm-9">
+				<select [(ngModel)]="editForm.categoryName" class="form-control" id="inputCategoryE">
+					<option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputTypeE"><b>Type</b></label>
+			<div class="col-sm-9">
+				<select [(ngModel)]="editForm.typeName" class="form-control" id="inputTypeE">
+					<ng-container *ngFor="let type of types">
+						<option *ngIf="type.categoryName === editForm.categoryName"
+						        [value]="type.name">{{type.name}}</option>
+					</ng-container>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button (click)="onEdit()" class="btn btn-success pull-right">Save</button>
+		<button (click)="onRefreshEditForm()" class="btn btn-secondary pull-right">Refresh</button>
+	</div>
+</ng-template>

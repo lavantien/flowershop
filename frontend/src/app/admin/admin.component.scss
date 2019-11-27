@@ -1,0 +1,69 @@
+.admin-wrapper {
+	margin: 10px;
+
+	table {
+		th, td {
+			text-align: center;
+			vertical-align: middle;
+		}
+
+		.btn-edit {
+			margin: 5px;
+		}
+	}
+
+	.product-img {
+		max-height: 100px;
+	}
+
+	.product-filter {
+		margin: 5px;
+
+		.form-group {
+			margin-bottom: 0;
+			height: 43px;
+		}
+	}
+
+	.table-product {
+		.col-index {
+			width: 5%;
+		}
+
+		.col-name {
+			width: 10%;
+		}
+
+		.col-description {
+			width: 25%;
+		}
+
+		.col-price {
+			width: 10%;
+		}
+
+		.col-image {
+			width: 10%;
+		}
+
+		.col-quantity {
+			width: 5%;
+		}
+
+		.col-sale-amount {
+			width: 5%;
+		}
+
+		.col-type {
+			width: 10%;
+		}
+
+		.col-category {
+			width: 10%;
+		}
+
+		.col-actions {
+			width: 10%;
+		}
+	}
+}

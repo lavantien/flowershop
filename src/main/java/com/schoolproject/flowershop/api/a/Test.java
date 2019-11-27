@@ -11,7 +11,7 @@ import java.util.Date;
 @Entity
 public class Test {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	@Length(max = 2000)
