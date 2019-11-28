@@ -46,7 +46,7 @@
 		"SAVE": "Lưu",
 		"REFRESH": "Làm mới",
 		"SEARCH_ADVANCED": "Tìm kiếm: tìm theo mỗi Tên sản phẩm hoặc tìm theo Loại và Dạng",
-		"PRODUCT_NAME": "Tên sản phẩm",
+		"PRODUCT_NAME": "Tên hoặc một khoảng trống",
 		"DELETE_PRODUCT": "Xóa sản phẩm này"
 	}
 }

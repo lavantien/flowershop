@@ -14,15 +14,15 @@ import {SharedService} from "../_services/shared.service";
 export class AdminComponent implements OnInit {
 	modalRef: BsModalRef;
 	data: Product[] = [];
-	products: Product[] = [];
-	productsDescription: string[] = [];
+	displayProducts: Product[] = [];
+	productsOriginalDescription: string[] = [];
 	categories: Category[] = [];
 	types: Type[] = [];
 	pagination = {
 		totalItem: 0,
 		itemPerPage: 20,
 		currentPage: 1,
-		maxSize: 8
+		maxSize: 7
 	};
 	createForm = {
 		name: '',
@@ -45,11 +45,13 @@ export class AdminComponent implements OnInit {
 		typeName: ''
 	};
 	searchForm = {
-		name: '',
+		name: ' ',
 		categoryName: '',
 		typeName: ''
 	};
+	searchResults: Product[] = [];
 	currentId = 0;
+	editIndex = 0;
 	faSearch = faSearch;
 	faPlusSquare = faPlusSquare;
 	faPen = faPen;
@@ -81,12 +83,14 @@ export class AdminComponent implements OnInit {
 	getProducts() {
 		this.http.get<Product[]>('api/product').subscribe(data => {
 			this.data = data;
+			this.productsOriginalDescription.length = 0;
 			this.data.forEach(product => {
 				product.imgUrl = product.imgUrl ? atob(product.imgUrl) : '';
-				this.productsDescription.push(product.description.substr(0, 60) + (product.description.length > 60 ? '...' : ''));
+				this.productsOriginalDescription.push(product.description);
+				product.description = product.description.substr(0, 60) + (product.description.length > 60 ? '...' : '');
 			});
-			this.pagination.totalItem = this.data.length;
-			this.repaging(data);
+			this.searchResults = data;
+			this.paging(this.searchResults);
 		});
 	}
 
@@ -110,27 +114,23 @@ export class AdminComponent implements OnInit {
 		});
 	}
 
-	repaging(data: Product[]) {
-		this.products = data.slice((this.pagination.currentPage - 1) * this.pagination.itemPerPage,
+	paging(data: Product[]) {
+		this.pagination.totalItem = data.length;
+		this.displayProducts = data.slice((this.pagination.currentPage - 1) * this.pagination.itemPerPage,
 			this.pagination.currentPage * this.pagination.itemPerPage);
 	}
 
 	onSearch() {
-		// TODO: use variable data for display instead of each invidual variable.
 		let searchResults: Product[] = [];
-		this.productsDescription.length = 0;
 		this.data.forEach(product => {
 			if (this.searchForm.name === '' && this.searchForm.typeName === product.typeName && this.searchForm.categoryName === product.categoryName) {
 				searchResults.push(product);
-				this.productsDescription.push(product.description.substr(0, 60) + (product.description.length > 60 ? '...' : ''));
 			} else if (this.searchForm.name !== '' && product.name.toLowerCase().includes(this.searchForm.name.toLowerCase())) {
 				searchResults.push(product);
-				this.productsDescription.push(product.description.substr(0, 60) + (product.description.length > 60 ? '...' : ''));
 			}
 		});
-		this.pagination.totalItem = searchResults.length;
-		this.repaging(searchResults);
-		this.searchForm.name = '';
+		this.paging(searchResults);
+		this.searchResults = searchResults;
 	}
 
 	onCreate() {
@@ -187,7 +187,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	onPageChanged(event: any) { // 1: 0 1 2 3   2: 4 5 6 7   3: 8 9 10 11
-		this.products = this.data.slice((event.page - 1) * event.itemsPerPage, event.page * event.itemsPerPage);
+		this.displayProducts = this.data.slice((event.page - 1) * event.itemsPerPage, event.page * event.itemsPerPage);
 	}
 
 	openCreateModal(template: TemplateRef<any>) {
@@ -197,7 +197,28 @@ export class AdminComponent implements OnInit {
 	openEditModal(template: TemplateRef<any>, currentId: number) {
 		this.modalRef = this.modalService.show(template);
 		this.currentId = currentId;
-		this.editForm = this.products.find(x => x.id === this.currentId);
+		this.editForm = JSON.parse(JSON.stringify(this.data.find(x => x.id === this.currentId)));
+		this.editIndex = this.data.findIndex(x => x.id === this.currentId);
+		this.editForm.description = this.productsOriginalDescription[this.editIndex];
+	}
+
+	onCloseEdit() {
+		this.editForm.description = this.data[this.editIndex].description;
+	}
+
+	onChangeCategory(mode: string) {
+		if (mode === 'search') {
+			this.searchForm.name = '';
+			this.searchForm.typeName = this.types[this.types.findIndex(x => x.categoryName === this.searchForm.categoryName)].name;
+		} else if (mode === 'create') {
+			this.createForm.typeName = this.types[this.types.findIndex(x => x.categoryName === this.createForm.categoryName)].name;
+		} else if (mode === 'edit') {
+			this.editForm.typeName = this.types[this.types.findIndex(x => x.categoryName === this.editForm.categoryName)].name;
+		}
+	}
+
+	onChangeTypeSearch() {
+		this.searchForm.name = '';
 	}
 
 	trackByFn(index, item) {

@@ -7,12 +7,12 @@
 				       type="text">
 			</div>
 			<div class="form-group col-2">
-				<select [(ngModel)]="searchForm.categoryName" class="form-control">
+				<select (change)="onChangeCategory('search'); onSearch()" [(ngModel)]="searchForm.categoryName" class="form-control">
 					<option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
 				</select>
 			</div>
 			<div class="form-group col-2">
-				<select (change)="onSearch()" [(ngModel)]="searchForm.typeName" class="form-control">
+				<select (change)="onChangeTypeSearch(); onSearch()" [(ngModel)]="searchForm.typeName" class="form-control">
 					<ng-container *ngFor="let type of types">
 						<option *ngIf="type.categoryName === searchForm.categoryName"
 						        [value]="type.name">{{type.name}}</option>
@@ -39,9 +39,9 @@
 				</pagination>
 			</div>
 			<div class="form-group col-1">
-				<select (change)="repaging(data)" [(ngModel)]="pagination.itemPerPage"
+				<select (change)="paging(searchResults)" [(ngModel)]="pagination.itemPerPage"
 				        class="btn btn-outline-primary float-right">
-					<option *ngFor="let val of [5, 10, 20, 50, 100, 200, 500]; let i = index" [selected]="i === 0"
+					<option *ngFor="let val of [5, 10, 20, 50, 100, 200, 500, 1000]; let i = index" [selected]="i === 0"
 					        [value]="val">{{val}}</option>
 				</select>
 			</div>
@@ -63,10 +63,10 @@
 		</tr>
 		</thead>
 		<tbody>
-		<tr *ngFor="let product of products; let i = index; trackBy: trackByFn">
+		<tr *ngFor="let product of displayProducts; trackBy: trackByFn;">
 			<th scope="row">{{product.id}}</th>
 			<td>{{product.name}}</td>
-			<td>{{productsDescription[i]}}</td>
+			<td>{{product.description}}</td>
 			<td>{{product.price.toLocaleString(locale)}}</td>
 			<td>
 				<img [alt]="product.name" [src]="product.imgUrl" class="product-img">
@@ -136,7 +136,7 @@
 		<div class="form-group row">
 			<label class="col-sm-3 col-form-label" for="inputCategory"><b>{{'ADMIN.CATEGORY' | translate}}</b></label>
 			<div class="col-sm-9">
-				<select [(ngModel)]="createForm.categoryName" class="form-control" id="inputCategory">
+				<select (change)="onChangeCategory('craete')" [(ngModel)]="createForm.categoryName" class="form-control" id="inputCategory">
 					<option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
 				</select>
 			</div>
@@ -162,7 +162,7 @@
 <ng-template #editTemplate>
 	<div class="modal-header">
 		<h4 class="modal-title pull-left">{{'ADMIN.EDIT_PRODUCT' | translate}}</h4>
-		<button (click)="modalRef.hide()" aria-label="Close" class="close pull-right">
+		<button (click)="modalRef.hide(); onCloseEdit();" aria-label="Close" class="close pull-right">
 			<span aria-hidden="true">&times;</span>
 		</button>
 	</div>
@@ -207,7 +207,7 @@
 		<div class="form-group row">
 			<label class="col-sm-3 col-form-label" for="inputCategoryE"><b>{{'ADMIN.CATEGORY' | translate}}</b></label>
 			<div class="col-sm-9">
-				<select [(ngModel)]="editForm.categoryName" class="form-control" id="inputCategoryE">
+				<select (change)="onChangeCategory('edit')" [(ngModel)]="editForm.categoryName" class="form-control" id="inputCategoryE">
 					<option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
 				</select>
 			</div>

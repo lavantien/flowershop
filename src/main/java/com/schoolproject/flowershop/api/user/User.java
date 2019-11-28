@@ -18,11 +18,12 @@ public class User {
 	private String district;
 	private String city;
 	private String type;
+	private Boolean enable = true;
 
 	public User() {
 	}
 
-	public User(String name, String password, String email, String phone, String address, String district, String city, String type) {
+	public User(String name, String password, String email, String phone, String address, String district, String city, String type, Boolean enable) {
 		this.name = name;
 		this.password = password;
 		this.email = email;
@@ -31,6 +32,7 @@ public class User {
 		this.district = district;
 		this.city = city;
 		this.type = type;
+		this.enable = enable;
 	}
 
 	@Override
@@ -45,6 +47,7 @@ public class User {
 			", district='" + district + '\'' +
 			", city='" + city + '\'' +
 			", type='" + type + '\'' +
+			", enable=" + enable +
 			'}';
 	}
 
@@ -118,5 +121,13 @@ public class User {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public Boolean getEnable() {
+		return enable;
+	}
+
+	public void setEnable(Boolean enable) {
+		this.enable = enable;
 	}
 }

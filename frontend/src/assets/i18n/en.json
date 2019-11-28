@@ -46,7 +46,7 @@
 		"SAVE": "Save",
 		"REFRESH": "Refresh",
 		"SEARCH_ADVANCED": "Search: either by Product's name alone or by Category and Type",
-		"PRODUCT_NAME": "Product's name",
+		"PRODUCT_NAME": "Name or a space",
 		"DELETE_PRODUCT": "Delete this product"
 	}
 }
