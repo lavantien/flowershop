@@ -14,47 +14,53 @@
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
 						<a class="nav-link" routerLink="/shop" routerLinkActive="active">
-							<fa-icon [icon]="faStore"></fa-icon>
+							<fa-icon [icon]="faStore" title="{{'MAIN.SHOP' | translate}}"></fa-icon>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a [tabindex]="isLoggedIn ? null : -1" class="nav-link {{isLoggedIn ? '' : 'disabled'}}" routerLink="/info"
 						   routerLinkActive="active">
-							<fa-icon [icon]="faUser"></fa-icon>
+							<fa-icon [icon]="faUser" title="{{'MAIN.INFO' | translate}}"></fa-icon>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/admin"
 						   routerLinkActive="active">
-							<fa-icon [icon]="faWarehouse"></fa-icon>
+							<fa-icon [icon]="faWarehouse" title="{{'MAIN.ADMIN' | translate}}"></fa-icon>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/summary"
+						   routerLinkActive="active">
+							<fa-icon [icon]="faChartLine" title="{{'MAIN.SUMMARY' | translate}}"></fa-icon>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" routerLink="/contact" routerLinkActive="active">
-							<fa-icon [icon]="faHandshake"></fa-icon>
+							<fa-icon [icon]="faHandshake" title="{{'MAIN.CONTACT' | translate}}"></fa-icon>
 						</a>
 					</li>
 					<li *ngIf="isTest" class="nav-item">
 						<a class="nav-link" routerLink="/test" routerLinkActive="active">
-							<fa-icon [icon]="faCubes"></fa-icon>
+							<fa-icon [icon]="faCubes" title="{{'MAIN.TEST' | translate}}"></fa-icon>
 						</a>
 					</li>
 				</ul>
 				<!--				<form class="form-inline my-2">-->
 				<!--					<input aria-label="Search" class="form-control" placeholder="{{'MAIN.SEARCH_EVERYTHING' | translate}}"-->
 				<!--					       type="search">-->
-				<!--					<button class="btn btn-outline-success" type="submit"><fa-icon [icon]="faSearch"></fa-icon></button>-->
+				<!--					<button class="btn btn-outline-success" type="submit"><fa-icon [icon]="faSearch" title="{{'MAIN.SEARCH' | translate}}"></fa-icon></button>-->
 				<!--				</form>-->
 				<select #langSelect (change)="translate.use(langSelect.value)" aria-label="Lang"
 				        class="btn btn-outline-primary btn-lang">
 					<option *ngFor="let lang of translate.getLangs()" [selected]="lang === translate.currentLang"
 					        [value]="lang">{{ lang }}</option>
 				</select>
-				<button *ngIf="!isLoggedIn" class="btn btn-outline-primary">
-					<fa-icon [icon]="faSignInAlt"></fa-icon>
+				<button (click)="openLoginModal(loginTemplate)" *ngIf="!isLoggedIn" class="btn btn-outline-primary">
+					<fa-icon [icon]="faSignInAlt" title="{{'MAIN.LOGIN' | translate}}"></fa-icon>
 				</button>
 				<button *ngIf="isLoggedIn" class="btn btn-outline-danger">
-					<fa-icon [icon]="faSignOutAlt"></fa-icon>
+					<fa-icon [icon]="faSignOutAlt" title="{{'MAIN.LOGOUT' | translate}}"></fa-icon>
 				</button>
 			</div>
 		</nav>
@@ -62,7 +68,160 @@
 	<div class="wrapper-router">
 		<router-outlet></router-outlet>
 	</div>
-	<button (click)="scrollTop()" class="btn btn-outline-primary fixed-bottom btn-scroll-top">
-		<fa-icon [icon]="faArrowUp"></fa-icon>
+	<button (click)="scrollTop()" class="btn btn-outline-primary fixed-bottom">
+		<fa-icon [icon]="faArrowUp" title="{{'MAIN.SCROLL_TOP' | translate}}"></fa-icon>
+	</button>
+	<button (click)="scrollBottom()" class="btn btn-outline-primary fixed-bottom-2">
+		<fa-icon [icon]="faArrowDown" title="{{'MAIN.SCROLL_BOT' | translate}}"></fa-icon>
+	</button>
+	<button (click)="scrollLeft()" class="btn btn-outline-primary fixed-bottom-3">
+		<fa-icon [icon]="faArrowLeft" title="{{'MAIN.SCROLL_LEFT' | translate}}"></fa-icon>
+	</button>
+	<button (click)="scrollRight()" class="btn btn-outline-primary fixed-bottom-4">
+		<fa-icon [icon]="faArrowRight" title="{{'MAIN.SCROLL_RIGHT' | translate}}"></fa-icon>
 	</button>
 </div>
+
+<ng-template #loginTemplate>
+	<div class="modal-header">
+		<h4 class="modal-title pull-left">{{'MAIN.LOGIN' | translate}}</h4>
+		<button (click)="modalRef.hide()" aria-label="Close" class="close pull-right">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputEmail"><b>{{'MAIN.EMAIL' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input [(ngModel)]="loginForm.email" class="form-control" id="inputEmail" type="email">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputPassword"><b>{{'MAIN.PASSWORD' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input (keyup.enter)="onLogin()" [(ngModel)]="loginForm.password" class="form-control" id="inputPassword"
+				       type="password">
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button (click)="onLogin()" class="btn btn-success pull-right">{{'MAIN.LOGIN' | translate}}</button>
+		<button (click)="openSignUpModal(signUpTemplate)"
+		        class="btn btn-primary pull-right">{{'MAIN.SIGN_UP' | translate}}</button>
+		<button (click)="openForgotPasswordModal(forgotPasswordModal)"
+		        class="btn btn-warning pull-right">{{'MAIN.FORGOT_PASSWORD' | translate}}</button>
+		<button (click)="onRefreshLoginForm()" class="btn btn-dark pull-right">{{'MAIN.REFRESH' | translate}}</button>
+	</div>
+</ng-template>
+
+<ng-template #signUpTemplate>
+	<div class="modal-header">
+		<h4 class="modal-title pull-left">{{'MAIN.SIGN_UP' | translate}}</h4>
+		<button (click)="modalRef2.hide()" aria-label="Close" class="close pull-right">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputNameS"><b>{{'MAIN.NAME' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input [(ngModel)]="signUpForm.name" class="form-control" id="inputNameS" type="text">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputEmailS"><b>{{'MAIN.EMAIL' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input [(ngModel)]="signUpForm.email" class="form-control" id="inputEmailS" type="email">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputReEmailS"><b>{{'MAIN.RE_EMAIL' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input [(ngModel)]="signUpForm.reEmail" class="form-control" id="inputReEmailS" type="email">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputPasswordS"><b>{{'MAIN.PASSWORD' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input [(ngModel)]="signUpForm.password" class="form-control" id="inputPasswordS" type="password">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputRePasswordS"><b>{{'MAIN.RE_PASSWORD' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input [(ngModel)]="signUpForm.rePassword" class="form-control" id="inputRePasswordS" type="password">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputPhoneS"><b>{{'MAIN.PHONE' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input [(ngModel)]="signUpForm.phone" class="form-control" id="inputPhoneS" type="text">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputAddressS"><b>{{'MAIN.ADDRESS' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input [(ngModel)]="signUpForm.address" class="form-control" id="inputAddressS" type="text">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputCityS"><b>{{'MAIN.CITY' | translate}}</b></label>
+			<div class="col-sm-8">
+				<select [(ngModel)]="signUpForm.city" class="form-control" id="inputCityS">
+					<option *ngFor="let city of cities" [value]="city.name">{{city.name}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputDistrictS"><b>{{'MAIN.DISTRICT' | translate}}</b></label>
+			<div class="col-sm-8">
+				<select [(ngModel)]="signUpForm.district" class="form-control" id="inputDistrictS">
+					<ng-container *ngFor="let district of districts">
+						<option *ngIf="district.cityName === signUpForm.city"
+						        [value]="district.name">{{district.name}}</option>
+					</ng-container>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button (click)="onCreateUser()" class="btn btn-success pull-right">{{'MAIN.SIGN_UP' | translate}}</button>
+		<button (click)="onRefreshSignUpForm()" class="btn btn-dark pull-right">{{'MAIN.REFRESH' | translate}}</button>
+	</div>
+</ng-template>
+
+<ng-template #forgotPasswordModal>
+	<div class="modal-header">
+		<h4 class="modal-title pull-left">{{'MAIN.FORGOT_PASSWORD' | translate}}</h4>
+		<button (click)="modalRef2.hide()" aria-label="Close" class="close pull-right">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputEmailF"><b>{{'MAIN.EMAIL' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input [(ngModel)]="forgotPasswordForm.email" class="form-control" id="inputEmailF" type="email">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label" for="inputNewPasswordF"><b>{{'MAIN.NEW_PASSWORD' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input [(ngModel)]="forgotPasswordForm.newPassword" class="form-control" id="inputNewPasswordF" type="password">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-form-label"
+			       for="inputReNewPasswordF"><b>{{'MAIN.RE_NEW_PASSWORD' | translate}}</b></label>
+			<div class="col-sm-8">
+				<input (keyup.enter)="onVerifyEmail()" [(ngModel)]="forgotPasswordForm.reNewPassword" class="form-control"
+				       id="inputReNewPasswordF" type="password">
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button (click)="onVerifyEmail()" class="btn btn-success pull-right">{{'MAIN.VERIFY_EMAIL' | translate}}</button>
+		<button (click)="onRefreshForgotPasswordForm()"
+		        class="btn btn-dark pull-right">{{'MAIN.REFRESH' | translate}}</button>
+	</div>
+</ng-template>

@@ -2,7 +2,9 @@ import {Component, OnInit, TemplateRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {faPen, faPlusSquare, faSearch, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {DataTranslateService} from "../_services/data-translate.service";
 import {TranslateService} from "@ngx-translate/core";
+import {SharedService} from "../_services/shared.service";
 
 @Component({
 	selector: 'app-admin',
@@ -18,7 +20,7 @@ export class AdminComponent implements OnInit {
 	types: Type[] = [];
 	pagination = {
 		totalItem: 0,
-		itemPerPage: 10,
+		itemPerPage: 20,
 		currentPage: 1,
 		maxSize: 8
 	};
@@ -52,14 +54,28 @@ export class AdminComponent implements OnInit {
 	faPlusSquare = faPlusSquare;
 	faPen = faPen;
 	faTrash = faTrash;
+	locale = '';
 
-	constructor(private http: HttpClient, private modalService: BsModalService, public translate: TranslateService) {
+	constructor(private http: HttpClient,
+	            private modalService: BsModalService,
+	            private dataTranslateService: DataTranslateService,
+	            private sharedService: SharedService,
+	            public translate: TranslateService) {
+		this.sharedService.getDefaultLang().subscribe(lang => {
+			this.locale = this.dataTranslateService.getLocale(lang);
+		});
 	}
 
 	ngOnInit() {
 		this.getProducts();
 		this.getCategories();
 		this.getTypes();
+		this.translate.onLangChange.subscribe(event => {
+			this.locale = this.dataTranslateService.getLocale(event.lang);
+			this.data.forEach(product => {
+				product.price = this.dataTranslateService.getPrice(product.price, event.lang);
+			});
+		});
 	}
 
 	getProducts() {
@@ -76,8 +92,8 @@ export class AdminComponent implements OnInit {
 
 	getCategories() {
 		this.http.get<Category[]>('api/category').subscribe(data => {
-			this.categories = data;
 			if (!!data) {
+				this.categories = data;
 				this.createForm.categoryName = this.categories[0].name;
 				this.searchForm.categoryName = this.categories[0].name;
 			}
@@ -86,8 +102,8 @@ export class AdminComponent implements OnInit {
 
 	getTypes() {
 		this.http.get<Type[]>('api/type').subscribe(data => {
-			this.types = data;
 			if (!!data) {
+				this.types = data;
 				this.createForm.typeName = this.types[0].name;
 				this.searchForm.typeName = this.types[0].name;
 			}
@@ -100,13 +116,14 @@ export class AdminComponent implements OnInit {
 	}
 
 	onSearch() {
+		// TODO: use variable data for display instead of each invidual variable.
 		let searchResults: Product[] = [];
 		this.productsDescription.length = 0;
 		this.data.forEach(product => {
 			if (this.searchForm.name === '' && this.searchForm.typeName === product.typeName && this.searchForm.categoryName === product.categoryName) {
 				searchResults.push(product);
 				this.productsDescription.push(product.description.substr(0, 60) + (product.description.length > 60 ? '...' : ''));
-			} else if (this.searchForm.name !== '' && product.name.includes(this.searchForm.name)) {
+			} else if (this.searchForm.name !== '' && product.name.toLowerCase().includes(this.searchForm.name.toLowerCase())) {
 				searchResults.push(product);
 				this.productsDescription.push(product.description.substr(0, 60) + (product.description.length > 60 ? '...' : ''));
 			}

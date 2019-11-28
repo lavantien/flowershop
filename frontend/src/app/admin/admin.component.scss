@@ -1,10 +1,12 @@
 .admin-wrapper {
+	$lap-inner-width: 1313px;
+	$pc-inner-width: 1868px;
 	margin: 10px;
 
 	.wrapper-filter {
-		width: 1324px;
+		width: $lap-inner-width;
 		@media only screen and (min-width: 1920px) {
-			width: 1875px;
+			width: $pc-inner-width;
 		}
 
 		.product-filter {
@@ -37,13 +39,13 @@
 	}
 
 	.table-product {
-		width: 1329px;
+		width: $lap-inner-width;
 		@media only screen and (min-width: 1920px) {
-			width: 1880px;
+			width: $pc-inner-width;
 		}
 
 		.col-index {
-			width: 5%;
+			width: 4%;
 		}
 
 		.col-name {
@@ -59,11 +61,11 @@
 		}
 
 		.col-image {
-			width: 6%;
+			width: 8%;
 		}
 
 		.col-quantity {
-			width: 8%;
+			width: 9%;
 		}
 
 		.col-sale-amount {
@@ -71,15 +73,15 @@
 		}
 
 		.col-type {
-			width: 10%;
+			width: 11%;
 		}
 
 		.col-category {
-			width: 7%;
+			width: 9%;
 		}
 
 		.col-actions {
-			width: 15%;
+			width: 10%;
 		}
 	}
 }

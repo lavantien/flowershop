@@ -2,7 +2,8 @@
 	<div class="wrapper-filter">
 		<div class="product-filter form-row">
 			<div class="form-group col-2">
-				<input (keyup.enter)="onSearch()" [(ngModel)]="searchForm.name" class="form-control" placeholder="Product Name"
+				<input (keyup.enter)="onSearch()" [(ngModel)]="searchForm.name" class="form-control"
+				       placeholder="{{'ADMIN.PRODUCT_NAME' | translate}}"
 				       type="text">
 			</div>
 			<div class="form-group col-2">
@@ -20,10 +21,10 @@
 			</div>
 			<div class="form-group col-1">
 				<button (click)="onSearch()" class="btn btn-primary">
-					<fa-icon [icon]="faSearch"></fa-icon>
+					<fa-icon [icon]="faSearch" title="{{'ADMIN.SEARCH_ADVANCED' | translate}}"></fa-icon>
 				</button>
 				<button (click)="openCreateModal(createTemplate)" class="btn btn-primary btn-create">
-					<fa-icon [icon]="faPlusSquare"></fa-icon>
+					<fa-icon [icon]="faPlusSquare" title="{{'ADMIN.CREATE_PRODUCT' | translate}}"></fa-icon>
 				</button>
 			</div>
 			<div class="form-group col-4">
@@ -66,7 +67,7 @@
 			<th scope="row">{{product.id}}</th>
 			<td>{{product.name}}</td>
 			<td>{{productsDescription[i]}}</td>
-			<td>{{product.price}}</td>
+			<td>{{product.price.toLocaleString(locale)}}</td>
 			<td>
 				<img [alt]="product.name" [src]="product.imgUrl" class="product-img">
 			</td>
@@ -76,10 +77,10 @@
 			<td>{{product.categoryName}}</td>
 			<td>
 				<button (click)="openEditModal(editTemplate, product.id)" class="btn btn-info btn-edit">
-					<fa-icon [icon]="faPen"></fa-icon>
+					<fa-icon [icon]="faPen" title="{{'ADMIN.EDIT_PRODUCT' | translate}}"></fa-icon>
 				</button>
 				<button (click)="onDelete(product.id)" class="btn btn-warning btn-edit">
-					<fa-icon [icon]="faTrash"></fa-icon>
+					<fa-icon [icon]="faTrash" title="{{'ADMIN.DELETE_PRODUCT' | translate}}"></fa-icon>
 				</button>
 			</td>
 		</tr>
@@ -89,51 +90,51 @@
 
 <ng-template #createTemplate>
 	<div class="modal-header">
-		<h4 class="modal-title pull-left">Create new product</h4>
+		<h4 class="modal-title pull-left">{{'ADMIN.CREATE_PRODUCT' | translate}}</h4>
 		<button (click)="modalRef.hide()" aria-label="Close" class="close pull-right">
 			<span aria-hidden="true">&times;</span>
 		</button>
 	</div>
 	<div class="modal-body">
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputName"><b>Name</b></label>
+			<label class="col-sm-3 col-form-label" for="inputName"><b>{{'ADMIN.NAME' | translate}}</b></label>
 			<div class="col-sm-9">
 				<input [(ngModel)]="createForm.name" class="form-control" id="inputName" type="text">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputDescription"><b>Description</b></label>
+			<label class="col-sm-3 col-form-label" for="inputDescription"><b>{{'ADMIN.DESCRIPTION' | translate}}</b></label>
 			<div class="col-sm-9">
 				<textarea [(ngModel)]="createForm.description" class="form-control" id="inputDescription"
 				          rows="3"></textarea>
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputPrice"><b>Price</b></label>
+			<label class="col-sm-3 col-form-label" for="inputPrice"><b>{{'ADMIN.PRICE' | translate}}</b></label>
 			<div class="col-sm-9">
 				<input [(ngModel)]="createForm.price" class="form-control" id="inputPrice" type="text">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputImage"><b>Image URL</b></label>
+			<label class="col-sm-3 col-form-label" for="inputImage"><b>{{'ADMIN.IMAGE' | translate}}</b></label>
 			<div class="col-sm-9">
 				<input [(ngModel)]="createForm.imgUrl" class="form-control" id="inputImage" type="text">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputQuantity"><b>Quantity</b></label>
+			<label class="col-sm-3 col-form-label" for="inputQuantity"><b>{{'ADMIN.QUANTITY' | translate}}</b></label>
 			<div class="col-sm-9">
 				<input [(ngModel)]="createForm.quantity" class="form-control" id="inputQuantity" type="number">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputSaleAmount"><b>Sale Amount</b></label>
+			<label class="col-sm-3 col-form-label" for="inputSaleAmount"><b>{{'ADMIN.SALE_AMOUNT' | translate}}</b></label>
 			<div class="col-sm-9">
 				<input [(ngModel)]="createForm.saleAmount" class="form-control" id="inputSaleAmount" type="number">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputCategory"><b>Category</b></label>
+			<label class="col-sm-3 col-form-label" for="inputCategory"><b>{{'ADMIN.CATEGORY' | translate}}</b></label>
 			<div class="col-sm-9">
 				<select [(ngModel)]="createForm.categoryName" class="form-control" id="inputCategory">
 					<option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
@@ -141,7 +142,7 @@
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputType"><b>Type</b></label>
+			<label class="col-sm-3 col-form-label" for="inputType"><b>{{'ADMIN.TYPE' | translate}}</b></label>
 			<div class="col-sm-9">
 				<select [(ngModel)]="createForm.typeName" class="form-control" id="inputType">
 					<ng-container *ngFor="let type of types">
@@ -153,58 +154,58 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button (click)="onCreate()" class="btn btn-success pull-right">Save</button>
-		<button (click)="onRefreshCreateForm()" class="btn btn-secondary pull-right">Refresh</button>
+		<button (click)="onCreate()" class="btn btn-success pull-right">{{'ADMIN.SAVE' | translate}}</button>
+		<button (click)="onRefreshCreateForm()" class="btn btn-dark pull-right">{{'ADMIN.REFRESH' | translate}}</button>
 	</div>
 </ng-template>
 
 <ng-template #editTemplate>
 	<div class="modal-header">
-		<h4 class="modal-title pull-left">Edit this product</h4>
+		<h4 class="modal-title pull-left">{{'ADMIN.EDIT_PRODUCT' | translate}}</h4>
 		<button (click)="modalRef.hide()" aria-label="Close" class="close pull-right">
 			<span aria-hidden="true">&times;</span>
 		</button>
 	</div>
 	<div class="modal-body">
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputNameE"><b>Name</b></label>
+			<label class="col-sm-3 col-form-label" for="inputNameE"><b>{{'ADMIN.NAME' | translate}}</b></label>
 			<div class="col-sm-9">
 				<input [(ngModel)]="editForm.name" class="form-control" id="inputNameE" type="text">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputDescriptionE"><b>Description</b></label>
+			<label class="col-sm-3 col-form-label" for="inputDescriptionE"><b>{{'ADMIN.DESCRIPTION' | translate}}</b></label>
 			<div class="col-sm-9">
 				<textarea [(ngModel)]="editForm.description" class="form-control" id="inputDescriptionE"
 				          rows="3"></textarea>
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputPriceE"><b>Price</b></label>
+			<label class="col-sm-3 col-form-label" for="inputPriceE"><b>{{'ADMIN.PRICE' | translate}}</b></label>
 			<div class="col-sm-9">
 				<input [(ngModel)]="editForm.price" class="form-control" id="inputPriceE" type="text">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputImageE"><b>Image URL</b></label>
+			<label class="col-sm-3 col-form-label" for="inputImageE"><b>{{'ADMIN.IMAGE' | translate}}</b></label>
 			<div class="col-sm-9">
 				<input [(ngModel)]="editForm.imgUrl" class="form-control" id="inputImageE" type="text">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputQuantityE"><b>Quantity</b></label>
+			<label class="col-sm-3 col-form-label" for="inputQuantityE"><b>{{'ADMIN.QUANTITY' | translate}}</b></label>
 			<div class="col-sm-9">
 				<input [(ngModel)]="editForm.quantity" class="form-control" id="inputQuantityE" type="number">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputSaleAmountE"><b>Sale Amount</b></label>
+			<label class="col-sm-3 col-form-label" for="inputSaleAmountE"><b>{{'ADMIN.SALE_AMOUNT' | translate}}</b></label>
 			<div class="col-sm-9">
 				<input [(ngModel)]="editForm.saleAmount" class="form-control" id="inputSaleAmountE" type="number">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputCategoryE"><b>Category</b></label>
+			<label class="col-sm-3 col-form-label" for="inputCategoryE"><b>{{'ADMIN.CATEGORY' | translate}}</b></label>
 			<div class="col-sm-9">
 				<select [(ngModel)]="editForm.categoryName" class="form-control" id="inputCategoryE">
 					<option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
@@ -212,7 +213,7 @@
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputTypeE"><b>Type</b></label>
+			<label class="col-sm-3 col-form-label" for="inputTypeE"><b>{{'ADMIN.TYPE' | translate}}</b></label>
 			<div class="col-sm-9">
 				<select [(ngModel)]="editForm.typeName" class="form-control" id="inputTypeE">
 					<ng-container *ngFor="let type of types">
@@ -224,7 +225,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button (click)="onEdit()" class="btn btn-success pull-right">Save</button>
-		<button (click)="onRefreshEditForm()" class="btn btn-secondary pull-right">Refresh</button>
+		<button (click)="onEdit()" class="btn btn-success pull-right">{{'ADMIN.SAVE' | translate}}</button>
+		<button (click)="onRefreshEditForm()" class="btn btn-dark pull-right">{{'ADMIN.REFRESH' | translate}}</button>
 	</div>
 </ng-template>

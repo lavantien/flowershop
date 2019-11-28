@@ -12,7 +12,8 @@ const routes: Routes = [
 	{path: 'shop', loadChildren: () => import('./store/store.module').then(m => m.StoreModule)},
 	{path: 'contact', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule)},
 	{path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)},
-	{path: 'info', loadChildren: () => import('./info/info.module').then(m => m.InfoModule)}
+	{path: 'info', loadChildren: () => import('./info/info.module').then(m => m.InfoModule)},
+	{path: 'summary', loadChildren: () => import('./summary/summary.module').then(m => m.SummaryModule)}
 ];
 
 @NgModule({

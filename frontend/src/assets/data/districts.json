@@ -1,0 +1,114 @@
+[
+	{
+		"name": "Bình Thạnh",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "Gò Vấp",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "Phú Nhuận",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "Thủ Đức",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "Tân Bình",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "Tân Phú",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "Bình Tân",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "1",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "2",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "3",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "4",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "5",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "6",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "7",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "8",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "9",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "10",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "11",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "12",
+		"cityName": "Hồ Chí Minh"
+	},
+	{
+		"name": "Ninh Kiều",
+		"cityName": "Cần Thơ"
+	},
+	{
+		"name": "Thốt Nốt",
+		"cityName": "Cần Thơ"
+	},
+	{
+		"name": "Hải Châu",
+		"cityName": "Đà Nẵng"
+	},
+	{
+		"name": "Thanh Khê",
+		"cityName": "Đà Nẵng"
+	},
+	{
+		"name": "Hoàn Kiếm",
+		"cityName": "Hà Nội"
+	},
+	{
+		"name": "Ba Đình",
+		"cityName": "Hà Nội"
+	},
+	{
+		"name": "Đồ Sơn",
+		"cityName": "Hải Phòng"
+	},
+	{
+		"name": "Dương Kinh",
+		"cityName": "Hải Phòng"
+	},
+	{
+		"name": "Other",
+		"cityName": "Other"
+	}
+]
