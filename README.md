@@ -23,7 +23,7 @@ FlowerShop
 10. Open browser at `http://localhost:4200` to access our application.
 
 #### Production environment setup detail instruction:
-1. Production environment needs only `JDK 11` and `Maven` installed.
+1. Production environment needs only `JDK 11`, `Maven` and `MySQL Server 8` installed. Then setup `database` and `application.properties` properly as in `Development environment`.
 2. Run `mvn package` in `cmd` inside root folder. This will create a `Jar` package inside `target` folder named `flowershop-1.0.jar`.
 3. Run this `Jar` package in `cmd` by this command `java -jar target/flowershop-1.0.jar`.
 4. Access our application via an endpoint, for example an `AWS Cloud Endpoint`.
