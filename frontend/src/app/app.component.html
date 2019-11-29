@@ -5,7 +5,7 @@
 				<img alt="Bình Yên Shop" height="30" src="../assets/images/brand.png"/>
 				<span class="rainbow-text">&nbsp;&nbsp;{{'MAIN.FLOWER_SHOP' | translate}}</span>
 			</a>
-			<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+			<button aria-controls="navbarSupportedContent" aria-expanded="false"
 			        class="navbar-toggler"
 			        data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
 				<span class="navbar-toggler-icon"></span>
@@ -47,14 +47,19 @@
 					</li>
 				</ul>
 				<!--				<form class="form-inline my-2">-->
-				<!--					<input aria-label="Search" class="form-control" placeholder="{{'MAIN.SEARCH_EVERYTHING' | translate}}"-->
+				<!--					<input class="form-control" placeholder="{{'MAIN.SEARCH_EVERYTHING' | translate}}"-->
 				<!--					       type="search">-->
 				<!--					<button class="btn btn-outline-success" type="submit"><fa-icon [icon]="faSearch" title="{{'MAIN.SEARCH' | translate}}"></fa-icon></button>-->
 				<!--				</form>-->
-				<select #langSelect (change)="translate.use(langSelect.value)" aria-label="Lang"
-				        class="btn btn-outline-primary btn-lang">
+				<select (change)="onChangeThemeColor()" [(ngModel)]="displayBg" class="btn btn-outline-primary btn-lang"
+				        title="{{'MAIN.THEME_COLOR' | translate}}">
+					<option *ngFor="let bg of displayBgs" [value]="bg">{{'MAIN.' + bg | translate}}</option>
+				</select>
+
+				<select #langSelect (change)="translate.use(langSelect.value)" class="btn btn-outline-primary btn-lang"
+				        title="{{'MAIN.LANGUAGE' | translate}}">
 					<option *ngFor="let lang of translate.getLangs()" [selected]="lang === translate.currentLang"
-					        [value]="lang">{{ lang }}</option>
+					        [value]="lang">{{lang}}</option>
 				</select>
 				<button (click)="openLoginModal(loginTemplate)" *ngIf="!isLoggedIn" class="btn btn-outline-primary">
 					<fa-icon [icon]="faSignInAlt" title="{{'MAIN.LOGIN' | translate}}"></fa-icon>
@@ -83,10 +88,10 @@
 </div>
 
 <ng-template #loginTemplate>
-	<div class="modal-header">
+	<div class="modal-header {{bgPrimary}} {{tcPrimary}}">
 		<h4 class="modal-title pull-left">{{'MAIN.LOGIN' | translate}}</h4>
-		<button (click)="modalRef.hide()" aria-label="Close" class="close pull-right">
-			<span aria-hidden="true">&times;</span>
+		<button (click)="modalRef.hide()" class="close pull-right">
+			<span aria-hidden="true" class="{{tcPrimary}}">&times;</span>
 		</button>
 	</div>
 	<div class="modal-body">
@@ -104,7 +109,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal-footer">
+	<div class="modal-footer bg-light">
 		<button (click)="onLogin()" class="btn btn-success pull-right">{{'MAIN.LOGIN' | translate}}</button>
 		<button (click)="openSignUpModal(signUpTemplate)"
 		        class="btn btn-primary pull-right">{{'MAIN.SIGN_UP' | translate}}</button>
@@ -115,10 +120,10 @@
 </ng-template>
 
 <ng-template #signUpTemplate>
-	<div class="modal-header">
+	<div class="modal-header {{bgPrimary}} {{tcPrimary}}">
 		<h4 class="modal-title pull-left">{{'MAIN.SIGN_UP' | translate}}</h4>
-		<button (click)="modalRef2.hide()" aria-label="Close" class="close pull-right">
-			<span aria-hidden="true">&times;</span>
+		<button (click)="modalRef2.hide()" class="close pull-right">
+			<span aria-hidden="true" class="{{tcPrimary}}">&times;</span>
 		</button>
 	</div>
 	<div class="modal-body">
@@ -184,17 +189,17 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal-footer">
+	<div class="modal-footer bg-light">
 		<button (click)="onCreateUser()" class="btn btn-success pull-right">{{'MAIN.SIGN_UP' | translate}}</button>
 		<button (click)="onRefreshSignUpForm()" class="btn btn-dark pull-right">{{'MAIN.REFRESH' | translate}}</button>
 	</div>
 </ng-template>
 
 <ng-template #forgotPasswordModal>
-	<div class="modal-header">
+	<div class="modal-header {{bgPrimary}} {{tcPrimary}}">
 		<h4 class="modal-title pull-left">{{'MAIN.FORGOT_PASSWORD' | translate}}</h4>
-		<button (click)="modalRef2.hide()" aria-label="Close" class="close pull-right">
-			<span aria-hidden="true">&times;</span>
+		<button (click)="modalRef2.hide()" class="close pull-right">
+			<span aria-hidden="true" class="{{tcPrimary}}">&times;</span>
 		</button>
 	</div>
 	<div class="modal-body">
@@ -219,7 +224,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal-footer">
+	<div class="modal-footer bg-light">
 		<button (click)="onVerifyEmail()" class="btn btn-success pull-right">{{'MAIN.VERIFY_EMAIL' | translate}}</button>
 		<button (click)="onRefreshForgotPasswordForm()"
 		        class="btn btn-dark pull-right">{{'MAIN.REFRESH' | translate}}</button>

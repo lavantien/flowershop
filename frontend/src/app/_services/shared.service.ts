@@ -5,16 +5,25 @@ import {BehaviorSubject} from "rxjs";
 	providedIn: 'root'
 })
 export class SharedService {
-	private defaultLang = new BehaviorSubject<string>('en');
+	private globalLanguage = new BehaviorSubject<string>('en');
+	private globalBackgroundPrimary = new BehaviorSubject<[string, string]>(['bg-light', 'text-dark'])
 
 	constructor() {
 	}
 
-	public getDefaultLang() {
-		return this.defaultLang.asObservable();
+	public getGlobalLanguage() {
+		return this.globalLanguage.asObservable();
 	}
 
-	public updateDefaultLang(lang: string) {
-		this.defaultLang.next(lang);
+	public updateGlobalLanguage(lang: string) {
+		this.globalLanguage.next(lang);
+	}
+
+	public getGlobalBackgroundPrimary() {
+		return this.globalBackgroundPrimary.asObservable();
+	}
+
+	public updateGlobalBackgroundPrimary(bg: [string, string]) {
+		this.globalBackgroundPrimary.next(bg);
 	}
 }

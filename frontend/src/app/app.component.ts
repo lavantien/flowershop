@@ -18,6 +18,7 @@ import {
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {HttpClient} from "@angular/common/http";
 import {InputValidatorService} from "./_services/input-validator.service";
+import {SharedService} from "./_services/shared.service";
 
 @Component({
 	selector: 'app-root',
@@ -66,15 +67,26 @@ export class AppComponent implements OnInit {
 	};
 	cities: City[] = [];
 	districts: District[] = [];
+	bgPrimary = '';
+	tcPrimary = '';
+	displayBg = 'LIGHT';
+	displayBgs = ['LIGHT', 'BLUE', 'GRAY', 'GREEN', 'RED', 'YELLOW', 'TEAL', 'BLACK', 'WHITE', 'TRANS'];
+	bgs = ['bg-light', 'bg-primary', 'bg-secondary', 'bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-dark', 'bg-white', 'bg-transparent'];
+	tcs = ['text-dark', 'text-white', 'text-white', 'text-white', 'text-white', 'text-dark', 'text-white', 'text-white', 'text-dark', 'text-dark'];
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
 	            private inputValidator: InputValidatorService,
+	            private sharedService: SharedService,
 	            public translate: TranslateService) {
 		translate.addLangs(['en', 'vi']);
 		translate.setDefaultLang('en');
 		const browserLang = translate.getBrowserLang();
 		translate.use(browserLang.match(/en|vi/) ? browserLang : 'en');
+		this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
+			this.bgPrimary = bg[0];
+			this.tcPrimary = bg[1];
+		});
 	}
 
 	ngOnInit() {
@@ -98,6 +110,10 @@ export class AppComponent implements OnInit {
 				this.signUpForm.district = this.districts[0].name;
 			}
 		});
+	}
+
+	onChangeThemeColor() {
+		this.sharedService.updateGlobalBackgroundPrimary([this.bgs[this.displayBgs.findIndex(x => x === this.displayBg)], this.tcs[this.displayBgs.findIndex(x => x === this.displayBg)]]);
 	}
 
 	openLoginModal(template: TemplateRef<any>) {

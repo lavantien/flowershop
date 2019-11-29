@@ -45,7 +45,7 @@ export class AdminComponent implements OnInit {
 		typeName: ''
 	};
 	searchForm = {
-		name: ' ',
+		name: '',
 		categoryName: '',
 		typeName: ''
 	};
@@ -57,14 +57,20 @@ export class AdminComponent implements OnInit {
 	faPen = faPen;
 	faTrash = faTrash;
 	locale = '';
+	bgPrimary = '';
+	tcPrimary = '';
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
 	            private dataTranslateService: DataTranslateService,
 	            private sharedService: SharedService,
 	            public translate: TranslateService) {
-		this.sharedService.getDefaultLang().subscribe(lang => {
+		this.sharedService.getGlobalLanguage().subscribe(lang => {
 			this.locale = this.dataTranslateService.getLocale(lang);
+		});
+		this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
+			this.bgPrimary = bg[0];
+			this.tcPrimary = bg[1];
 		});
 	}
 
