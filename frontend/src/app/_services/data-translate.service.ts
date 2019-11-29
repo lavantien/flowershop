@@ -8,10 +8,11 @@ export class DataTranslateService {
 	}
 
 	getPrice(price: number, lang: string): number {
+		const ratio = 23000.0;
 		if (lang === 'vi') {
-			return price * 23000 - 9770;
+			return price * ratio;
 		}
-		return price / 23000 + 9770;
+		return price / ratio;
 	}
 
 	getLocale(lang: string): string {

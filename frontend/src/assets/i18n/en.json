@@ -61,9 +61,9 @@
 		"PRODUCT_NAME": "Name or a space",
 		"DELETE_PRODUCT": "Delete this product",
 		"NO_PRODUCT_FOUND": "No product found.",
-		"IMPORT_EXCEL": "Import data from an Excel file as new products",
+		"IMPORT_EXCEL": "Import new data from an Excel file",
 		"EXPORT_EXCEL": "Export data to an Excel file",
-		"BROWSE_EXCEL": "Upload Excel file",
+		"BROWSE_EXCEL": "Upload Excel",
 		"IMPORT_BUTTON": "Import"
 	},
 	"DATA": {

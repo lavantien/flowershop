@@ -5,7 +5,9 @@ import {
 	faPen,
 	faPlusSquare,
 	faSearch,
-	faTrash
+	faTrash,
+	faFileUpload,
+	faFileDownload
 } from '@fortawesome/free-solid-svg-icons';
 import {DataTranslateService} from "../_services/data-translate.service";
 import {TranslateService} from "@ngx-translate/core";
@@ -61,6 +63,8 @@ export class AdminComponent implements OnInit {
 	faPlusSquare = faPlusSquare;
 	faPen = faPen;
 	faTrash = faTrash;
+	faFileUpload = faFileUpload;
+	faFileDownload = faFileDownload;
 	locale = '';
 	bgPrimary = '';
 	tcPrimary = '';
@@ -200,7 +204,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	onPageChanged(event: any) { // 1: 0 1 2 3   2: 4 5 6 7   3: 8 9 10 11
-		this.displayProducts = this.data.slice((event.page - 1) * event.itemsPerPage, event.page * event.itemsPerPage);
+		this.displayProducts = this.searchResults.slice((event.page - 1) * event.itemsPerPage, event.page * event.itemsPerPage);
 	}
 
 	openCreateModal(template: TemplateRef<any>) {
