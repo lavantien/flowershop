@@ -1,7 +1,12 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {faPen, faPlusSquare, faSearch, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {
+	faPen,
+	faPlusSquare,
+	faSearch,
+	faTrash
+} from '@fortawesome/free-solid-svg-icons';
 import {DataTranslateService} from "../_services/data-translate.service";
 import {TranslateService} from "@ngx-translate/core";
 import {SharedService} from "../_services/shared.service";
@@ -22,7 +27,7 @@ export class AdminComponent implements OnInit {
 		totalItem: 0,
 		itemPerPage: 20,
 		currentPage: 1,
-		maxSize: 7
+		maxSize: 5
 	};
 	createForm = {
 		name: '',
@@ -59,6 +64,7 @@ export class AdminComponent implements OnInit {
 	locale = '';
 	bgPrimary = '';
 	tcPrimary = '';
+	excelFile: File = null;
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
@@ -121,6 +127,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	paging(data: Product[]) {
+		// TODO: Fix page change and then change items per page -> not research.
 		this.pagination.totalItem = data.length;
 		this.displayProducts = data.slice((this.pagination.currentPage - 1) * this.pagination.itemPerPage,
 			this.pagination.currentPage * this.pagination.itemPerPage);
@@ -210,6 +217,22 @@ export class AdminComponent implements OnInit {
 
 	onCloseEdit() {
 		this.editForm.description = this.data[this.editIndex].description;
+	}
+
+	openImportExcelModal(template: TemplateRef<any>) {
+		this.modalRef = this.modalService.show(template);
+	}
+
+	onImportExcel() {
+		alert('Imported!');
+	}
+
+	onExportExcel() {
+		alert('Exported!');
+	}
+
+	onRefreshImportExcel() {
+		this.excelFile = null;
 	}
 
 	onChangeCategory(mode: string) {

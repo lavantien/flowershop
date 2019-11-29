@@ -21,15 +21,21 @@
 					</ng-container>
 				</select>
 			</div>
-			<div class="form-group col-1">
+			<div class="form-group col-2">
 				<button (click)="onSearch()" class="btn btn-primary">
 					<fa-icon [icon]="faSearch" title="{{'ADMIN.SEARCH_ADVANCED' | translate}}"></fa-icon>
 				</button>
 				<button (click)="openCreateModal(createTemplate)" class="btn btn-primary btn-create">
 					<fa-icon [icon]="faPlusSquare" title="{{'ADMIN.CREATE_PRODUCT' | translate}}"></fa-icon>
 				</button>
+				<button (click)="openImportExcelModal(importExcelTemplate)" class="btn btn-primary btn-create">
+					<fa-icon [icon]="faPlusSquare" title="{{'ADMIN.IMPORT_EXCEL' | translate}}"></fa-icon>
+				</button>
+				<button (click)="onExportExcel()" class="btn btn-primary btn-create">
+					<fa-icon [icon]="faPlusSquare" title="{{'ADMIN.EXPORT_EXCEL' | translate}}"></fa-icon>
+				</button>
 			</div>
-			<div class="form-group col-4">
+			<div class="form-group col-3">
 				<pagination (pageChanged)="onPageChanged($event)"
 				            [(ngModel)]="pagination.currentPage"
 				            [boundaryLinks]="true"
@@ -240,5 +246,26 @@
 	<div class="modal-footer bg-light">
 		<button (click)="onEdit()" class="btn btn-success pull-right">{{'ADMIN.SAVE' | translate}}</button>
 		<button (click)="onRefreshEditForm()" class="btn btn-dark pull-right">{{'ADMIN.REFRESH' | translate}}</button>
+	</div>
+</ng-template>
+
+<ng-template #importExcelTemplate>
+	<div class="modal-header {{bgPrimary}} {{tcPrimary}}">
+		<h4 class="modal-title pull-left">{{'ADMIN.IMPORT_EXCEL' | translate}}</h4>
+		<button (click)="modalRef.hide()" class="close pull-right">
+			<span aria-hidden="true" class="{{tcPrimary}}">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div class="form-group row">
+			<label class="col-sm-3 col-form-label" for="inputExcel"><b>{{'ADMIN.BROWSE_EXCEL' | translate}}</b></label>
+			<div class="col-sm-9">
+				<input [(ngModel)]="excelFile" class="form-control" id="inputExcel" type="file">
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer bg-light">
+		<button (click)="onImportExcel()" class="btn btn-success pull-right">{{'ADMIN.IMPORT_BUTTON' | translate}}</button>
+		<button (click)="onRefreshImportExcel()" class="btn btn-dark pull-right">{{'ADMIN.REFRESH' | translate}}</button>
 	</div>
 </ng-template>

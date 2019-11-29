@@ -60,7 +60,11 @@
 		"SEARCH_ADVANCED": "Tìm kiếm: tìm theo mỗi Tên sản phẩm hoặc tìm theo Loại và Dạng",
 		"PRODUCT_NAME": "Tên hoặc khoảng trống",
 		"DELETE_PRODUCT": "Xóa sản phẩm này",
-		"NO_PRODUCT_FOUND": "Không tìm thấy sản phẩm nào."
+		"NO_PRODUCT_FOUND": "Không tìm thấy sản phẩm nào.",
+		"IMPORT_EXCEL": "Nhập dữ liệu mới từ một tệp Excel",
+		"EXPORT_EXCEL": "Xuất dữ liệu ra thành một tệp Excel",
+		"BROWSE_EXCEL": "Chọn một tệp Excel",
+		"IMPORT_BUTTON": "Nhập"
 	},
 	"DATA": {
 		"FLOWERS": "Hoa",

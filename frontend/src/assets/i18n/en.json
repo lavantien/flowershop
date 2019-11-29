@@ -60,7 +60,11 @@
 		"SEARCH_ADVANCED": "Search: either by Product's name alone or by Category and Type",
 		"PRODUCT_NAME": "Name or a space",
 		"DELETE_PRODUCT": "Delete this product",
-		"NO_PRODUCT_FOUND": "No product found."
+		"NO_PRODUCT_FOUND": "No product found.",
+		"IMPORT_EXCEL": "Import data from an Excel file as new products",
+		"EXPORT_EXCEL": "Export data to an Excel file",
+		"BROWSE_EXCEL": "Upload Excel file",
+		"IMPORT_BUTTON": "Import"
 	},
 	"DATA": {
 		"FLOWERS": "Flowers",
