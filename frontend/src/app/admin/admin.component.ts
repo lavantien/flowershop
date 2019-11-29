@@ -12,6 +12,7 @@ import {
 import {DataTranslateService} from "../_services/data-translate.service";
 import {TranslateService} from "@ngx-translate/core";
 import {SharedService} from "../_services/shared.service";
+import * as XLSX from 'xlsx';
 
 @Component({
 	selector: 'app-admin',
@@ -68,7 +69,7 @@ export class AdminComponent implements OnInit {
 	locale = '';
 	bgPrimary = '';
 	tcPrimary = '';
-	excelFile: File = null;
+	excelData: any[] = [];
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
@@ -131,7 +132,6 @@ export class AdminComponent implements OnInit {
 	}
 
 	paging(data: Product[]) {
-		// TODO: Fix page change and then change items per page -> not research.
 		this.pagination.totalItem = data.length;
 		this.displayProducts = data.slice((this.pagination.currentPage - 1) * this.pagination.itemPerPage,
 			this.pagination.currentPage * this.pagination.itemPerPage);
@@ -156,7 +156,6 @@ export class AdminComponent implements OnInit {
 			return this.createForm;
 		}).subscribe(data => {
 			this.getProducts();
-			alert('Created!');
 		});
 	}
 
@@ -166,14 +165,12 @@ export class AdminComponent implements OnInit {
 			return this.editForm;
 		}).subscribe(data => {
 			this.getProducts();
-			alert('Edited!');
 		});
 	}
 
-	onDelete(id: number) {
-		this.http.delete<any>('api/product/delete?id=' + id).subscribe(data => {
+	onDelete() {
+		this.http.delete<any>(`api/product/${this.currentId}`).subscribe(data => {
 			this.getProducts();
-			alert('Deleted!');
 		});
 	}
 
@@ -223,20 +220,82 @@ export class AdminComponent implements OnInit {
 		this.editForm.description = this.data[this.editIndex].description;
 	}
 
+	openDeleteModal(template: TemplateRef<any>, currentId: number) {
+		this.modalRef = this.modalService.show(template);
+		this.currentId = currentId;
+	}
+
 	openImportExcelModal(template: TemplateRef<any>) {
 		this.modalRef = this.modalService.show(template);
 	}
 
-	onImportExcel() {
-		alert('Imported!');
+	onFileChange(evt: any) {
+		/* wire up file reader */
+		const target: DataTransfer = <DataTransfer>(evt.target);
+		if (target.files.length !== 1) {
+			throw new Error('Cannot use multiple files');
+		}
+		if (target.files.item(0).type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+			alert('Not Excel!');
+			return;
+		}
+		const reader: FileReader = new FileReader();
+		reader.onload = (e: any) => {
+			/* read workbook */
+			const bstr: string = e.target.result;
+			const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+
+			/* grab first sheet */
+			const wsname: string = wb.SheetNames[0];
+			const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+			/* save data */
+			this.excelData = XLSX.utils.sheet_to_json(ws, {header: ['id', 'name', 'description', 'imgUrl', 'price', 'quantity', 'saleAmount', 'typeName', 'categoryName']}).slice(1);
+			if (!!this.excelData && typeof this.excelData === typeof this.data) {
+				this.onImportExcel(<Product[]>this.excelData);
+			} else {
+				alert('Wrong Format!');
+			}
+		};
+		reader.readAsBinaryString(target.files[0]);
+	}
+	
+	onImportExcel(excelData: Product[]) {
+		this.data = excelData;
 	}
 
 	onExportExcel() {
-		alert('Exported!');
+		/* prepare data */
+		const tempDescriptions: string[] = [];
+		this.data.forEach((data, index) => {
+			tempDescriptions[index] = data.description;
+			data.description = this.productsOriginalDescription[index];
+			if (this.locale !== 'en-US') {
+				data.price = this.dataTranslateService.getPrice(data.price, 'en');
+			}
+		});
+
+		/* generate worksheet */
+		const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.data);
+
+		/* generate workbook and add the worksheet */
+		const wb: XLSX.WorkBook = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(wb, ws, `${this.locale === 'en-US' ? 'Products' : 'Sản phẩm'}`);
+
+		/* save to file */
+		XLSX.writeFile(wb, `${this.locale === 'en-US' ? 'products' : 'sản_phẩm'}__${new Date().toLocaleDateString(this.locale)}__${new Date().toLocaleTimeString(this.locale)}.xlsx`);
+
+		/* restore data state */
+		this.data.forEach((data, index) => {
+			data.description = tempDescriptions[index];
+			if (this.locale !== 'en-US') {
+				data.price = this.dataTranslateService.getPrice(data.price, 'vi');
+			}
+		});
 	}
 
 	onRefreshImportExcel() {
-		this.excelFile = null;
+		this.excelData = null;
 	}
 
 	onChangeCategory(mode: string) {

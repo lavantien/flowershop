@@ -64,7 +64,8 @@
 		"IMPORT_EXCEL": "Nhập dữ liệu mới từ một tệp Excel",
 		"EXPORT_EXCEL": "Xuất dữ liệu ra thành một tệp Excel",
 		"BROWSE_EXCEL": "Chọn tệp Excel",
-		"IMPORT_BUTTON": "Nhập"
+		"IMPORT_BUTTON": "Nhập",
+		"IMPORT_EXCEL_NOTE": "Chỉ nhận tệp Excel. Tính từ dòng thứ 2 trở đi của tệp."
 	},
 	"DATA": {
 		"FLOWERS": "Hoa",

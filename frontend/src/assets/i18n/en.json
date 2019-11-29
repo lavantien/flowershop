@@ -64,7 +64,8 @@
 		"IMPORT_EXCEL": "Import new data from an Excel file",
 		"EXPORT_EXCEL": "Export data to an Excel file",
 		"BROWSE_EXCEL": "Upload Excel",
-		"IMPORT_BUTTON": "Import"
+		"IMPORT_BUTTON": "Import",
+		"IMPORT_EXCEL_NOTE": "Excel file only. Import data start from 2nd row of the file."
 	},
 	"DATA": {
 		"FLOWERS": "Flowers",

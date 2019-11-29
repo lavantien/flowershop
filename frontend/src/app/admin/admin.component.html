@@ -88,7 +88,7 @@
 					<button (click)="openEditModal(editTemplate, product.id)" class="btn btn-info btn-edit">
 						<fa-icon [icon]="faPen" title="{{'ADMIN.EDIT_PRODUCT' | translate}}"></fa-icon>
 					</button>
-					<button (click)="onDelete(product.id)" class="btn btn-warning btn-edit">
+					<button (click)="openDeleteModal(deleteTemplate, product.id)" class="btn btn-warning btn-edit">
 						<fa-icon [icon]="faTrash" title="{{'ADMIN.DELETE_PRODUCT' | translate}}"></fa-icon>
 					</button>
 				</td>
@@ -249,6 +249,20 @@
 	</div>
 </ng-template>
 
+<ng-template #deleteTemplate>
+	<div class="modal-header {{bgPrimary}} {{tcPrimary}}">
+		<h4 class="modal-title pull-left">{{'ADMIN.DELETE_PRODUCT' | translate}}?</h4>
+		<button (click)="modalRef.hide()" class="close pull-right">
+			<span aria-hidden="true" class="{{tcPrimary}}">&times;</span>
+		</button>
+	</div>
+	<div class="modal-footer bg-light">
+		<button (click)="onDelete()" class="btn btn-danger pull-right">
+			<fa-icon [icon]="faTrash" title="{{'ADMIN.DELETE_PRODUCT' | translate}}"></fa-icon>
+		</button>
+	</div>
+</ng-template>
+
 <ng-template #importExcelTemplate>
 	<div class="modal-header {{bgPrimary}} {{tcPrimary}}">
 		<h4 class="modal-title pull-left">{{'ADMIN.IMPORT_EXCEL' | translate}}</h4>
@@ -257,15 +271,18 @@
 		</button>
 	</div>
 	<div class="modal-body">
-		<div class="form-group row">
-			<label class="col-sm-3 col-form-label" for="inputExcel"><b>{{'ADMIN.BROWSE_EXCEL' | translate}}</b></label>
-			<div class="col-sm-9">
-				<input [(ngModel)]="excelFile" class="form-control" id="inputExcel" type="file">
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text" id="inputGroupFileAddon">{{'ADMIN.BROWSE_EXCEL' | translate}}</span>
+			</div>
+			<div class="custom-file">
+				<input (change)="onFileChange($event)" type="file" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
+				<label class="custom-file-label" for="inputGroupFile">{{'ADMIN.IMPORT_EXCEL' | translate}}</label>
 			</div>
 		</div>
+		<span><i>{{'ADMIN.IMPORT_EXCEL_NOTE' | translate}}</i></span>
 	</div>
 	<div class="modal-footer bg-light">
-		<button (click)="onImportExcel()" class="btn btn-success pull-right">{{'ADMIN.IMPORT_BUTTON' | translate}}</button>
-		<button (click)="onRefreshImportExcel()" class="btn btn-dark pull-right">{{'ADMIN.REFRESH' | translate}}</button>
+		<button (click)="onImportExcel(excelData)" class="btn btn-success pull-right">{{'ADMIN.IMPORT_BUTTON' | translate}}</button>
 	</div>
 </ng-template>
