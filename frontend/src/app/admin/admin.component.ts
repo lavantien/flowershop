@@ -98,7 +98,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	getProducts() {
-		this.http.get<Product[]>('api/product').subscribe(data => {
+		this.http.get<Product[]>('/api/product').subscribe(data => {
 			this.data = data;
 			this.productsOriginalDescription.length = 0;
 			this.data.forEach(product => {
@@ -112,7 +112,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	getCategories() {
-		this.http.get<Category[]>('api/category').subscribe(data => {
+		this.http.get<Category[]>('/api/category').subscribe(data => {
 			if (!!data) {
 				this.categories = data;
 				this.createForm.categoryName = this.categories[0].name;
@@ -122,7 +122,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	getTypes() {
-		this.http.get<Type[]>('api/type').subscribe(data => {
+		this.http.get<Type[]>('/api/type').subscribe(data => {
 			if (!!data) {
 				this.types = data;
 				this.createForm.typeName = this.types[0].name;
@@ -151,7 +151,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	onCreate() {
-		this.http.post<Product>('api/product/create', () => {
+		this.http.post<Product>('/api/product/create', () => {
 			this.createForm.imgUrl = btoa(this.createForm.imgUrl);
 			return this.createForm;
 		}).subscribe(data => {
@@ -160,7 +160,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	onEdit() {
-		this.http.put<Product>(`api/product/${this.currentId}`, () => {
+		this.http.put<Product>(`/api/product/${this.currentId}`, () => {
 			this.editForm.imgUrl = btoa(this.editForm.imgUrl);
 			return this.editForm;
 		}).subscribe(data => {
@@ -169,7 +169,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	onDelete() {
-		this.http.delete<any>(`api/product/${this.currentId}`).subscribe(data => {
+		this.http.delete<any>(`/api/product/${this.currentId}`).subscribe(data => {
 			this.getProducts();
 		});
 	}
@@ -261,7 +261,12 @@ export class AdminComponent implements OnInit {
 	}
 	
 	onImportExcel(excelData: Product[]) {
-		this.data = excelData;
+		this.http.post<Product[]>('/api/product', this.data).subscribe(data => {
+			if (data === excelData) {
+				alert('Import Successful!');
+				this.getProducts();
+			}
+		});
 	}
 
 	onExportExcel() {
@@ -292,10 +297,6 @@ export class AdminComponent implements OnInit {
 				data.price = this.dataTranslateService.getPrice(data.price, 'vi');
 			}
 		});
-	}
-
-	onRefreshImportExcel() {
-		this.excelData = null;
 	}
 
 	onChangeCategory(mode: string) {
