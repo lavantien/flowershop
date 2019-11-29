@@ -4,6 +4,7 @@ import {TranslateModule} from "@ngx-translate/core";
 import {FormsModule} from "@angular/forms";
 import {ModalModule, PaginationModule} from "ngx-bootstrap";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {LightboxModule} from "ngx-lightbox";
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 		FormsModule,
 		FontAwesomeModule,
 		ModalModule,
-		PaginationModule
+		PaginationModule,
+		LightboxModule
 	]
 })
 export class SharedModule {

@@ -13,6 +13,7 @@ import {DataTranslateService} from "../_services/data-translate.service";
 import {TranslateService} from "@ngx-translate/core";
 import {SharedService} from "../_services/shared.service";
 import * as XLSX from 'xlsx';
+import {Lightbox} from "ngx-lightbox";
 
 @Component({
 	selector: 'app-admin',
@@ -75,6 +76,7 @@ export class AdminComponent implements OnInit {
 	            private modalService: BsModalService,
 	            private dataTranslateService: DataTranslateService,
 	            private sharedService: SharedService,
+	            private lightbox: Lightbox,
 	            public translate: TranslateService) {
 		this.sharedService.getGlobalLanguage().subscribe(lang => {
 			this.locale = this.dataTranslateService.getLocale(lang);
@@ -297,6 +299,32 @@ export class AdminComponent implements OnInit {
 				data.price = this.dataTranslateService.getPrice(data.price, 'vi');
 			}
 		});
+	}
+
+	onOpenImage(index: number) {
+		let album: {
+			src: string;
+			caption: string;
+			thumb: string;
+		}[] = [];
+		const src = this.displayProducts[index].imgUrl;
+		const thumb = this.displayProducts[index].imgUrl;
+		let caption = this.displayProducts[index].name;
+		let category = '';
+		let type = '';
+		this.translate.get('DATA.' + this.displayProducts[index].categoryName).subscribe(rs => {
+			category = rs;
+		});
+		this.translate.get('DATA.' + this.displayProducts[index].typeName).subscribe(rs => {
+			type = rs;
+		});
+		caption += ' - (' + category + ' - ' + type + ').';
+		album.push({
+			src: src,
+			caption: caption,
+			thumb: thumb
+		});
+		this.lightbox.open(album, 0);
 	}
 
 	onChangeCategory(mode: string) {

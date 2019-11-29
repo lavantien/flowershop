@@ -72,13 +72,13 @@
 		</thead>
 		<tbody>
 		<ng-container *ngIf="displayProducts.length !== 0">
-			<tr *ngFor="let product of displayProducts; trackBy: trackByFn;">
+			<tr *ngFor="let product of displayProducts; trackBy: trackByFn; let i = index">
 				<th scope="row">{{product.id}}</th>
 				<td>{{product.name}}</td>
 				<td>{{product.description}}</td>
 				<td>{{product.price.toLocaleString(locale)}}</td>
 				<td>
-					<img [alt]="product.name" [src]="product.imgUrl" class="product-img">
+					<img [alt]="product.name" [src]="product.imgUrl" (click)="onOpenImage(i)" class="product-img">
 				</td>
 				<td>{{product.quantity}}</td>
 				<td>{{product.saleAmount}}</td>
