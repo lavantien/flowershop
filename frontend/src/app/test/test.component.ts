@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {timeout} from "rxjs/operators";
 
 @Component({
 	selector: 'app-test',
@@ -8,6 +9,7 @@ import {HttpClient} from "@angular/common/http";
 })
 export class TestComponent implements OnInit {
 	tests: Test[] = [];
+	timeOutHttpRequest = 2000;
 
 	constructor(private http: HttpClient) {
 	}
@@ -17,11 +19,15 @@ export class TestComponent implements OnInit {
 	}
 
 	getTests() {
-		this.http.get<Test[]>('/api/test').subscribe(rs => {
-			this.tests = rs;
+		this.http.get<Test[]>('/api/test').pipe(timeout(this.timeOutHttpRequest)).subscribe(rs => {
+			if (!!rs) {
+				this.tests = rs;
+			}
 		}, error => {
 			console.log(`Error: ${error}`);
 			this.tests = [];
+		}, () => {
+			//Spinner hide
 		});
 	}
 }

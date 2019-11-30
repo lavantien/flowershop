@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {
@@ -14,13 +14,15 @@ import {TranslateService} from "@ngx-translate/core";
 import {SharedService} from "../_services/shared.service";
 import * as XLSX from 'xlsx';
 import {Lightbox} from "ngx-lightbox";
+import {timeout} from "rxjs/operators";
+import {Subscription} from "rxjs";
 
 @Component({
 	selector: 'app-admin',
 	templateUrl: './admin.component.html',
 	styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
 	modalRef: BsModalRef;
 	data: Product[] = [];
 	displayProducts: Product[] = [];
@@ -71,6 +73,8 @@ export class AdminComponent implements OnInit {
 	bgPrimary = '';
 	tcPrimary = '';
 	excelData: any[] = [];
+	timeOutHttpRequest = 2000;
+	private subscriptions: Subscription = new Subscription();
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
@@ -78,58 +82,85 @@ export class AdminComponent implements OnInit {
 	            private sharedService: SharedService,
 	            private lightbox: Lightbox,
 	            public translate: TranslateService) {
-		this.sharedService.getGlobalLanguage().subscribe(lang => {
-			this.locale = this.dataTranslateService.getLocale(lang);
-		});
-		this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
-			this.bgPrimary = bg[0];
-			this.tcPrimary = bg[1];
-		});
 	}
 
 	ngOnInit() {
 		this.getProducts();
 		this.getCategories();
 		this.getTypes();
-		this.translate.onLangChange.subscribe(event => {
+		this.subscriptions.add(this.sharedService.getGlobalLanguage().subscribe(lang => {
+			this.locale = this.dataTranslateService.getLocale(lang);
+		}));
+		this.subscriptions.add(this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
+			this.bgPrimary = bg[0];
+			this.tcPrimary = bg[1];
+		}));
+		// TODO: Fix Firefox reload change language bug
+		this.subscriptions.add(this.translate.onLangChange.subscribe(event => {
 			this.locale = this.dataTranslateService.getLocale(event.lang);
+			console.log(event.lang);
 			this.data.forEach(product => {
 				product.price = this.dataTranslateService.getPrice(product.price, event.lang);
 			});
-		});
+		}));
+	}
+
+	ngOnDestroy() {
+		this.subscriptions.unsubscribe();
 	}
 
 	getProducts() {
-		this.http.get<Product[]>('/api/product').subscribe(data => {
-			this.data = data;
-			this.productsOriginalDescription.length = 0;
-			this.data.forEach(product => {
-				product.imgUrl = product.imgUrl ? atob(product.imgUrl) : '';
-				this.productsOriginalDescription.push(product.description);
-				product.description = product.description.substr(0, 60) + (product.description.length > 60 ? '...' : '');
-			});
-			this.searchResults = data;
-			this.paging(this.searchResults);
+		this.http.get<Product[]>('/api/product').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+			if (!!data) {
+				this.data = data;
+				this.productsOriginalDescription.length = 0;
+				this.data.forEach(product => {
+					product.imgUrl = product.imgUrl ? atob(product.imgUrl) : '';
+					this.productsOriginalDescription.push(product.description);
+					product.description = product.description.substr(0, 60) + (product.description.length > 60 ? '...' : '');
+				});
+				this.searchResults = data;
+				this.paging(this.searchResults);
+			}
+		}, error => {
+			console.log(`Error: ${error}`);
+			this.data = [];
+		}, () => {
+			// Spinner hide
 		});
 	}
 
 	getCategories() {
-		this.http.get<Category[]>('/api/category').subscribe(data => {
+		this.http.get<Category[]>('/api/category').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (!!data) {
 				this.categories = data;
 				this.createForm.categoryName = this.categories[0].name;
 				this.searchForm.categoryName = this.categories[0].name;
 			}
+		}, error => {
+			console.log(`Error: ${error}`);
+			this.categories = [];
+			this.createForm.categoryName = '';
+			this.searchForm.categoryName = '';
+		}, () => {
+			// Spinner hide
 		});
 	}
 
 	getTypes() {
-		this.http.get<Type[]>('/api/type').subscribe(data => {
+		this.http.get<Type[]>('/api/type').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (!!data) {
 				this.types = data;
 				this.createForm.typeName = this.types[0].name;
 				this.searchForm.typeName = this.types[0].name;
 			}
+		}, error => {
+			console.log(`Error: ${error}`);
+			this.types = [];
+			this.createForm.typeName = '';
+			this.searchForm.typeName = '';
+		}, () => {
+			// Spinner hide
 		});
 	}
 
@@ -156,8 +187,12 @@ export class AdminComponent implements OnInit {
 		this.http.post<Product>('/api/product/create', () => {
 			this.createForm.imgUrl = btoa(this.createForm.imgUrl);
 			return this.createForm;
-		}).subscribe(data => {
+		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(() => {
 			this.getProducts();
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+			// Spinner hide
 		});
 	}
 
@@ -165,14 +200,22 @@ export class AdminComponent implements OnInit {
 		this.http.put<Product>(`/api/product/${this.currentId}`, () => {
 			this.editForm.imgUrl = btoa(this.editForm.imgUrl);
 			return this.editForm;
-		}).subscribe(data => {
+		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(() => {
 			this.getProducts();
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+			// Spinner hide
 		});
 	}
 
 	onDelete() {
-		this.http.delete<any>(`/api/product/${this.currentId}`).subscribe(data => {
+		this.http.delete<any>(`/api/product/${this.currentId}`).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			this.getProducts();
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+			// Spinner hide
 		});
 	}
 
@@ -263,11 +306,15 @@ export class AdminComponent implements OnInit {
 	}
 	
 	onImportExcel(excelData: Product[]) {
-		this.http.post<Product[]>('/api/product', this.data).subscribe(data => {
+		this.http.post<Product[]>('/api/product', this.data).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (data === excelData) {
 				alert('Import Successful!');
 				this.getProducts();
 			}
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+			// Spinner hide
 		});
 	}
 

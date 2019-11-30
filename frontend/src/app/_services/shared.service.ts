@@ -6,7 +6,8 @@ import {BehaviorSubject} from "rxjs";
 })
 export class SharedService {
 	private globalLanguage = new BehaviorSubject<string>('en');
-	private globalBackgroundPrimary = new BehaviorSubject<[string, string]>(['bg-light', 'text-dark'])
+	private globalBackgroundPrimary = new BehaviorSubject<[string, string]>(['bg-light', 'text-dark']);
+	// private globalIsFirefox = new BehaviorSubject<boolean>(typeof InstallTrigger !== 'undefined');
 
 	constructor() {
 	}

@@ -19,6 +19,7 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {HttpClient} from "@angular/common/http";
 import {InputValidatorService} from "./_services/input-validator.service";
 import {SharedService} from "./_services/shared.service";
+import {timeout} from "rxjs/operators";
 
 @Component({
 	selector: 'app-root',
@@ -73,6 +74,7 @@ export class AppComponent implements OnInit {
 	displayBgs = ['LIGHT', 'BLUE', 'GRAY', 'GREEN', 'RED', 'YELLOW', 'TEAL', 'BLACK', 'WHITE', 'TRANS'];
 	bgs = ['bg-light', 'bg-primary', 'bg-secondary', 'bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-dark', 'bg-white', 'bg-transparent'];
 	tcs = ['text-dark', 'text-white', 'text-white', 'text-white', 'text-white', 'text-dark', 'text-white', 'text-white', 'text-dark', 'text-dark'];
+	timeOutHttpRequest = 2000;
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
@@ -95,20 +97,32 @@ export class AppComponent implements OnInit {
 	}
 
 	getCities() {
-		this.http.get<City[]>('../assets/data/cities.json').subscribe(data => {
+		this.http.get<City[]>('../assets/data/cities.json').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (!!data) {
 				this.cities = data;
 				this.signUpForm.city = this.cities[0].name;
 			}
+		}, error => {
+			console.log(`Error: ${error}`);
+			this.cities = [];
+			this.signUpForm.city = '';
+		}, () => {
+			// Spinner hide
 		});
 	}
 
 	getDistricts() {
-		this.http.get<District[]>('../assets/data/districts.json').subscribe(data => {
+		this.http.get<District[]>('../assets/data/districts.json').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (!!data) {
 				this.districts = data;
 				this.signUpForm.district = this.districts[0].name;
 			}
+		}, error => {
+			console.log(`Error: ${error}`);
+			this.districts = [];
+			this.signUpForm.district = '';
+		}, () => {
+			// Spinner hide
 		});
 	}
 
@@ -126,9 +140,6 @@ export class AppComponent implements OnInit {
 		} else {
 			alert('Login Failed!');
 		}
-		console.log(this.loginForm);
-		console.log(this.inputValidator.isInteger(1650));
-		console.log(this.inputValidator.isInteger(165.213));
 	}
 
 	openSignUpModal(template: TemplateRef<any>) {
@@ -137,7 +148,6 @@ export class AppComponent implements OnInit {
 
 	onCreateUser() {
 		alert('Created!');
-		console.log(this.signUpForm);
 	}
 
 	openForgotPasswordModal(template: TemplateRef<any>) {
@@ -147,7 +157,6 @@ export class AppComponent implements OnInit {
 	onVerifyEmail() {
 		// TODO: Implement verify email for forgot password.
 		alert('Verified!');
-		console.log(this.forgotPasswordForm);
 	}
 
 	onRefreshLoginForm() {
