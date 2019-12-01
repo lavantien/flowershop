@@ -72,6 +72,14 @@
 	</div>
 	<div class="wrapper-router">
 		<router-outlet></router-outlet>
+		<ngx-spinner
+			[fullScreen]="false"
+			bdColor="rgba(51,51,51,0.8)"
+			color="#007bff"
+			size="large"
+			type="ball-clip-rotate-pulse"
+		>
+		</ngx-spinner>
 	</div>
 	<button (click)="scrollTop()" class="btn btn-outline-primary fixed-bottom">
 		<fa-icon [icon]="faArrowUp" title="{{'MAIN.SCROLL_TOP' | translate}}"></fa-icon>
@@ -79,12 +87,12 @@
 	<button (click)="scrollBottom()" class="btn btn-outline-primary fixed-bottom-2">
 		<fa-icon [icon]="faArrowDown" title="{{'MAIN.SCROLL_BOT' | translate}}"></fa-icon>
 	</button>
-	<button (click)="scrollLeft()" class="btn btn-outline-primary fixed-bottom-3">
-		<fa-icon [icon]="faArrowLeft" title="{{'MAIN.SCROLL_LEFT' | translate}}"></fa-icon>
-	</button>
-	<button (click)="scrollRight()" class="btn btn-outline-primary fixed-bottom-4">
-		<fa-icon [icon]="faArrowRight" title="{{'MAIN.SCROLL_RIGHT' | translate}}"></fa-icon>
-	</button>
+	<!--	<button (click)="scrollLeft()" class="btn btn-outline-primary fixed-bottom-3">-->
+	<!--		<fa-icon [icon]="faArrowLeft" title="{{'MAIN.SCROLL_LEFT' | translate}}"></fa-icon>-->
+	<!--	</button>-->
+	<!--	<button (click)="scrollRight()" class="btn btn-outline-primary fixed-bottom-4">-->
+	<!--		<fa-icon [icon]="faArrowRight" title="{{'MAIN.SCROLL_RIGHT' | translate}}"></fa-icon>-->
+	<!--	</button>-->
 </div>
 
 <ng-template #loginTemplate>

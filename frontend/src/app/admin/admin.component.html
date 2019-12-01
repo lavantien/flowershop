@@ -78,7 +78,7 @@
 				<td>{{product.description}}</td>
 				<td>{{product.price.toLocaleString(locale)}}</td>
 				<td>
-					<img [alt]="product.name" [src]="product.imgUrl" (click)="onOpenImage(i)" class="product-img">
+					<img (click)="onOpenImage(i)" [alt]="product.name" [src]="product.imgUrl" class="product-img">
 				</td>
 				<td>{{product.quantity}}</td>
 				<td>{{product.saleAmount}}</td>
@@ -276,13 +276,15 @@
 				<span class="input-group-text" id="inputGroupFileAddon">{{'ADMIN.BROWSE_EXCEL' | translate}}</span>
 			</div>
 			<div class="custom-file">
-				<input (change)="onFileChange($event)" type="file" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
+				<input (change)="onFileChange($event)" aria-describedby="inputGroupFileAddon" class="custom-file-input" id="inputGroupFile"
+				       type="file">
 				<label class="custom-file-label" for="inputGroupFile">{{'ADMIN.IMPORT_EXCEL' | translate}}</label>
 			</div>
 		</div>
 		<span><i>{{'ADMIN.IMPORT_EXCEL_NOTE' | translate}}</i></span>
 	</div>
 	<div class="modal-footer bg-light">
-		<button (click)="onImportExcel(excelData)" class="btn btn-success pull-right">{{'ADMIN.IMPORT_BUTTON' | translate}}</button>
+		<button (click)="onImportExcel(excelData)"
+		        class="btn btn-success pull-right">{{'ADMIN.IMPORT_BUTTON' | translate}}</button>
 	</div>
 </ng-template>

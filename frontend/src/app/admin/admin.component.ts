@@ -1,14 +1,7 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {
-	faPen,
-	faPlusSquare,
-	faSearch,
-	faTrash,
-	faFileUpload,
-	faFileDownload
-} from '@fortawesome/free-solid-svg-icons';
+import {faFileDownload, faFileUpload, faPen, faPlusSquare, faSearch, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {DataTranslateService} from "../_services/data-translate.service";
 import {TranslateService} from "@ngx-translate/core";
 import {SharedService} from "../_services/shared.service";
@@ -16,6 +9,7 @@ import * as XLSX from 'xlsx';
 import {Lightbox} from "ngx-lightbox";
 import {timeout} from "rxjs/operators";
 import {Subscription} from "rxjs";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
 	selector: 'app-admin',
@@ -74,13 +68,14 @@ export class AdminComponent implements OnInit, OnDestroy {
 	tcPrimary = '';
 	excelData: any[] = [];
 	timeOutHttpRequest = 2000;
-	private subscriptions: Subscription = new Subscription();
+	private subscriptions = new Subscription();
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
 	            private dataTranslateService: DataTranslateService,
 	            private sharedService: SharedService,
 	            private lightbox: Lightbox,
+	            private spinner: NgxSpinnerService,
 	            public translate: TranslateService) {
 	}
 
@@ -95,14 +90,10 @@ export class AdminComponent implements OnInit, OnDestroy {
 			this.bgPrimary = bg[0];
 			this.tcPrimary = bg[1];
 		}));
-		// TODO: Fix Firefox reload change language bug
-		this.subscriptions.add(this.translate.onLangChange.subscribe(event => {
-			this.locale = this.dataTranslateService.getLocale(event.lang);
-			console.log(event.lang);
-			this.data.forEach(product => {
-				product.price = this.dataTranslateService.getPrice(product.price, event.lang);
-			});
-		}));
+		this.spinner.show();
+		setTimeout(() => {
+			this.spinner.hide();
+		}, 3000);
 	}
 
 	ngOnDestroy() {
@@ -110,6 +101,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	getProducts() {
+		this.spinner.show();
 		this.http.get<Product[]>('/api/product').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (!!data) {
 				this.data = data;
@@ -118,6 +110,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 					product.imgUrl = product.imgUrl ? atob(product.imgUrl) : '';
 					this.productsOriginalDescription.push(product.description);
 					product.description = product.description.substr(0, 60) + (product.description.length > 60 ? '...' : '');
+					product.price = this.dataTranslateService.getPrice(product.price, 'vi');
 				});
 				this.searchResults = data;
 				this.paging(this.searchResults);
@@ -127,10 +120,12 @@ export class AdminComponent implements OnInit, OnDestroy {
 			this.data = [];
 		}, () => {
 			// Spinner hide
+			this.spinner.hide();
 		});
 	}
 
 	getCategories() {
+		this.spinner.show();
 		this.http.get<Category[]>('/api/category').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (!!data) {
 				this.categories = data;
@@ -144,10 +139,12 @@ export class AdminComponent implements OnInit, OnDestroy {
 			this.searchForm.categoryName = '';
 		}, () => {
 			// Spinner hide
+			this.spinner.hide();
 		});
 	}
 
 	getTypes() {
+		this.spinner.show();
 		this.http.get<Type[]>('/api/type').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (!!data) {
 				this.types = data;
@@ -161,6 +158,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 			this.searchForm.typeName = '';
 		}, () => {
 			// Spinner hide
+			this.spinner.hide();
 		});
 	}
 
@@ -184,8 +182,10 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	onCreate() {
+		this.spinner.show();
 		this.http.post<Product>('/api/product/create', () => {
 			this.createForm.imgUrl = btoa(this.createForm.imgUrl);
+			this.createForm.price = this.dataTranslateService.getPrice(this.createForm.price, 'en');
 			return this.createForm;
 		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(() => {
 			this.getProducts();
@@ -193,12 +193,15 @@ export class AdminComponent implements OnInit, OnDestroy {
 			console.log(`Error: ${error}`);
 		}, () => {
 			// Spinner hide
+			this.spinner.hide();
 		});
 	}
 
 	onEdit() {
+		this.spinner.show();
 		this.http.put<Product>(`/api/product/${this.currentId}`, () => {
 			this.editForm.imgUrl = btoa(this.editForm.imgUrl);
+			this.createForm.price = this.dataTranslateService.getPrice(this.createForm.price, 'en');
 			return this.editForm;
 		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(() => {
 			this.getProducts();
@@ -206,16 +209,19 @@ export class AdminComponent implements OnInit, OnDestroy {
 			console.log(`Error: ${error}`);
 		}, () => {
 			// Spinner hide
+			this.spinner.hide();
 		});
 	}
 
 	onDelete() {
+		this.spinner.show();
 		this.http.delete<any>(`/api/product/${this.currentId}`).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			this.getProducts();
 		}, error => {
 			console.log(`Error: ${error}`);
 		}, () => {
 			// Spinner hide
+			this.spinner.hide();
 		});
 	}
 
@@ -304,9 +310,15 @@ export class AdminComponent implements OnInit, OnDestroy {
 		};
 		reader.readAsBinaryString(target.files[0]);
 	}
-	
+
 	onImportExcel(excelData: Product[]) {
-		this.http.post<Product[]>('/api/product', this.data).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+		this.spinner.show();
+		this.http.post<Product[]>('/api/product', () => {
+			this.data.forEach(data => {
+				data.price = this.dataTranslateService.getPrice(data.price, 'en');
+			});
+			return this.data;
+		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (data === excelData) {
 				alert('Import Successful!');
 				this.getProducts();
@@ -315,6 +327,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 			console.log(`Error: ${error}`);
 		}, () => {
 			// Spinner hide
+			this.spinner.hide();
 		});
 	}
 

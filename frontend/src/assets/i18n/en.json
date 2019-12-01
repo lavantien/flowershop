@@ -46,7 +46,7 @@
 	"ADMIN": {
 		"NAME": "Name",
 		"DESCRIPTION": "Description",
-		"PRICE": "Price (USD)",
+		"PRICE": "Price (VND)",
 		"IMAGE": "Image",
 		"QUANTITY": "Quantity",
 		"SALE_AMOUNT": "Sale amount",

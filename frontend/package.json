@@ -29,6 +29,7 @@
 		"jquery": "^3.4.1",
 		"ngx-bootstrap": "^5.2.0",
 		"ngx-lightbox": "^2.1.1",
+		"ngx-spinner": "^8.0.3",
 		"popper.js": "^1.14.7",
 		"rxjs": "~6.4.0",
 		"tslib": "^1.10.0",

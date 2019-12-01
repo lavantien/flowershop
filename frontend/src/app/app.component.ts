@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
 import {
 	faArrowDown,
@@ -20,13 +20,15 @@ import {HttpClient} from "@angular/common/http";
 import {InputValidatorService} from "./_services/input-validator.service";
 import {SharedService} from "./_services/shared.service";
 import {timeout} from "rxjs/operators";
+import {NgxSpinnerService} from "ngx-spinner";
+import {Subscription} from "rxjs";
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 	isAdmin = true;
 	isTest = true;
 	isLoggedIn = false;
@@ -75,20 +77,22 @@ export class AppComponent implements OnInit {
 	bgs = ['bg-light', 'bg-primary', 'bg-secondary', 'bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-dark', 'bg-white', 'bg-transparent'];
 	tcs = ['text-dark', 'text-white', 'text-white', 'text-white', 'text-white', 'text-dark', 'text-white', 'text-white', 'text-dark', 'text-dark'];
 	timeOutHttpRequest = 2000;
+	private subscriptions = new Subscription();
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
 	            private inputValidator: InputValidatorService,
 	            private sharedService: SharedService,
+	            private spinner: NgxSpinnerService,
 	            public translate: TranslateService) {
 		translate.addLangs(['en', 'vi']);
 		translate.setDefaultLang('en');
 		const browserLang = translate.getBrowserLang();
 		translate.use(browserLang.match(/en|vi/) ? browserLang : 'en');
-		this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
+		this.subscriptions.add(this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
 			this.bgPrimary = bg[0];
 			this.tcPrimary = bg[1];
-		});
+		}));
 	}
 
 	ngOnInit() {
@@ -96,7 +100,12 @@ export class AppComponent implements OnInit {
 		this.getDistricts();
 	}
 
+	ngOnDestroy() {
+		this.subscriptions.unsubscribe();
+	}
+
 	getCities() {
+		this.spinner.show();
 		this.http.get<City[]>('../assets/data/cities.json').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (!!data) {
 				this.cities = data;
@@ -108,10 +117,12 @@ export class AppComponent implements OnInit {
 			this.signUpForm.city = '';
 		}, () => {
 			// Spinner hide
+			this.spinner.hide();
 		});
 	}
 
 	getDistricts() {
+		this.spinner.show();
 		this.http.get<District[]>('../assets/data/districts.json').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
 			if (!!data) {
 				this.districts = data;
@@ -123,6 +134,7 @@ export class AppComponent implements OnInit {
 			this.signUpForm.district = '';
 		}, () => {
 			// Spinner hide
+			this.spinner.hide();
 		});
 	}
 
