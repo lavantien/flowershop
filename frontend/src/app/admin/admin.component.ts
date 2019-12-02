@@ -10,7 +10,7 @@ import {Lightbox} from "ngx-lightbox";
 import {timeout} from "rxjs/operators";
 import {Subscription} from "rxjs";
 import {NgxSpinnerService} from "ngx-spinner";
-
+// TODO: Implement select multiple rows.
 @Component({
 	selector: 'app-admin',
 	templateUrl: './admin.component.html',
