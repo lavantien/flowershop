@@ -65,7 +65,11 @@
 		"EXPORT_EXCEL": "Export data to an Excel file",
 		"BROWSE_EXCEL": "Upload Excel",
 		"IMPORT_BUTTON": "Import",
-		"IMPORT_EXCEL_NOTE": "Excel file only. Import data start from 2nd row of the file."
+		"IMPORT_EXCEL_NOTE": "Excel file only. Import data start from 2nd row of the file.",
+		"ITEMS_PER_PAGE": "Number of items displayed per page"
+	},
+	"SHOP": {
+
 	},
 	"DATA": {
 		"FLOWERS": "Flowers",

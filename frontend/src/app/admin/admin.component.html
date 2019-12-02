@@ -23,16 +23,16 @@
 			</div>
 			<div class="form-group col-2">
 				<button (click)="onSearch()" class="btn btn-primary">
-					<fa-icon [icon]="faSearch" title="{{'ADMIN.SEARCH_ADVANCED' | translate}}"></fa-icon>
+					<fa-icon [icon]="faSearch" tooltip="{{'ADMIN.SEARCH_ADVANCED' | translate}}" placement="bottom"></fa-icon>
 				</button>
 				<button (click)="openCreateModal(createTemplate)" class="btn btn-primary btn-create">
-					<fa-icon [icon]="faPlusSquare" title="{{'ADMIN.CREATE_PRODUCT' | translate}}"></fa-icon>
+					<fa-icon [icon]="faPlusSquare" tooltip="{{'ADMIN.CREATE_PRODUCT' | translate}}" placement="bottom"></fa-icon>
 				</button>
 				<button (click)="openImportExcelModal(importExcelTemplate)" class="btn btn-primary btn-create">
-					<fa-icon [icon]="faFileUpload" title="{{'ADMIN.IMPORT_EXCEL' | translate}}"></fa-icon>
+					<fa-icon [icon]="faFileUpload" tooltip="{{'ADMIN.IMPORT_EXCEL' | translate}}" placement="bottom"></fa-icon>
 				</button>
 				<button (click)="onExportExcel()" class="btn btn-primary btn-create">
-					<fa-icon [icon]="faFileDownload" title="{{'ADMIN.EXPORT_EXCEL' | translate}}"></fa-icon>
+					<fa-icon [icon]="faFileDownload" tooltip="{{'ADMIN.EXPORT_EXCEL' | translate}}" placement="bottom"></fa-icon>
 				</button>
 			</div>
 			<div class="form-group col-3">
@@ -48,7 +48,7 @@
 			</div>
 			<div class="form-group col-1">
 				<select (change)="paging(searchResults)" [(ngModel)]="pagination.itemPerPage"
-				        class="btn btn-outline-primary float-right">
+				        class="btn btn-outline-primary float-right" tooltip="{{'ADMIN.ITEMS_PER_PAGE' | translate}}" placement="bottom">
 					<option *ngFor="let val of [5, 10, 20, 50, 100, 200, 500, 1000]; let i = index" [selected]="i === 0"
 					        [value]="val">{{val}}</option>
 				</select>
@@ -86,10 +86,10 @@
 				<td>{{'DATA.' + product.typeName | translate}}</td>
 				<td>
 					<button (click)="openEditModal(editTemplate, product.id)" class="btn btn-info btn-edit">
-						<fa-icon [icon]="faPen" title="{{'ADMIN.EDIT_PRODUCT' | translate}}"></fa-icon>
+						<fa-icon [icon]="faPen" tooltip="{{'ADMIN.EDIT_PRODUCT' | translate}}" placement="bottom"></fa-icon>
 					</button>
 					<button (click)="openDeleteModal(deleteTemplate, product.id)" class="btn btn-warning btn-edit">
-						<fa-icon [icon]="faTrash" title="{{'ADMIN.DELETE_PRODUCT' | translate}}"></fa-icon>
+						<fa-icon [icon]="faTrash" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}" placement="bottom"></fa-icon>
 					</button>
 				</td>
 			</tr>
@@ -258,7 +258,7 @@
 	</div>
 	<div class="modal-footer bg-light">
 		<button (click)="onDelete()" class="btn btn-danger pull-right">
-			<fa-icon [icon]="faTrash" title="{{'ADMIN.DELETE_PRODUCT' | translate}}"></fa-icon>
+			<fa-icon [icon]="faTrash" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}" placement="bottom"></fa-icon>
 		</button>
 	</div>
 </ng-template>

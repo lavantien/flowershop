@@ -2,84 +2,66 @@
 	$lap-inner-width: 1294px;
 	$pc-inner-width: 1868px;
 	margin: 10px;
-
 	.wrapper-filter {
 		width: $lap-inner-width;
 		@media only screen and (min-width: 1920px) {
 			width: $pc-inner-width;
 		}
-
 		.product-filter {
 			margin-bottom: 10px;
-
 			.form-group {
 				margin-bottom: 0;
 				height: 43px;
-
 				.btn-create {
 					margin-left: 10px;
 				}
 			}
 		}
 	}
-
 	table {
 		th, td {
 			text-align: center;
 			vertical-align: middle;
 		}
-
 		.btn-edit {
 			margin: 5px;
 		}
 	}
-
 	.product-img {
 		max-height: 50px;
 	}
-
 	.table-product {
 		width: $lap-inner-width;
 		@media only screen and (min-width: 1920px) {
 			width: $pc-inner-width;
 		}
-
 		.col-index {
 			width: 4%;
 		}
-
 		.col-name {
 			width: 12%;
 		}
-
 		.col-description {
 			width: 20%;
 		}
-
 		.col-price {
 			width: 8%;
 		}
-
 		.col-image {
 			width: 8%;
 		}
-
 		.col-quantity {
 			width: 9%;
 		}
-
 		.col-sale-amount {
 			width: 9%;
 		}
-
 		.col-type {
 			width: 11%;
 		}
-
 		.col-category {
 			width: 9%;
 		}
-
 		.col-actions {
 			width: 10%;
 		}

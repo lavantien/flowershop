@@ -14,58 +14,58 @@
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
 						<a class="nav-link" routerLink="/shop" routerLinkActive="active">
-							<fa-icon [icon]="faStore" title="{{'MAIN.SHOP' | translate}}"></fa-icon>
+							<fa-icon [icon]="faStore" tooltip="{{'MAIN.SHOP' | translate}}"></fa-icon>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a [tabindex]="isLoggedIn ? null : -1" class="nav-link {{isLoggedIn ? '' : 'disabled'}}" routerLink="/info"
 						   routerLinkActive="active">
-							<fa-icon [icon]="faUser" title="{{'MAIN.INFO' | translate}}"></fa-icon>
+							<fa-icon [icon]="faUser" tooltip="{{'MAIN.INFO' | translate}}"></fa-icon>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/admin"
 						   routerLinkActive="active">
-							<fa-icon [icon]="faWarehouse" title="{{'MAIN.ADMIN' | translate}}"></fa-icon>
+							<fa-icon [icon]="faWarehouse" tooltip="{{'MAIN.ADMIN' | translate}}"></fa-icon>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/summary"
 						   routerLinkActive="active">
-							<fa-icon [icon]="faChartLine" title="{{'MAIN.SUMMARY' | translate}}"></fa-icon>
+							<fa-icon [icon]="faChartLine" tooltip="{{'MAIN.SUMMARY' | translate}}"></fa-icon>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" routerLink="/contact" routerLinkActive="active">
-							<fa-icon [icon]="faHandshake" title="{{'MAIN.CONTACT' | translate}}"></fa-icon>
+							<fa-icon [icon]="faHandshake" tooltip="{{'MAIN.CONTACT' | translate}}"></fa-icon>
 						</a>
 					</li>
 					<li *ngIf="isTest" class="nav-item">
 						<a class="nav-link" routerLink="/test" routerLinkActive="active">
-							<fa-icon [icon]="faCubes" title="{{'MAIN.TEST' | translate}}"></fa-icon>
+							<fa-icon [icon]="faCubes" tooltip="{{'MAIN.TEST' | translate}}"></fa-icon>
 						</a>
 					</li>
 				</ul>
 				<!--				<form class="form-inline my-2">-->
 				<!--					<input class="form-control" placeholder="{{'MAIN.SEARCH_EVERYTHING' | translate}}"-->
 				<!--					       type="search">-->
-				<!--					<button class="btn btn-outline-success" type="submit"><fa-icon [icon]="faSearch" title="{{'MAIN.SEARCH' | translate}}"></fa-icon></button>-->
+				<!--					<button class="btn btn-outline-success" type="submit"><fa-icon [icon]="faSearch" tooltip="{{'MAIN.SEARCH' | translate}}"></fa-icon></button>-->
 				<!--				</form>-->
 				<select (change)="onChangeThemeColor()" [(ngModel)]="displayBg" class="btn btn-outline-primary btn-lang"
-				        title="{{'MAIN.THEME_COLOR' | translate}}">
+				        tooltip="{{'MAIN.THEME_COLOR' | translate}}">
 					<option *ngFor="let bg of displayBgs" [value]="bg">{{'MAIN.' + bg | translate}}</option>
 				</select>
 
 				<select #langSelect (change)="translate.use(langSelect.value)" class="btn btn-outline-primary btn-lang"
-				        title="{{'MAIN.LANGUAGE' | translate}}">
+				        tooltip="{{'MAIN.LANGUAGE' | translate}}">
 					<option *ngFor="let lang of translate.getLangs()" [selected]="lang === translate.currentLang"
 					        [value]="lang">{{lang}}</option>
 				</select>
 				<button (click)="openLoginModal(loginTemplate)" *ngIf="!isLoggedIn" class="btn btn-outline-primary">
-					<fa-icon [icon]="faSignInAlt" title="{{'MAIN.LOGIN' | translate}}"></fa-icon>
+					<fa-icon [icon]="faSignInAlt" tooltip="{{'MAIN.LOGIN' | translate}}"></fa-icon>
 				</button>
 				<button *ngIf="isLoggedIn" class="btn btn-outline-danger">
-					<fa-icon [icon]="faSignOutAlt" title="{{'MAIN.LOGOUT' | translate}}"></fa-icon>
+					<fa-icon [icon]="faSignOutAlt" tooltip="{{'MAIN.LOGOUT' | translate}}"></fa-icon>
 				</button>
 			</div>
 		</nav>
@@ -82,16 +82,16 @@
 		</ngx-spinner>
 	</div>
 	<button (click)="scrollTop()" class="btn btn-outline-primary fixed-bottom">
-		<fa-icon [icon]="faArrowUp" title="{{'MAIN.SCROLL_TOP' | translate}}"></fa-icon>
+		<fa-icon [icon]="faArrowUp" tooltip="{{'MAIN.SCROLL_TOP' | translate}}"></fa-icon>
 	</button>
 	<button (click)="scrollBottom()" class="btn btn-outline-primary fixed-bottom-2">
-		<fa-icon [icon]="faArrowDown" title="{{'MAIN.SCROLL_BOT' | translate}}"></fa-icon>
+		<fa-icon [icon]="faArrowDown" tooltip="{{'MAIN.SCROLL_BOT' | translate}}"></fa-icon>
 	</button>
 	<!--	<button (click)="scrollLeft()" class="btn btn-outline-primary fixed-bottom-3">-->
-	<!--		<fa-icon [icon]="faArrowLeft" title="{{'MAIN.SCROLL_LEFT' | translate}}"></fa-icon>-->
+	<!--		<fa-icon [icon]="faArrowLeft" tooltip="{{'MAIN.SCROLL_LEFT' | translate}}"></fa-icon>-->
 	<!--	</button>-->
 	<!--	<button (click)="scrollRight()" class="btn btn-outline-primary fixed-bottom-4">-->
-	<!--		<fa-icon [icon]="faArrowRight" title="{{'MAIN.SCROLL_RIGHT' | translate}}"></fa-icon>-->
+	<!--		<fa-icon [icon]="faArrowRight" tooltip="{{'MAIN.SCROLL_RIGHT' | translate}}"></fa-icon>-->
 	<!--	</button>-->
 </div>
 

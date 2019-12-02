@@ -8,7 +8,7 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {SharedModule} from "./shared.module";
-import {ModalModule, PaginationModule} from "ngx-bootstrap";
+import {ModalModule, PaginationModule, TooltipModule} from "ngx-bootstrap";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -33,6 +33,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		}),
 		ModalModule.forRoot(),
 		PaginationModule.forRoot(),
+		TooltipModule.forRoot(),
 		SharedModule
 	],
 	providers: [],

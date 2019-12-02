@@ -1,1 +1,69 @@
-<p>store works!</p>
+<div class="wrapper-store">
+	<div class="wrapper-product">
+		<div class="wrapper-filter">
+			<div class="form-row">
+				<div class="form-group col-2">
+					<input (keyup.enter)="onSearch()" [(ngModel)]="searchForm.name" class="form-control"
+					       placeholder="{{'ADMIN.PRODUCT_NAME' | translate}}"
+					       type="text">
+				</div>
+				<div class="form-group col-2">
+					<select (change)="onChangeCategory('search'); onSearch()" [(ngModel)]="searchForm.categoryName"
+					        class="form-control">
+						<option *ngFor="let category of categories"
+						        [value]="category.name">{{'DATA.' + category.name | translate}}</option>
+					</select>
+				</div>
+				<div class="form-group col-2">
+					<select (change)="onChangeTypeSearch(); onSearch()" [(ngModel)]="searchForm.typeName" class="form-control">
+						<ng-container *ngFor="let type of types">
+							<option *ngIf="type.categoryName === searchForm.categoryName"
+							        [value]="type.name">{{'DATA.' + type.name | translate}}</option>
+						</ng-container>
+					</select>
+				</div>
+				<div class="form-group col-1">
+					<button (click)="onSearch()" class="btn btn-primary">
+						<fa-icon [icon]="faSearch" tooltip="{{'ADMIN.SEARCH_ADVANCED' | translate}}" placement="bottom"></fa-icon>
+					</button>
+				</div>
+				<div class="form-group col-4">
+					<pagination (pageChanged)="onPageChanged($event)"
+					            [(ngModel)]="pagination.currentPage"
+					            [boundaryLinks]="true"
+					            [itemsPerPage]="pagination.itemPerPage"
+					            [maxSize]="pagination.maxSize"
+					            [totalItems]="pagination.totalItem"
+					            class="float-right" firstText="&laquo;" lastText="&raquo;" nextText="&rsaquo;"
+					            previousText="&lsaquo;">
+					</pagination>
+				</div>
+				<div class="form-group col-1">
+					<select (change)="paging(searchResults)" [(ngModel)]="pagination.itemPerPage"
+					        class="btn btn-outline-primary float-right" tooltip="{{'ADMIN.ITEMS_PER_PAGE' | translate}}" placement="bottom">
+						<option *ngFor="let val of [6, 12, 24, 48, 96, 192, 500, 1000]; let i = index" [selected]="i === 0"
+						        [value]="val">{{val}}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div *ngIf="displayProducts.length !== 0" class="row">
+				<div *ngFor="let product of displayProducts; trackBy: trackByFn; let i = index" class="col-sm-2">
+					<div class="card">
+						<img (click)="onOpenImage(i)" [alt]="product.name" [src]="product.imgUrl" class="card-img-top">
+						<div class="card-body">
+							<h5 class="card-title">{{product.name}}</h5>
+							<p class="card-text">{{product.price.toLocaleString(locale)}} VND</p>
+							<button class="btn btn-primary">IDetail</button>
+							<button class="btn btn-primary">IAddCart</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div *ngIf="displayProducts.length === 0" class="row">
+				<div><i>{{'ADMIN.NO_PRODUCT_FOUND' | translate}}</i></div>
+			</div>
+		</div>
+	</div>
+</div>

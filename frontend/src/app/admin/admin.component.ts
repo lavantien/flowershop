@@ -90,10 +90,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 			this.bgPrimary = bg[0];
 			this.tcPrimary = bg[1];
 		}));
-		this.spinner.show();
-		setTimeout(() => {
-			this.spinner.hide();
-		}, 3000);
 	}
 
 	ngOnDestroy() {

@@ -65,7 +65,11 @@
 		"EXPORT_EXCEL": "Xuất dữ liệu ra thành một tệp Excel",
 		"BROWSE_EXCEL": "Chọn tệp Excel",
 		"IMPORT_BUTTON": "Nhập",
-		"IMPORT_EXCEL_NOTE": "Chỉ nhận tệp Excel. Tính từ dòng thứ 2 trở đi của tệp."
+		"IMPORT_EXCEL_NOTE": "Chỉ nhận tệp Excel. Tính từ dòng thứ 2 trở đi của tệp.",
+		"ITEMS_PER_PAGE": "Số sản phẩm hiển thị trong một trang,"
+	},
+	"SHOP": {
+
 	},
 	"DATA": {
 		"FLOWERS": "Hoa",
