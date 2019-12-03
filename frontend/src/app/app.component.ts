@@ -23,7 +23,7 @@ import {SharedService} from "./_services/shared.service";
 import {timeout} from "rxjs/operators";
 import {NgxSpinnerService} from "ngx-spinner";
 import {Subscription} from "rxjs";
-
+// TODO: Add footer
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',

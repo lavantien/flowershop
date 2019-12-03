@@ -1,4 +1,4 @@
-package com.schoolproject.flowershop.api.bill;
+package com.lavantien.flowershop.api.bill;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

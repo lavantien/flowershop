@@ -1,4 +1,4 @@
-package com.schoolproject.flowershop.api.user;
+package com.lavantien.flowershop.api.user;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

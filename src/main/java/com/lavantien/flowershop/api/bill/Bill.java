@@ -1,4 +1,4 @@
-package com.schoolproject.flowershop.api.bill;
+package com.lavantien.flowershop.api.bill;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

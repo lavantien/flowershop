@@ -1,4 +1,4 @@
-package com.schoolproject.flowershop.api.product;
+package com.lavantien.flowershop.api.product;
 
 import org.hibernate.validator.constraints.Length;
 

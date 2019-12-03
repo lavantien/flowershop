@@ -12,7 +12,7 @@ import {Subscription} from "rxjs";
 import {NgxSpinnerService} from "ngx-spinner";
 
 // TODO: Implement select multiple rows.
-// TODO: Implement sortable headers
+// TODO: Implement sortable headers (name, price, quantity, saleAmount)
 @Component({
 	selector: 'app-admin',
 	templateUrl: './admin.component.html',

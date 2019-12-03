@@ -8,7 +8,7 @@
 		<version>2.2.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.schoolproject</groupId>
+	<groupId>com.lavantien</groupId>
 	<artifactId>flowershop</artifactId>
 	<version>1.0</version>
 	<name>flowershop</name>

@@ -1,4 +1,4 @@
-package com.schoolproject.flowershop;
+package com.lavantien.flowershop;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

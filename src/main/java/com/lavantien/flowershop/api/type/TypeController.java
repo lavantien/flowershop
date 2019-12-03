@@ -1,4 +1,4 @@
-package com.schoolproject.flowershop.api.type;
+package com.lavantien.flowershop.api.type;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

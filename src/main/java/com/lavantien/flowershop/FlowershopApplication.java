@@ -1,4 +1,4 @@
-package com.schoolproject.flowershop;
+package com.lavantien.flowershop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -9,7 +9,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {Subscription} from "rxjs";
 import {timeout} from "rxjs/operators";
 import {faCartPlus, faDna, faSearch, faSortAmountDownAlt, faSortAmountUp} from '@fortawesome/free-solid-svg-icons';
-
+// TODO: Pull left sort button
 @Component({
 	selector: 'app-store',
 	templateUrl: './store.component.html',

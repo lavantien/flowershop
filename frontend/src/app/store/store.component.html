@@ -23,8 +23,8 @@
 					</select>
 				</div>
 				<div class="form-group col-xl-1 col-lg-1 col-md-1 col-sm-3 col-3">
-					<button (click)="onSearch()" class="btn btn-dark">
-						<fa-icon [icon]="faSearch" placement="bottom" tooltip="{{'ADMIN.SEARCH_ADVANCED' | translate}}"></fa-icon>
+					<button (click)="onSearch()" class="btn btn-dark" tooltip="{{'ADMIN.SEARCH_ADVANCED' | translate}}" placement="bottom">
+						<fa-icon [icon]="faSearch"></fa-icon>
 					</button>
 				</div>
 				<div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-8 col-8">
@@ -40,16 +40,14 @@
 					</pagination>
 				</div>
 				<div class="form-group col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1">
-					<button (click)="onSortPrice()" class="btn btn-outline-dark">
-						<fa-icon *ngIf="sortFlip" [icon]="faSortAmountUp" placement="bottom"
-						         tooltip="{{'SHOP.SORT_PRICE' | translate}}"></fa-icon>
-						<fa-icon *ngIf="!sortFlip" [icon]="faSortAmountDownAlt" placement="bottom"
-						         tooltip="{{'SHOP.SORT_PRICE' | translate}}"></fa-icon>
+					<button (click)="onSortPrice()" class="btn btn-dark" tooltip="{{'SHOP.SORT_PRICE' | translate}}" placement="bottom">
+						<fa-icon *ngIf="sortFlip" [icon]="faSortAmountUp"></fa-icon>
+						<fa-icon *ngIf="!sortFlip" [icon]="faSortAmountDownAlt"></fa-icon>
 					</button>
 				</div>
 				<div class="form-group col-xl-1 col-lg-1 col-md-1 col-sm-3 col-3">
 					<select (change)="paging(searchResults)" [(ngModel)]="pagination.itemPerPage"
-					        class="btn btn-outline-dark pl-0" placement="bottom" tooltip="{{'ADMIN.ITEMS_PER_PAGE' | translate}}">
+					        class="btn btn-outline-dark pl-0" tooltip="{{'ADMIN.ITEMS_PER_PAGE' | translate}}" placement="bottom">
 						<option *ngFor="let val of [6, 12, 24, 48, 96]; let i = index" [selected]="i === 0"
 						        [value]="val">{{val}}</option>
 					</select>
@@ -68,9 +66,8 @@
 						<div class="card-footer {{bgPrimary}} {{tcPrimary}}">
 							<span class="float-left">{{product.price.toLocaleString(locale)}} đ</span>
 							<span class="float-right">
-								<button (click)="onAddToCart(i)" class="btn btn-dark">
-									<fa-icon [icon]="faCartPlus" placement="bottom"
-									         tooltip="{{'SHOP.ADD_TO_CART' | translate}}"></fa-icon>
+								<button (click)="onAddToCart(i)" class="btn btn-dark" tooltip="{{'SHOP.ADD_TO_CART' | translate}}" placement="bottom">
+									<fa-icon [icon]="faCartPlus"></fa-icon>
 								</button>
 							</span>
 						</div>

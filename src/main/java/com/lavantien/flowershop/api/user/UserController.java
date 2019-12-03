@@ -1,4 +1,4 @@
-package com.schoolproject.flowershop.api.user;
+package com.lavantien.flowershop.api.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
