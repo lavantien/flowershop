@@ -13,6 +13,17 @@
 			.btn-lang {
 				margin-right: 15px;
 			}
+
+			@media only screen and (min-width: 576px) {
+				.responsive-float {
+					float: right;
+				}
+			}
+			@media only screen and (max-width: 576px) {
+				.responsive-float {
+					float: left;
+				}
+			}
 		}
 	}
 

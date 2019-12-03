@@ -6,6 +6,7 @@ import {BehaviorSubject} from "rxjs";
 })
 export class SharedService {
 	private globalLanguage = new BehaviorSubject<string>('en');
+	private globalButtonStyle = new BehaviorSubject<string>('btn-outline-primary');
 	private globalBackgroundPrimary = new BehaviorSubject<[string, string]>(['bg-light', 'text-dark']);
 
 	constructor() {

@@ -10,7 +10,9 @@ import {Lightbox} from "ngx-lightbox";
 import {timeout} from "rxjs/operators";
 import {Subscription} from "rxjs";
 import {NgxSpinnerService} from "ngx-spinner";
+
 // TODO: Implement select multiple rows.
+// TODO: Implement sortable headers
 @Component({
 	selector: 'app-admin',
 	templateUrl: './admin.component.html',
@@ -365,16 +367,18 @@ export class AdminComponent implements OnInit, OnDestroy {
 		}[] = [];
 		const src = this.displayProducts[index].imgUrl;
 		const thumb = this.displayProducts[index].imgUrl;
-		let caption = this.displayProducts[index].name;
+		let caption = '<b>' + this.displayProducts[index].name;
 		let category = '';
 		let type = '';
+		let description: string;
 		this.translate.get('DATA.' + this.displayProducts[index].categoryName).subscribe(rs => {
 			category = rs;
 		});
 		this.translate.get('DATA.' + this.displayProducts[index].typeName).subscribe(rs => {
 			type = rs;
 		});
-		caption += ' - (' + category + ' - ' + type + ').';
+		description = this.productsOriginalDescription[this.productsOriginalDescription.findIndex(x => x.includes(this.displayProducts[index].description.substring(0, this.displayProducts[index].description.length - 3)))];
+		caption += '</b> - (' + category + ' - ' + type + ').<br><i>' + description + '</i>';
 		album.push({
 			src: src,
 			caption: caption,

@@ -1,14 +1,15 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
 import {
-	faArrowDown,
+	faAngleDoubleDown,
+	faAngleDoubleUp,
 	faArrowLeft,
 	faArrowRight,
-	faArrowUp,
 	faChartLine,
 	faCubes,
 	faHandshake,
 	faSearch,
+	faShoppingCart,
 	faSignInAlt,
 	faSignOutAlt,
 	faStore,
@@ -32,8 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
 	isAdmin = true;
 	isTest = true;
 	isLoggedIn = false;
-	faArrowUp = faArrowUp;
-	faArrowDown = faArrowDown;
+	faAngleDoubleUp = faAngleDoubleUp;
+	faAngleDoubleDown = faAngleDoubleDown;
 	faArrowLeft = faArrowLeft;
 	faArrowRight = faArrowRight;
 	faStore = faStore;
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	faSignInAlt = faSignInAlt;
 	faSignOutAlt = faSignOutAlt;
 	faChartLine = faChartLine;
+	faShoppingCart = faShoppingCart;
 	modalRef: BsModalRef;
 	modalRef2: BsModalRef;
 	loginForm = {
@@ -169,6 +171,14 @@ export class AppComponent implements OnInit, OnDestroy {
 	onVerifyEmail() {
 		// TODO: Implement verify email for forgot password.
 		alert('Verified!');
+	}
+
+	openCartModal(template: TemplateRef<any>) {
+		this.modalRef = this.modalService.show(template);
+	}
+
+	onSettle() {
+		alert('confirmed transaction!');
 	}
 
 	onRefreshLoginForm() {

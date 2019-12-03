@@ -41,7 +41,9 @@
 		"TEAL": "Teal",
 		"BLACK": "Black",
 		"WHITE": "White",
-		"TRANS": "Transparent"
+		"TRANS": "Transparent",
+		"CART": "Shopping cart",
+		"CONFIRM_ORDER": "Confirm order"
 	},
 	"ADMIN": {
 		"NAME": "Name",
@@ -69,7 +71,9 @@
 		"ITEMS_PER_PAGE": "Number of items displayed per page"
 	},
 	"SHOP": {
-
+		"DETAILS": "Details",
+		"ADD_TO_CART": "Add to shopping cart",
+		"SORT_PRICE": "Sort by price"
 	},
 	"DATA": {
 		"FLOWERS": "Flowers",

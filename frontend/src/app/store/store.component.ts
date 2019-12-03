@@ -8,7 +8,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {TranslateService} from "@ngx-translate/core";
 import {Subscription} from "rxjs";
 import {timeout} from "rxjs/operators";
-import {faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faCartPlus, faDna, faSearch, faSortAmountDownAlt, faSortAmountUp} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'app-store',
@@ -17,8 +17,11 @@ import {faSearch} from '@fortawesome/free-solid-svg-icons';
 })
 export class StoreComponent implements OnInit, OnDestroy {
 	faSearch = faSearch;
+	faCartPlus = faCartPlus;
+	faDna = faDna;
+	faSortAmountUp = faSortAmountUp;
+	faSortAmountDownAlt = faSortAmountDownAlt;
 	timeOutHttpRequest = 2000;
-	private subscriptions = new Subscription();
 	modalRef: BsModalRef;
 	products: Product[] = [];
 	categories: Category[] = [];
@@ -30,7 +33,7 @@ export class StoreComponent implements OnInit, OnDestroy {
 		totalItem: 0,
 		itemPerPage: 24,
 		currentPage: 1,
-		maxSize: 9
+		maxSize: 3
 	};
 	displayProducts: Product[] = [];
 	searchForm = {
@@ -39,6 +42,9 @@ export class StoreComponent implements OnInit, OnDestroy {
 		typeName: ''
 	};
 	searchResults: Product[] = [];
+	sortFlip = false;
+	firstTimeSort = true;
+	private subscriptions = new Subscription();
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
@@ -74,6 +80,8 @@ export class StoreComponent implements OnInit, OnDestroy {
 				this.products.forEach(product => {
 					product.imgUrl = product.imgUrl ? atob(product.imgUrl) : '';
 					product.price = this.dataTranslateService.getPrice(product.price, 'vi');
+					// TODO: Translate product name
+					// TODO: Translate product production
 				});
 				this.searchResults = data;
 				this.paging(this.searchResults);
@@ -148,11 +156,13 @@ export class StoreComponent implements OnInit, OnDestroy {
 		if (mode === 'search') {
 			this.searchForm.name = '';
 			this.searchForm.typeName = this.types[this.types.findIndex(x => x.categoryName === this.searchForm.categoryName)].name;
+			this.firstTimeSort = false;
 		}
 	}
 
 	onChangeTypeSearch() {
 		this.searchForm.name = '';
+		this.firstTimeSort = false;
 	}
 
 	onOpenImage(index: number) {
@@ -163,22 +173,42 @@ export class StoreComponent implements OnInit, OnDestroy {
 		}[] = [];
 		const src = this.displayProducts[index].imgUrl;
 		const thumb = this.displayProducts[index].imgUrl;
-		let caption = this.displayProducts[index].name;
+		let caption = '<b>' + this.displayProducts[index].name;
 		let category = '';
 		let type = '';
+		let description: string;
 		this.translate.get('DATA.' + this.displayProducts[index].categoryName).subscribe(rs => {
 			category = rs;
 		});
 		this.translate.get('DATA.' + this.displayProducts[index].typeName).subscribe(rs => {
 			type = rs;
 		});
-		caption += ' - (' + category + ' - ' + type + ').';
+		description = this.displayProducts[index].description;
+		caption += '</b> - (' + category + ' - ' + type + ').<br><i>' + description + '</i>';
 		album.push({
 			src: src,
 			caption: caption,
 			thumb: thumb
 		});
 		this.lightbox.open(album, 0);
+	}
+
+	onSortPrice() {
+		if (this.sortFlip) {
+			this.products.sort((a, b) => a.price - b.price);
+		} else {
+			this.products.sort((a, b) => b.price - a.price);
+		}
+		this.sortFlip = !this.sortFlip;
+		const prevName = this.searchForm.name;
+		this.searchForm.name = this.firstTimeSort && this.searchForm.name === '' ? ' ' : this.searchForm.name;
+		this.onSearch();
+		this.searchForm.name = prevName;
+	}
+
+	onAddToCart(index: number) {
+		// TODO: Implement shopping cart
+		alert('added!');
 	}
 
 	trackByFn(index, item) {

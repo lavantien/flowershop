@@ -41,7 +41,9 @@
 		"TEAL": "Xanh ngọc",
 		"BLACK": "Đen",
 		"WHITE": "Trắng",
-		"TRANS": "Trong suốt"
+		"TRANS": "Trong suốt",
+		"CART": "Giỏ hàng",
+		"CONFIRM_ORDER": "Xác nhận đơn hàng"
 	},
 	"ADMIN": {
 		"NAME": "Tên",
@@ -69,7 +71,9 @@
 		"ITEMS_PER_PAGE": "Số sản phẩm hiển thị trong một trang,"
 	},
 	"SHOP": {
-
+		"DETAILS": "Chi tiết",
+		"ADD_TO_CART": "Thêm vào giỏ hàng",
+		"SORT_PRICE": "Sắp xếp theo giá"
 	},
 	"DATA": {
 		"FLOWERS": "Hoa",

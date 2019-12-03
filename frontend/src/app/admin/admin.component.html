@@ -22,17 +22,17 @@
 				</select>
 			</div>
 			<div class="form-group col-2">
-				<button (click)="onSearch()" class="btn btn-primary">
-					<fa-icon [icon]="faSearch" tooltip="{{'ADMIN.SEARCH_ADVANCED' | translate}}" placement="bottom"></fa-icon>
+				<button (click)="onSearch()" class="btn btn-dark">
+					<fa-icon [icon]="faSearch" placement="bottom" tooltip="{{'ADMIN.SEARCH_ADVANCED' | translate}}"></fa-icon>
 				</button>
-				<button (click)="openCreateModal(createTemplate)" class="btn btn-primary btn-create">
-					<fa-icon [icon]="faPlusSquare" tooltip="{{'ADMIN.CREATE_PRODUCT' | translate}}" placement="bottom"></fa-icon>
+				<button (click)="openCreateModal(createTemplate)" class="btn btn-dark btn-create">
+					<fa-icon [icon]="faPlusSquare" placement="bottom" tooltip="{{'ADMIN.CREATE_PRODUCT' | translate}}"></fa-icon>
 				</button>
-				<button (click)="openImportExcelModal(importExcelTemplate)" class="btn btn-primary btn-create">
-					<fa-icon [icon]="faFileUpload" tooltip="{{'ADMIN.IMPORT_EXCEL' | translate}}" placement="bottom"></fa-icon>
+				<button (click)="openImportExcelModal(importExcelTemplate)" class="btn btn-dark btn-create">
+					<fa-icon [icon]="faFileUpload" placement="bottom" tooltip="{{'ADMIN.IMPORT_EXCEL' | translate}}"></fa-icon>
 				</button>
-				<button (click)="onExportExcel()" class="btn btn-primary btn-create">
-					<fa-icon [icon]="faFileDownload" tooltip="{{'ADMIN.EXPORT_EXCEL' | translate}}" placement="bottom"></fa-icon>
+				<button (click)="onExportExcel()" class="btn btn-dark btn-create">
+					<fa-icon [icon]="faFileDownload" placement="bottom" tooltip="{{'ADMIN.EXPORT_EXCEL' | translate}}"></fa-icon>
 				</button>
 			</div>
 			<div class="form-group col-3">
@@ -41,6 +41,7 @@
 				            [boundaryLinks]="true"
 				            [itemsPerPage]="pagination.itemPerPage"
 				            [maxSize]="pagination.maxSize"
+				            [pageBtnClass]="'pagination-style'"
 				            [totalItems]="pagination.totalItem"
 				            class="float-right" firstText="&laquo;" lastText="&raquo;" nextText="&rsaquo;"
 				            previousText="&lsaquo;">
@@ -48,7 +49,8 @@
 			</div>
 			<div class="form-group col-1">
 				<select (change)="paging(searchResults)" [(ngModel)]="pagination.itemPerPage"
-				        class="btn btn-outline-primary float-right" tooltip="{{'ADMIN.ITEMS_PER_PAGE' | translate}}" placement="bottom">
+				        class="btn btn-outline-primary float-right" placement="bottom"
+				        tooltip="{{'ADMIN.ITEMS_PER_PAGE' | translate}}">
 					<option *ngFor="let val of [5, 10, 20, 50, 100, 200, 500, 1000]; let i = index" [selected]="i === 0"
 					        [value]="val">{{val}}</option>
 				</select>
@@ -86,10 +88,10 @@
 				<td>{{'DATA.' + product.typeName | translate}}</td>
 				<td>
 					<button (click)="openEditModal(editTemplate, product.id)" class="btn btn-info btn-edit">
-						<fa-icon [icon]="faPen" tooltip="{{'ADMIN.EDIT_PRODUCT' | translate}}" placement="bottom"></fa-icon>
+						<fa-icon [icon]="faPen" placement="bottom" tooltip="{{'ADMIN.EDIT_PRODUCT' | translate}}"></fa-icon>
 					</button>
 					<button (click)="openDeleteModal(deleteTemplate, product.id)" class="btn btn-warning btn-edit">
-						<fa-icon [icon]="faTrash" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}" placement="bottom"></fa-icon>
+						<fa-icon [icon]="faTrash" placement="bottom" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}"></fa-icon>
 					</button>
 				</td>
 			</tr>
@@ -258,7 +260,7 @@
 	</div>
 	<div class="modal-footer bg-light">
 		<button (click)="onDelete()" class="btn btn-danger pull-right">
-			<fa-icon [icon]="faTrash" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}" placement="bottom"></fa-icon>
+			<fa-icon [icon]="faTrash" placement="bottom" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}"></fa-icon>
 		</button>
 	</div>
 </ng-template>
@@ -276,7 +278,8 @@
 				<span class="input-group-text" id="inputGroupFileAddon">{{'ADMIN.BROWSE_EXCEL' | translate}}</span>
 			</div>
 			<div class="custom-file">
-				<input (change)="onFileChange($event)" aria-describedby="inputGroupFileAddon" class="custom-file-input" id="inputGroupFile"
+				<input (change)="onFileChange($event)" aria-describedby="inputGroupFileAddon" class="custom-file-input"
+				       id="inputGroupFile"
 				       type="file">
 				<label class="custom-file-label" for="inputGroupFile">{{'ADMIN.IMPORT_EXCEL' | translate}}</label>
 			</div>

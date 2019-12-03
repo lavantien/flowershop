@@ -1,72 +1,84 @@
 <div class="wrapper-main">
 	<div class="wrapper-navbar">
 		<nav class="navbar navbar-expand navbar-light bg-light">
-			<a class="navbar-brand" routerLink="">
+			<a class="navbar-brand ml-2" routerLink="">
 				<img alt="Bình Yên Shop" height="30" src="../assets/images/brand.png"/>
-				<span class="rainbow-text">&nbsp;&nbsp;{{'MAIN.FLOWER_SHOP' | translate}}</span>
+				<!--				<span class="rainbow-text">&nbsp;&nbsp;{{'MAIN.FLOWER_SHOP' | translate}}</span>-->
 			</a>
 			<button aria-controls="navbarSupportedContent" aria-expanded="false"
 			        class="navbar-toggler"
 			        data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/shop" routerLinkActive="active">
-							<fa-icon [icon]="faStore" tooltip="{{'MAIN.SHOP' | translate}}"></fa-icon>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a [tabindex]="isLoggedIn ? null : -1" class="nav-link {{isLoggedIn ? '' : 'disabled'}}" routerLink="/info"
-						   routerLinkActive="active">
-							<fa-icon [icon]="faUser" tooltip="{{'MAIN.INFO' | translate}}"></fa-icon>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/admin"
-						   routerLinkActive="active">
-							<fa-icon [icon]="faWarehouse" tooltip="{{'MAIN.ADMIN' | translate}}"></fa-icon>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/summary"
-						   routerLinkActive="active">
-							<fa-icon [icon]="faChartLine" tooltip="{{'MAIN.SUMMARY' | translate}}"></fa-icon>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/contact" routerLinkActive="active">
-							<fa-icon [icon]="faHandshake" tooltip="{{'MAIN.CONTACT' | translate}}"></fa-icon>
-						</a>
-					</li>
-					<li *ngIf="isTest" class="nav-item">
-						<a class="nav-link" routerLink="/test" routerLinkActive="active">
-							<fa-icon [icon]="faCubes" tooltip="{{'MAIN.TEST' | translate}}"></fa-icon>
-						</a>
-					</li>
-				</ul>
+			<div class="collapse navbar-collapse row" id="navbarSupportedContent">
+				<div class="col-sm-6">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item">
+							<a class="nav-link" routerLink="/shop" routerLinkActive="active">
+								<fa-icon [icon]="faStore" tooltip="{{'MAIN.SHOP' | translate}}"></fa-icon>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a [tabindex]="isLoggedIn ? null : -1" class="nav-link {{isLoggedIn ? '' : 'disabled'}}"
+							   routerLink="/info"
+							   routerLinkActive="active">
+								<fa-icon [icon]="faUser" tooltip="{{'MAIN.INFO' | translate}}"></fa-icon>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/admin"
+							   routerLinkActive="active">
+								<fa-icon [icon]="faWarehouse" tooltip="{{'MAIN.ADMIN' | translate}}"></fa-icon>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/summary"
+							   routerLinkActive="active">
+								<fa-icon [icon]="faChartLine" tooltip="{{'MAIN.SUMMARY' | translate}}"></fa-icon>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" routerLink="/contact" routerLinkActive="active">
+								<fa-icon [icon]="faHandshake" tooltip="{{'MAIN.CONTACT' | translate}}"></fa-icon>
+							</a>
+						</li>
+						<li *ngIf="isTest" class="nav-item">
+							<a class="nav-link" routerLink="/test" routerLinkActive="active">
+								<fa-icon [icon]="faCubes" tooltip="{{'MAIN.TEST' | translate}}"></fa-icon>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-6">
+					<div class="responsive-float">
+						<button (click)="openCartModal(cartTemplate)" class="btn btn-outline-dark btn-lang">
+							<fa-icon [icon]="faShoppingCart" tooltip="{{'MAIN.CART' | translate}}"></fa-icon>
+							<span> ({{33}})</span>
+						</button>
+						<select #langSelect (change)="translate.use(langSelect.value)" class="btn btn-outline-dark btn-lang"
+						        tooltip="{{'MAIN.LANGUAGE' | translate}}">
+							<option *ngFor="let lang of translate.getLangs()" [selected]="lang === translate.currentLang"
+							        [value]="lang">{{lang}}</option>
+						</select>
+						<button (click)="openLoginModal(loginTemplate)" *ngIf="!isLoggedIn" class="btn btn-outline-dark">
+							<fa-icon [icon]="faSignInAlt" tooltip="{{'MAIN.LOGIN' | translate}}"></fa-icon>
+						</button>
+						<button *ngIf="isLoggedIn" class="btn btn-outline-dark">
+							<fa-icon [icon]="faSignOutAlt" tooltip="{{'MAIN.LOGOUT' | translate}}"></fa-icon>
+						</button>
+					</div>
+				</div>
+
 				<!--				<form class="form-inline my-2">-->
 				<!--					<input class="form-control" placeholder="{{'MAIN.SEARCH_EVERYTHING' | translate}}"-->
 				<!--					       type="search">-->
 				<!--					<button class="btn btn-outline-success" type="submit"><fa-icon [icon]="faSearch" tooltip="{{'MAIN.SEARCH' | translate}}"></fa-icon></button>-->
 				<!--				</form>-->
-				<select (change)="onChangeThemeColor()" [(ngModel)]="displayBg" class="btn btn-outline-primary btn-lang"
-				        tooltip="{{'MAIN.THEME_COLOR' | translate}}">
-					<option *ngFor="let bg of displayBgs" [value]="bg">{{'MAIN.' + bg | translate}}</option>
-				</select>
+				<!--				<select (change)="onChangeThemeColor()" [(ngModel)]="displayBg" class="btn btn-outline-dark btn-lang"-->
+				<!--				        tooltip="{{'MAIN.THEME_COLOR' | translate}}">-->
+				<!--					<option *ngFor="let bg of displayBgs" [value]="bg">{{'MAIN.' + bg | translate}}</option>-->
+				<!--				</select>-->
 
-				<select #langSelect (change)="translate.use(langSelect.value)" class="btn btn-outline-primary btn-lang"
-				        tooltip="{{'MAIN.LANGUAGE' | translate}}">
-					<option *ngFor="let lang of translate.getLangs()" [selected]="lang === translate.currentLang"
-					        [value]="lang">{{lang}}</option>
-				</select>
-				<button (click)="openLoginModal(loginTemplate)" *ngIf="!isLoggedIn" class="btn btn-outline-primary">
-					<fa-icon [icon]="faSignInAlt" tooltip="{{'MAIN.LOGIN' | translate}}"></fa-icon>
-				</button>
-				<button *ngIf="isLoggedIn" class="btn btn-outline-danger">
-					<fa-icon [icon]="faSignOutAlt" tooltip="{{'MAIN.LOGOUT' | translate}}"></fa-icon>
-				</button>
 			</div>
 		</nav>
 	</div>
@@ -82,15 +94,15 @@
 		</ngx-spinner>
 	</div>
 	<button (click)="scrollTop()" class="btn btn-outline-primary fixed-bottom">
-		<fa-icon [icon]="faArrowUp" tooltip="{{'MAIN.SCROLL_TOP' | translate}}"></fa-icon>
+		<fa-icon [icon]="faAngleDoubleUp" tooltip="{{'MAIN.SCROLL_TOP' | translate}}"></fa-icon>
 	</button>
 	<button (click)="scrollBottom()" class="btn btn-outline-primary fixed-bottom-2">
-		<fa-icon [icon]="faArrowDown" tooltip="{{'MAIN.SCROLL_BOT' | translate}}"></fa-icon>
+		<fa-icon [icon]="faAngleDoubleDown" tooltip="{{'MAIN.SCROLL_BOT' | translate}}"></fa-icon>
 	</button>
-	<!--	<button (click)="scrollLeft()" class="btn btn-outline-primary fixed-bottom-3">-->
+	<!--	<button (click)="scrollLeft()" class="btn btn-outline-dark fixed-bottom-3">-->
 	<!--		<fa-icon [icon]="faArrowLeft" tooltip="{{'MAIN.SCROLL_LEFT' | translate}}"></fa-icon>-->
 	<!--	</button>-->
-	<!--	<button (click)="scrollRight()" class="btn btn-outline-primary fixed-bottom-4">-->
+	<!--	<button (click)="scrollRight()" class="btn btn-outline-dark fixed-bottom-4">-->
 	<!--		<fa-icon [icon]="faArrowRight" tooltip="{{'MAIN.SCROLL_RIGHT' | translate}}"></fa-icon>-->
 	<!--	</button>-->
 </div>
@@ -121,7 +133,7 @@
 		<button (click)="onLogin()" class="btn btn-success pull-right">{{'MAIN.LOGIN' | translate}}</button>
 		<button (click)="openSignUpModal(signUpTemplate)"
 		        class="btn btn-primary pull-right">{{'MAIN.SIGN_UP' | translate}}</button>
-		<button (click)="openForgotPasswordModal(forgotPasswordModal)"
+		<button (click)="openForgotPasswordModal(forgotPasswordTemplate)"
 		        class="btn btn-warning pull-right">{{'MAIN.FORGOT_PASSWORD' | translate}}</button>
 		<button (click)="onRefreshLoginForm()" class="btn btn-dark pull-right">{{'MAIN.REFRESH' | translate}}</button>
 	</div>
@@ -203,7 +215,7 @@
 	</div>
 </ng-template>
 
-<ng-template #forgotPasswordModal>
+<ng-template #forgotPasswordTemplate>
 	<div class="modal-header {{bgPrimary}} {{tcPrimary}}">
 		<h4 class="modal-title pull-left">{{'MAIN.FORGOT_PASSWORD' | translate}}</h4>
 		<button (click)="modalRef2.hide()" class="close pull-right">
@@ -236,5 +248,20 @@
 		<button (click)="onVerifyEmail()" class="btn btn-success pull-right">{{'MAIN.VERIFY_EMAIL' | translate}}</button>
 		<button (click)="onRefreshForgotPasswordForm()"
 		        class="btn btn-dark pull-right">{{'MAIN.REFRESH' | translate}}</button>
+	</div>
+</ng-template>
+
+<ng-template #cartTemplate>
+	<div class="modal-header {{bgPrimary}} {{tcPrimary}}">
+		<h4 class="modal-title pull-left">{{'MAIN.CART' | translate}}</h4>
+		<button (click)="modalRef.hide()" class="close pull-right">
+			<span aria-hidden="true" class="{{tcPrimary}}">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+
+	</div>
+	<div class="modal-footer bg-light">
+		<button (click)="onSettle()" class="btn btn-success pull-right">{{'MAIN.CONFIRM_ORDER' | translate}}</button>
 	</div>
 </ng-template>
