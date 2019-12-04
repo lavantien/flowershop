@@ -43,12 +43,13 @@
 		"WHITE": "Trắng",
 		"TRANS": "Trong suốt",
 		"CART": "Giỏ hàng",
-		"CONFIRM_ORDER": "Xác nhận đơn hàng"
+		"CONFIRM_ORDER": "Xác nhận đơn hàng",
+		"CREDIT": "Dự án của lavantien @12/2019 - mã nguồn ở: https://github.com/lavantien"
 	},
 	"ADMIN": {
 		"NAME": "Tên",
 		"DESCRIPTION": "Mô tả",
-		"PRICE": "Giá (VND)",
+		"PRICE": "Giá (đ)",
 		"IMAGE": "Ảnh",
 		"QUANTITY": "Tồn kho",
 		"SALE_AMOUNT": "Đã bán",
@@ -61,14 +62,16 @@
 		"REFRESH": "Làm mới",
 		"SEARCH_ADVANCED": "Tìm kiếm: tìm theo mỗi Tên sản phẩm hoặc tìm theo Loại và Dạng",
 		"PRODUCT_NAME": "Tên hoặc khoảng trống",
-		"DELETE_PRODUCT": "Xóa sản phẩm này",
+		"DELETE_PRODUCT": "Xóa những sản phẩm này",
 		"NO_PRODUCT_FOUND": "Không tìm thấy sản phẩm nào.",
 		"IMPORT_EXCEL": "Nhập dữ liệu mới từ một tệp Excel",
 		"EXPORT_EXCEL": "Xuất dữ liệu ra thành một tệp Excel",
 		"BROWSE_EXCEL": "Chọn tệp Excel",
 		"IMPORT_BUTTON": "Nhập",
 		"IMPORT_EXCEL_NOTE": "Chỉ nhận tệp Excel. Tính từ dòng thứ 2 trở đi của tệp.",
-		"ITEMS_PER_PAGE": "Số sản phẩm hiển thị trong một trang,"
+		"ITEMS_PER_PAGE": "Số sản phẩm hiển thị trong một trang",
+		"TOTAL_PRICE": "Tổng giá",
+		"QUANTITY_CART": "Số lượng"
 	},
 	"SHOP": {
 		"DETAILS": "Chi tiết",

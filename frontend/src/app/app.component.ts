@@ -1,21 +1,6 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
-import {
-	faAngleDoubleDown,
-	faAngleDoubleUp,
-	faArrowLeft,
-	faArrowRight,
-	faChartLine,
-	faCubes,
-	faHandshake,
-	faSearch,
-	faShoppingCart,
-	faSignInAlt,
-	faSignOutAlt,
-	faStore,
-	faUser,
-	faWarehouse
-} from '@fortawesome/free-solid-svg-icons';
+import {faAngleDoubleDown, faAngleDoubleUp, faArrowLeft, faArrowRight, faChartLine, faCubes, faHandshake, faSearch, faShoppingCart, faSignInAlt, faSignOutAlt, faStore, faUser, faWarehouse, faMinus, faPlus} from '@fortawesome/free-solid-svg-icons';
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {HttpClient} from "@angular/common/http";
 import {InputValidatorService} from "./_services/input-validator.service";
@@ -23,7 +8,9 @@ import {SharedService} from "./_services/shared.service";
 import {timeout} from "rxjs/operators";
 import {NgxSpinnerService} from "ngx-spinner";
 import {Subscription} from "rxjs";
-// TODO: Add footer
+import {SessionService} from "./_services/session.service";
+import {Product} from "./_models/product";
+
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
@@ -47,6 +34,8 @@ export class AppComponent implements OnInit, OnDestroy {
 	faSignOutAlt = faSignOutAlt;
 	faChartLine = faChartLine;
 	faShoppingCart = faShoppingCart;
+	faMinus = faMinus;
+	faPlus = faPlus;
 	modalRef: BsModalRef;
 	modalRef2: BsModalRef;
 	loginForm = {
@@ -80,11 +69,17 @@ export class AppComponent implements OnInit, OnDestroy {
 	tcs = ['text-dark', 'text-white', 'text-white', 'text-white', 'text-white', 'text-dark', 'text-white', 'text-white', 'text-dark', 'text-dark'];
 	timeOutHttpRequest = 2000;
 	private subscriptions = new Subscription();
+	countOfIndividualProduct: number[] = [];
+	totalPriceOfIndividualProduct: number[] = [];
+	addedProducts: Product[] = [];
+	countAddedProduct = 0;
+	totalPriceOfAddedProduct = 0;
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
 	            private inputValidator: InputValidatorService,
 	            private sharedService: SharedService,
+	            private sessionService: SessionService,
 	            private spinner: NgxSpinnerService,
 	            public translate: TranslateService) {
 		translate.addLangs(['en', 'vi']);
@@ -94,6 +89,23 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.subscriptions.add(this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
 			this.bgPrimary = bg[0];
 			this.tcPrimary = bg[1];
+		}));
+		this.subscriptions.add(this.sessionService.getNewlyAddedProduct().subscribe(product => {
+			if (!!product) {
+				const prodIndex = this.addedProducts.findIndex(x => x.id === product.id);
+				if (prodIndex === -1) {
+					this.addedProducts.push(product);
+					this.countOfIndividualProduct.push(1);
+					this.totalPriceOfIndividualProduct.push(product.price);
+					++this.countAddedProduct;
+				} else {
+					++this.countOfIndividualProduct[prodIndex];
+					this.totalPriceOfIndividualProduct[prodIndex] += product.price;
+				}
+				this.totalPriceOfAddedProduct += product.price;
+			} else {
+				this.countAddedProduct = 0;
+			}
 		}));
 	}
 
@@ -174,7 +186,34 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	openCartModal(template: TemplateRef<any>) {
-		this.modalRef = this.modalService.show(template);
+		this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+	}
+
+	cancelAndDecreaseItem(index: number) {
+		if (index === -1) {
+			this.totalPriceOfAddedProduct = 0;
+			this.countAddedProduct = 0;
+			this.addedProducts.length = 0;
+			this.countOfIndividualProduct.length = 0;
+			this.totalPriceOfIndividualProduct.length = 0;
+			return;
+		}
+		this.totalPriceOfAddedProduct -= this.addedProducts[index].price;
+		if (this.countOfIndividualProduct[index] === 1) {
+			this.addedProducts.splice(index, 1);
+			this.countOfIndividualProduct.splice(index, 1);
+			this.totalPriceOfIndividualProduct.splice(index, 1);
+			--this.countAddedProduct;
+		} else {
+			--this.countOfIndividualProduct[index];
+			this.totalPriceOfIndividualProduct[index] -= this.addedProducts[index].price;
+		}
+	}
+
+	increaseItem(index: number) {
+		++this.countOfIndividualProduct[index];
+		this.totalPriceOfIndividualProduct[index] += this.addedProducts[index].price;
+		this.totalPriceOfAddedProduct += this.addedProducts[index].price;
 	}
 
 	onSettle() {

@@ -58,7 +58,7 @@
 						</select>
 						<button (click)="openCartModal(cartTemplate)" class="btn btn-dark btn-lang" tooltip="{{'MAIN.CART' | translate}}" placement="bottom">
 							<fa-icon [icon]="faShoppingCart"></fa-icon>
-							<span> ({{33}})</span>
+							<span> ({{countAddedProduct}})</span>
 						</button>
 						<button (click)="openLoginModal(loginTemplate)" *ngIf="!isLoggedIn" class="btn btn-dark" tooltip="{{'MAIN.LOGIN' | translate}}" placement="bottom">
 							<fa-icon [icon]="faSignInAlt"></fa-icon>
@@ -90,6 +90,9 @@
 			type="ball-clip-rotate-pulse"
 		>
 		</ngx-spinner>
+		<div class="text-center">
+			<span><b>{{'MAIN.CREDIT' | translate}}</b></span>
+		</div>
 	</div>
 	<button (click)="scrollTop()" class="btn btn-dark fixed-bottom" tooltip="{{'MAIN.SCROLL_TOP' | translate}}" placement="top">
 		<fa-icon [icon]="faAngleDoubleUp"></fa-icon>
@@ -256,8 +259,47 @@
 			<span aria-hidden="true" class="{{tcPrimary}}">&times;</span>
 		</button>
 	</div>
-	<div class="modal-body">
+	<div class="modal-body table-responsive wrapper-cart-table">
+		<table class="table table-bordered table-striped table-sm table-hover text-center">
+			<thead class="{{bgPrimary}} {{tcPrimary}}">
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">{{'ADMIN.NAME' | translate}}</th>
+				<th scope="col">{{'ADMIN.CATEGORY' | translate}}</th>
+				<th scope="col">{{'ADMIN.TYPE' | translate}}</th>
+				<th scope="col">{{'ADMIN.PRICE' | translate}}</th>
+				<th scope="col">{{'ADMIN.QUANTITY_CART' | translate}}</th>
+				<th scope="col">{{'ADMIN.TOTAL_PRICE' | translate}}</th>
+				<th scope="col" class="col-hoverable"><fa-icon (click)="cancelAndDecreaseItem(-1)" [icon]="faMinus"></fa-icon></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr *ngFor="let product of addedProducts; let i = index">
+				<th scope="row">{{i + 1}}</th>
+				<td>{{product.name}}</td>
+				<td>{{'DATA.' + product.categoryName | translate}}</td>
+				<td>{{'DATA.' + product.typeName | translate}}</td>
+				<td>{{product.price.toLocaleString(translate.currentLang)}}</td>
+				<td>{{countOfIndividualProduct[i]}}</td>
+				<td>{{totalPriceOfIndividualProduct[i].toLocaleString(translate.currentLang)}}</td>
+				<td>
+					<fa-icon (click)="increaseItem(i)" [icon]="faPlus"></fa-icon>&nbsp;
+					<fa-icon (click)="cancelAndDecreaseItem(i)" [icon]="faMinus"></fa-icon>
+				</td>
+			</tr>
+			<tr *ngIf="addedProducts.length !== 0">
+				<td colspan="6"><b>{{'ADMIN.TOTAL_PRICE' | translate}}</b></td>
+				<td><b>{{totalPriceOfAddedProduct.toLocaleString(translate.currentLang)}}</b></td>
+				<td></td>
+			</tr>
+			<tr *ngIf="addedProducts.length === 0">
+				<td colspan="8"><i>{{'ADMIN.NO_PRODUCT_FOUND' | translate}}</i></td>
+			</tr>
+			</tbody>
+		</table>
+		<div class="personal-info">
 
+		</div>
 	</div>
 	<div class="modal-footer bg-light">
 		<button (click)="onSettle()" class="btn btn-success pull-right">{{'MAIN.CONFIRM_ORDER' | translate}}</button>

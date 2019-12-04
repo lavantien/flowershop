@@ -2,18 +2,15 @@
 	.wrapper-navbar {
 		nav {
 			padding: 0 1rem;
-
 			a {
 				.rainbow-text {
 					background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
 					-webkit-background-clip: text;
 				}
 			}
-
 			.btn-lang {
 				margin-right: 15px;
 			}
-
 			@media only screen and (min-width: 576px) {
 				.responsive-float {
 					float: right;
@@ -26,26 +23,42 @@
 			}
 		}
 	}
-
 	.wrapper-router {
 		padding: 10px;
 	}
-
 	.fixed-bottom-2 {
 		position: fixed;
 		bottom: 0;
 		left: 40px;
 	}
-
 	.fixed-bottom-3 {
 		position: fixed;
 		bottom: 0;
 		left: 80px;
 	}
-
 	.fixed-bottom-4 {
 		position: fixed;
 		bottom: 0;
 		left: 120px;
 	}
+}
+
+.col-hoverable {
+	&:hover {
+		color: #212529;
+		background-color: rgba(0,0,0,.075);
+	}
+}
+.wrapper-cart-table {
+	max-height: 600px;
+	overflow: auto;
+}
+@media only screen and (min-width: 1920px) {
+	.wrapper-cart-table {
+		max-height: 800px;
+		overflow: auto;
+	}
+}
+.personal-info {
+
 }

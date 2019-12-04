@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {faFileDownload, faFileUpload, faPen, faPlusSquare, faSearch, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faFileDownload, faFileUpload, faPen, faPlusSquare, faSearch, faTrash, faSortAmountUp, faSortAmountDownAlt} from '@fortawesome/free-solid-svg-icons';
 import {DataTranslateService} from "../_services/data-translate.service";
 import {TranslateService} from "@ngx-translate/core";
 import {SharedService} from "../_services/shared.service";
@@ -10,9 +10,10 @@ import {Lightbox} from "ngx-lightbox";
 import {timeout} from "rxjs/operators";
 import {Subscription} from "rxjs";
 import {NgxSpinnerService} from "ngx-spinner";
+import {Product} from "../_models/product";
+import {Category} from "../_models/category";
+import {Type} from "../_models/type";
 
-// TODO: Implement select multiple rows.
-// TODO: Implement sortable headers (name, price, quantity, saleAmount)
 @Component({
 	selector: 'app-admin',
 	templateUrl: './admin.component.html',
@@ -65,12 +66,17 @@ export class AdminComponent implements OnInit, OnDestroy {
 	faTrash = faTrash;
 	faFileUpload = faFileUpload;
 	faFileDownload = faFileDownload;
-	locale = '';
+	faSortAmountUp = faSortAmountUp;
+	faSortAmountDownAlt = faSortAmountDownAlt;
 	bgPrimary = '';
 	tcPrimary = '';
 	excelData: any[] = [];
 	timeOutHttpRequest = 2000;
 	private subscriptions = new Subscription();
+	numOfSortableCol = 5; // name, price, quantity, saleAmount, id
+	sortFlip: boolean[] = [];
+	firstTimeSort = true;
+	isSelected: boolean[] = [];
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
@@ -79,15 +85,15 @@ export class AdminComponent implements OnInit, OnDestroy {
 	            private lightbox: Lightbox,
 	            private spinner: NgxSpinnerService,
 	            public translate: TranslateService) {
+		for (let i = 0; i < this.numOfSortableCol; ++i) {
+			this.sortFlip[i] = false;
+		}
 	}
 
 	ngOnInit() {
 		this.getProducts();
 		this.getCategories();
 		this.getTypes();
-		this.subscriptions.add(this.sharedService.getGlobalLanguage().subscribe(lang => {
-			this.locale = this.dataTranslateService.getLocale(lang);
-		}));
 		this.subscriptions.add(this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
 			this.bgPrimary = bg[0];
 			this.tcPrimary = bg[1];
@@ -107,7 +113,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 				this.data.forEach(product => {
 					product.imgUrl = product.imgUrl ? atob(product.imgUrl) : '';
 					this.productsOriginalDescription.push(product.description);
-					product.description = product.description.substr(0, 60) + (product.description.length > 60 ? '...' : '');
+					product.description = product.description.substr(0, 50) + (product.description.length > 60 ? '...' : '');
 					product.price = this.dataTranslateService.getPrice(product.price, 'vi');
 				});
 				this.searchResults = data;
@@ -120,6 +126,54 @@ export class AdminComponent implements OnInit, OnDestroy {
 			// Spinner hide
 			this.spinner.hide();
 		});
+	}
+
+	paging(data: Product[]) {
+		this.pagination.totalItem = data.length;
+		this.displayProducts = data.slice((this.pagination.currentPage - 1) * this.pagination.itemPerPage,
+			this.pagination.currentPage * this.pagination.itemPerPage);
+		this.isSelected.length = 0;
+		for (let i = 0; i < this.displayProducts.length; ++i) {
+			this.isSelected.push(false);
+		}
+	}
+
+	onPageChanged(event: any) { // 1: 0 1 2 3   2: 4 5 6 7   3: 8 9 10 11
+		this.displayProducts = this.searchResults.slice((event.page - 1) * event.itemsPerPage, event.page * event.itemsPerPage);
+		this.isSelected.length = 0;
+		for (let i = 0; i < this.displayProducts.length; ++i) {
+			this.isSelected.push(false);
+		}
+	}
+
+	onSearch() {
+		let searchResults: Product[] = [];
+		this.data.forEach(product => {
+			if (this.searchForm.name === '' && this.searchForm.typeName === product.typeName && this.searchForm.categoryName === product.categoryName) {
+				searchResults.push(product);
+			} else if (this.searchForm.name !== '' && product.name.toLowerCase().includes(this.searchForm.name.toLowerCase())) {
+				searchResults.push(product);
+			}
+		});
+		this.paging(searchResults);
+		this.searchResults = searchResults;
+	}
+
+	onChangeCategory(mode: string) {
+		if (mode === 'search') {
+			this.searchForm.name = '';
+			this.searchForm.typeName = this.types[this.types.findIndex(x => x.categoryName === this.searchForm.categoryName)].name;
+		} else if (mode === 'create') {
+			this.createForm.typeName = this.types[this.types.findIndex(x => x.categoryName === this.createForm.categoryName)].name;
+		} else if (mode === 'edit') {
+			this.editForm.typeName = this.types[this.types.findIndex(x => x.categoryName === this.editForm.categoryName)].name;
+		}
+		this.firstTimeSort = false;
+	}
+
+	onChangeTypeSearch() {
+		this.searchForm.name = '';
+		this.firstTimeSort = false;
 	}
 
 	getCategories() {
@@ -160,69 +214,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	paging(data: Product[]) {
-		this.pagination.totalItem = data.length;
-		this.displayProducts = data.slice((this.pagination.currentPage - 1) * this.pagination.itemPerPage,
-			this.pagination.currentPage * this.pagination.itemPerPage);
-	}
-
-	onSearch() {
-		let searchResults: Product[] = [];
-		this.data.forEach(product => {
-			if (this.searchForm.name === '' && this.searchForm.typeName === product.typeName && this.searchForm.categoryName === product.categoryName) {
-				searchResults.push(product);
-			} else if (this.searchForm.name !== '' && product.name.toLowerCase().includes(this.searchForm.name.toLowerCase())) {
-				searchResults.push(product);
-			}
-		});
-		this.paging(searchResults);
-		this.searchResults = searchResults;
-	}
-
-	onCreate() {
-		this.spinner.show();
-		this.http.post<Product>('/api/product/create', () => {
-			this.createForm.imgUrl = btoa(this.createForm.imgUrl);
-			this.createForm.price = this.dataTranslateService.getPrice(this.createForm.price, 'en');
-			return this.createForm;
-		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(() => {
-			this.getProducts();
-		}, error => {
-			console.log(`Error: ${error}`);
-		}, () => {
-			// Spinner hide
-			this.spinner.hide();
-		});
-	}
-
-	onEdit() {
-		this.spinner.show();
-		this.http.put<Product>(`/api/product/${this.currentId}`, () => {
-			this.editForm.imgUrl = btoa(this.editForm.imgUrl);
-			this.createForm.price = this.dataTranslateService.getPrice(this.createForm.price, 'en');
-			return this.editForm;
-		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(() => {
-			this.getProducts();
-		}, error => {
-			console.log(`Error: ${error}`);
-		}, () => {
-			// Spinner hide
-			this.spinner.hide();
-		});
-	}
-
-	onDelete() {
-		this.spinner.show();
-		this.http.delete<any>(`/api/product/${this.currentId}`).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
-			this.getProducts();
-		}, error => {
-			console.log(`Error: ${error}`);
-		}, () => {
-			// Spinner hide
-			this.spinner.hide();
-		});
-	}
-
 	onRefreshCreateForm() {
 		this.createForm = {
 			name: '',
@@ -249,12 +240,24 @@ export class AdminComponent implements OnInit, OnDestroy {
 		};
 	}
 
-	onPageChanged(event: any) { // 1: 0 1 2 3   2: 4 5 6 7   3: 8 9 10 11
-		this.displayProducts = this.searchResults.slice((event.page - 1) * event.itemsPerPage, event.page * event.itemsPerPage);
-	}
-
 	openCreateModal(template: TemplateRef<any>) {
 		this.modalRef = this.modalService.show(template);
+	}
+
+	onCreate() {
+		this.spinner.show();
+		this.http.post<Product>('/api/product/create', () => {
+			this.createForm.imgUrl = btoa(this.createForm.imgUrl);
+			this.createForm.price = this.dataTranslateService.getPrice(this.createForm.price, 'en');
+			return this.createForm;
+		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(() => {
+			this.getProducts();
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+			// Spinner hide
+			this.spinner.hide();
+		});
 	}
 
 	openEditModal(template: TemplateRef<any>, currentId: number) {
@@ -265,13 +268,58 @@ export class AdminComponent implements OnInit, OnDestroy {
 		this.editForm.description = this.productsOriginalDescription[this.editIndex];
 	}
 
+	onEdit() {
+		this.spinner.show();
+		this.http.put<Product>(`/api/product/${this.currentId}`, () => {
+			this.editForm.imgUrl = btoa(this.editForm.imgUrl);
+			this.createForm.price = this.dataTranslateService.getPrice(this.createForm.price, 'en');
+			return this.editForm;
+		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(() => {
+			this.getProducts();
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+			// Spinner hide
+			this.spinner.hide();
+		});
+	}
+
 	onCloseEdit() {
 		this.editForm.description = this.data[this.editIndex].description;
 	}
 
 	openDeleteModal(template: TemplateRef<any>, currentId: number) {
-		this.modalRef = this.modalService.show(template);
+		this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
 		this.currentId = currentId;
+	}
+
+	onDelete() {
+		this.spinner.show();
+		if (this.isSelected.length === 1) {
+			this.http.delete<any>(`/api/product/${this.currentId}`).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+				this.getProducts();
+			}, error => {
+				console.log(`Error: ${error}`);
+			}, () => {
+				// Spinner hide
+				this.spinner.hide();
+			});
+		} else {
+			let delProdIds: number[] = [];
+			for (let i = 0; i < this.isSelected.length; ++i) {
+				if (this.isSelected[i]) {
+					delProdIds.push(this.displayProducts[i].id);
+				}
+			}
+			this.http.request<any>('delete', `/api/product`, {body: delProdIds}).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+				this.getProducts();
+			}, error => {
+				console.log(`Error: ${error}`);
+			}, () => {
+				// Spinner hide
+				this.spinner.hide();
+			});
+		}
 	}
 
 	openImportExcelModal(template: TemplateRef<any>) {
@@ -335,7 +383,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 		this.data.forEach((data, index) => {
 			tempDescriptions[index] = data.description;
 			data.description = this.productsOriginalDescription[index];
-			if (this.locale !== 'en-US') {
+			if (this.translate.currentLang !== 'en-US') {
 				data.price = this.dataTranslateService.getPrice(data.price, 'en');
 			}
 		});
@@ -345,15 +393,15 @@ export class AdminComponent implements OnInit, OnDestroy {
 
 		/* generate workbook and add the worksheet */
 		const wb: XLSX.WorkBook = XLSX.utils.book_new();
-		XLSX.utils.book_append_sheet(wb, ws, `${this.locale === 'en-US' ? 'Products' : 'Sản phẩm'}`);
+		XLSX.utils.book_append_sheet(wb, ws, `${this.translate.currentLang === 'en-US' ? 'Products' : 'Sản phẩm'}`);
 
 		/* save to file */
-		XLSX.writeFile(wb, `${this.locale === 'en-US' ? 'products' : 'sản_phẩm'}__${new Date().toLocaleDateString(this.locale)}__${new Date().toLocaleTimeString(this.locale)}.xlsx`);
+		XLSX.writeFile(wb, `${this.translate.currentLang === 'en-US' ? 'data' : 'sản_phẩm'}__${new Date().toLocaleDateString(this.translate.currentLang)}__${new Date().toLocaleTimeString(this.translate.currentLang)}.xlsx`);
 
 		/* restore data state */
 		this.data.forEach((data, index) => {
 			data.description = tempDescriptions[index];
-			if (this.locale !== 'en-US') {
+			if (this.translate.currentLang !== 'en-US') {
 				data.price = this.dataTranslateService.getPrice(data.price, 'vi');
 			}
 		});
@@ -387,45 +435,61 @@ export class AdminComponent implements OnInit, OnDestroy {
 		this.lightbox.open(album, 0);
 	}
 
-	onChangeCategory(mode: string) {
-		if (mode === 'search') {
-			this.searchForm.name = '';
-			this.searchForm.typeName = this.types[this.types.findIndex(x => x.categoryName === this.searchForm.categoryName)].name;
-		} else if (mode === 'create') {
-			this.createForm.typeName = this.types[this.types.findIndex(x => x.categoryName === this.createForm.categoryName)].name;
-		} else if (mode === 'edit') {
-			this.editForm.typeName = this.types[this.types.findIndex(x => x.categoryName === this.editForm.categoryName)].name;
+	onSort(sortWhat: number) {
+		// sortWhat <-> name, price, quantity, saleAmount, id
+		if (this.sortFlip[sortWhat]) {
+			switch (sortWhat) {
+				case 0:
+					this.data.sort((a, b) => a.name.localeCompare(b.name, this.translate.currentLang));
+					break;
+				case 1:
+					this.data.sort((a, b) => a.price - b.price);
+					break;
+				case 2:
+					this.data.sort((a, b) => a.quantity - b.quantity);
+					break;
+				case 3:
+					this.data.sort((a, b) => a.saleAmount - b.saleAmount);
+					break;
+				case 4:
+					this.data.sort((a, b) => a.id - b.id);
+					break;
+				default:
+					break;
+			}
+		} else {
+			switch (sortWhat) {
+				case 0:
+					this.data.sort((a, b) => b.name.localeCompare(a.name, this.translate.currentLang));
+					break;
+				case 1:
+					this.data.sort((a, b) => b.price - a.price);
+					break;
+				case 2:
+					this.data.sort((a, b) => b.quantity - a.quantity);
+					break;
+				case 3:
+					this.data.sort((a, b) => b.saleAmount - a.saleAmount);
+					break;
+				case 4:
+					this.data.sort((a, b) => b.id - a.id);
+					break;
+				default:
+					break;
+			}
 		}
+		const prevName = this.searchForm.name;
+		this.searchForm.name = this.firstTimeSort && this.searchForm.name === '' ? ' ' : this.searchForm.name;
+		this.onSearch();
+		this.searchForm.name = prevName;
+		this.sortFlip[sortWhat] = !this.sortFlip[sortWhat];
 	}
 
-	onChangeTypeSearch() {
-		this.searchForm.name = '';
+	selectRow(index: number) {
+		this.isSelected[index] = !this.isSelected[index];
 	}
 
 	trackByFn(index, item) {
 		return index;
 	}
-}
-
-interface Product {
-	id: number;
-	name: string;
-	description: string;
-	price: number;
-	imgUrl: string;
-	quantity: number;
-	saleAmount: number;
-	categoryName: string;
-	typeName: string;
-}
-
-interface Category {
-	id: number;
-	name: string;
-}
-
-interface Type {
-	id: number;
-	name: string;
-	categoryName: string;
 }

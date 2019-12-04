@@ -43,15 +43,16 @@
 		"WHITE": "White",
 		"TRANS": "Transparent",
 		"CART": "Shopping cart",
-		"CONFIRM_ORDER": "Confirm order"
+		"CONFIRM_ORDER": "Confirm order",
+		"CREDIT": "lavantien's project @12/2019 - source code at: https://github.com/lavantien"
 	},
 	"ADMIN": {
 		"NAME": "Name",
 		"DESCRIPTION": "Description",
-		"PRICE": "Price (VND)",
+		"PRICE": "Price (đ)",
 		"IMAGE": "Image",
 		"QUANTITY": "Quantity",
-		"SALE_AMOUNT": "Sale amount",
+		"SALE_AMOUNT": "Sold",
 		"TYPE": "Type",
 		"CATEGORY": "Category",
 		"ACTION": "Action",
@@ -61,14 +62,16 @@
 		"REFRESH": "Refresh",
 		"SEARCH_ADVANCED": "Search: either by Product's name alone or by Category and Type",
 		"PRODUCT_NAME": "Name or a space",
-		"DELETE_PRODUCT": "Delete this product",
+		"DELETE_PRODUCT": "Delete these products",
 		"NO_PRODUCT_FOUND": "No product found.",
 		"IMPORT_EXCEL": "Import new data from an Excel file",
 		"EXPORT_EXCEL": "Export data to an Excel file",
 		"BROWSE_EXCEL": "Upload Excel",
 		"IMPORT_BUTTON": "Import",
 		"IMPORT_EXCEL_NOTE": "Excel file only. Import data start from 2nd row of the file.",
-		"ITEMS_PER_PAGE": "Number of items displayed per page"
+		"ITEMS_PER_PAGE": "Number of items displayed per page",
+		"TOTAL_PRICE": "Total price",
+		"QUANTITY_CART": "Quantity"
 	},
 	"SHOP": {
 		"DETAILS": "Details",

@@ -5,6 +5,16 @@
 				.form-group {
 					margin-bottom: 0;
 					margin-top: 5px;
+					@media only screen and (min-width: 768px) {
+						.responsive-float {
+							float: right;
+						}
+					}
+					@media only screen and (max-width: 768px) {
+						.responsive-float {
+							float: left;
+						}
+					}
 				}
 			}
 		}

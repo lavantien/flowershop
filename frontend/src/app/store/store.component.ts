@@ -9,7 +9,11 @@ import {TranslateService} from "@ngx-translate/core";
 import {Subscription} from "rxjs";
 import {timeout} from "rxjs/operators";
 import {faCartPlus, faDna, faSearch, faSortAmountDownAlt, faSortAmountUp} from '@fortawesome/free-solid-svg-icons';
-// TODO: Pull left sort button
+import {SessionService} from "../_services/session.service";
+import {Product} from "../_models/product";
+import {Category} from "../_models/category";
+import {Type} from "../_models/type";
+
 @Component({
 	selector: 'app-store',
 	templateUrl: './store.component.html',
@@ -28,7 +32,6 @@ export class StoreComponent implements OnInit, OnDestroy {
 	types: Type[] = [];
 	bgPrimary = '';
 	tcPrimary = '';
-	locale = '';
 	pagination = {
 		totalItem: 0,
 		itemPerPage: 24,
@@ -50,6 +53,7 @@ export class StoreComponent implements OnInit, OnDestroy {
 	            private modalService: BsModalService,
 	            private dataTranslateService: DataTranslateService,
 	            private sharedService: SharedService,
+	            private sessionService: SessionService,
 	            private lightbox: Lightbox,
 	            private spinner: NgxSpinnerService,
 	            public translate: TranslateService) {
@@ -59,9 +63,6 @@ export class StoreComponent implements OnInit, OnDestroy {
 		this.getProducts();
 		this.getCategories();
 		this.getTypes();
-		this.subscriptions.add(this.sharedService.getGlobalLanguage().subscribe(lang => {
-			this.locale = this.dataTranslateService.getLocale(lang);
-		}));
 		this.subscriptions.add(this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
 			this.bgPrimary = bg[0];
 			this.tcPrimary = bg[1];
@@ -199,42 +200,18 @@ export class StoreComponent implements OnInit, OnDestroy {
 		} else {
 			this.products.sort((a, b) => b.price - a.price);
 		}
-		this.sortFlip = !this.sortFlip;
 		const prevName = this.searchForm.name;
 		this.searchForm.name = this.firstTimeSort && this.searchForm.name === '' ? ' ' : this.searchForm.name;
 		this.onSearch();
 		this.searchForm.name = prevName;
+		this.sortFlip = !this.sortFlip;
 	}
 
 	onAddToCart(index: number) {
-		// TODO: Implement shopping cart
-		alert('added!');
+		this.sessionService.updateNewlyAddedProduct(this.displayProducts[index]);
 	}
 
 	trackByFn(index, item) {
 		return index;
 	}
-}
-
-interface Product {
-	id: number;
-	name: string;
-	description: string;
-	price: number;
-	imgUrl: string;
-	quantity: number;
-	saleAmount: number;
-	categoryName: string;
-	typeName: string;
-}
-
-interface Category {
-	id: number;
-	name: string;
-}
-
-interface Type {
-	id: number;
-	name: string;
-	categoryName: string;
 }

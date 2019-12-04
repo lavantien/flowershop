@@ -59,13 +59,28 @@
 	<table class="table table-bordered table-striped table-hover table-sm table-product">
 		<thead class="{{bgPrimary}} {{tcPrimary}}">
 		<tr>
-			<th class="col-index" scope="col">#</th>
-			<th class="col-name" scope="col">{{'ADMIN.NAME' | translate}}</th>
+			<th (click)="onSort(4)" class="col-index" scope="col">#
+				<fa-icon *ngIf="sortFlip[4]" [icon]="faSortAmountUp"></fa-icon>
+				<fa-icon *ngIf="!sortFlip[4]" [icon]="faSortAmountDownAlt"></fa-icon>
+			</th>
+			<th (click)="onSort(0)" class="col-name col-sortable" scope="col">{{'ADMIN.NAME' | translate}}
+				<fa-icon *ngIf="sortFlip[0]" [icon]="faSortAmountUp"></fa-icon>
+				<fa-icon *ngIf="!sortFlip[0]" [icon]="faSortAmountDownAlt"></fa-icon>
+			</th>
 			<th class="col-description" scope="col">{{'ADMIN.DESCRIPTION' | translate}}</th>
-			<th class="col-price" scope="col">{{'ADMIN.PRICE' | translate}}</th>
+			<th (click)="onSort(1)" class="col-price col-sortable" scope="col">{{'ADMIN.PRICE' | translate}}
+				<fa-icon *ngIf="sortFlip[1]" [icon]="faSortAmountUp"></fa-icon>
+				<fa-icon *ngIf="!sortFlip[1]" [icon]="faSortAmountDownAlt"></fa-icon>
+			</th>
 			<th class="col-image" scope="col">{{'ADMIN.IMAGE' | translate}}</th>
-			<th class="col-quantity" scope="col">{{'ADMIN.QUANTITY' | translate}}</th>
-			<th class="col-sale-amount" scope="col">{{'ADMIN.SALE_AMOUNT' | translate}}</th>
+			<th (click)="onSort(2)" class="col-quantity col-sortable" scope="col">{{'ADMIN.QUANTITY' | translate}}
+				<fa-icon *ngIf="sortFlip[2]" [icon]="faSortAmountUp"></fa-icon>
+				<fa-icon *ngIf="!sortFlip[2]" [icon]="faSortAmountDownAlt"></fa-icon>
+			</th>
+			<th (click)="onSort(3)" class="col-sale-amount col-sortable" scope="col">{{'ADMIN.SALE_AMOUNT' | translate}}
+				<fa-icon *ngIf="sortFlip[3]" [icon]="faSortAmountUp"></fa-icon>
+				<fa-icon *ngIf="!sortFlip[3]" [icon]="faSortAmountDownAlt"></fa-icon>
+			</th>
 			<th class="col-category" scope="col">{{'ADMIN.CATEGORY' | translate}}</th>
 			<th class="col-type" scope="col">{{'ADMIN.TYPE' | translate}}</th>
 			<th class="col-actions" scope="col">{{'ADMIN.ACTION' | translate}}</th>
@@ -73,27 +88,29 @@
 		</thead>
 		<tbody>
 		<ng-container *ngIf="displayProducts.length !== 0">
-			<tr *ngFor="let product of displayProducts; trackBy: trackByFn; let i = index">
-				<th scope="row">{{product.id}}</th>
-				<td>{{product.name}}</td>
-				<td>{{product.description}}</td>
-				<td>{{product.price.toLocaleString(locale)}}</td>
-				<td>
-					<img (click)="onOpenImage(i)" [alt]="product.name" [src]="product.imgUrl" class="product-img">
-				</td>
-				<td>{{product.quantity}}</td>
-				<td>{{product.saleAmount}}</td>
-				<td>{{'DATA.' + product.categoryName | translate}}</td>
-				<td>{{'DATA.' + product.typeName | translate}}</td>
-				<td>
-					<button (click)="openEditModal(editTemplate, product.id)" class="btn btn-info btn-edit" tooltip="{{'ADMIN.EDIT_PRODUCT' | translate}}" placement="bottom">
-						<fa-icon [icon]="faPen"></fa-icon>
-					</button>
-					<button (click)="openDeleteModal(deleteTemplate, product.id)" class="btn btn-warning btn-edit" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}" placement="bottom">
-						<fa-icon [icon]="faTrash"></fa-icon>
-					</button>
-				</td>
-			</tr>
+			<ng-container *ngFor="let product of displayProducts; trackBy: trackByFn; let i = index">
+				<tr (click)="selectRow(i)" [ngClass]="{'row-selected': isSelected[i]}">
+					<th scope="row">{{product.id}}</th>
+					<td>{{product.name}}</td>
+					<td>{{product.description}}</td>
+					<td>{{product.price.toLocaleString(translate.currentLang)}}</td>
+					<td>
+						<img (click)="onOpenImage(i)" [alt]="product.name" [src]="product.imgUrl" class="product-img">
+					</td>
+					<td>{{product.quantity}}</td>
+					<td>{{product.saleAmount}}</td>
+					<td>{{'DATA.' + product.categoryName | translate}}</td>
+					<td>{{'DATA.' + product.typeName | translate}}</td>
+					<td>
+						<button (click)="openEditModal(editTemplate, product.id)" class="btn btn-info btn-edit" tooltip="{{'ADMIN.EDIT_PRODUCT' | translate}}" placement="bottom">
+							<fa-icon [icon]="faPen"></fa-icon>
+						</button>
+						<button (click)="openDeleteModal(deleteTemplate, product.id)" class="btn btn-warning btn-edit" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}" placement="bottom">
+							<fa-icon [icon]="faTrash"></fa-icon>
+						</button>
+					</td>
+				</tr>
+			</ng-container>
 		</ng-container>
 		<ng-container *ngIf="displayProducts.length === 0">
 			<tr>
@@ -256,6 +273,34 @@
 		<button (click)="modalRef.hide()" class="close pull-right">
 			<span aria-hidden="true" class="{{tcPrimary}}">&times;</span>
 		</button>
+	</div>
+	<div class="modal-body table-responsive wrapper-delete-table">
+		<table class="table table-bordered table-striped table-sm">
+			<thead class="{{bgPrimary}} {{tcPrimary}}">
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">{{'ADMIN.NAME' | translate}}</th>
+				<th scope="col">{{'ADMIN.PRICE' | translate}}</th>
+				<th scope="col">{{'ADMIN.QUANTITY' | translate}}</th>
+				<th scope="col">{{'ADMIN.SALE_AMOUNT' | translate}}</th>
+				<th scope="col">{{'ADMIN.CATEGORY' | translate}}</th>
+				<th scope="col">{{'ADMIN.TYPE' | translate}}</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr *ngFor="let indexFlag of isSelected; let i = index">
+				<ng-container *ngIf="indexFlag">
+					<th scope="row">{{displayProducts[i].id}}</th>
+					<td>{{displayProducts[i].name}}</td>
+					<td>{{displayProducts[i].price.toLocaleString(translate.currentLang)}}</td>
+					<td>{{displayProducts[i].quantity}}</td>
+					<td>{{displayProducts[i].saleAmount}}</td>
+					<td>{{'DATA.' + displayProducts[i].categoryName | translate}}</td>
+					<td>{{'DATA.' + displayProducts[i].typeName | translate}}</td>
+				</ng-container>
+			</tr>
+			</tbody>
+		</table>
 	</div>
 	<div class="modal-footer bg-light">
 		<button (click)="onDelete()" class="btn btn-danger pull-right" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}" placement="bottom">
