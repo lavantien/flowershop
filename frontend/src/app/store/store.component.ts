@@ -1,18 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {BsModalRef, BsModalService} from "ngx-bootstrap";
-import {DataTranslateService} from "../_services/data-translate.service";
-import {SharedService} from "../_services/shared.service";
-import {Lightbox} from "ngx-lightbox";
-import {NgxSpinnerService} from "ngx-spinner";
-import {TranslateService} from "@ngx-translate/core";
-import {Subscription} from "rxjs";
-import {timeout} from "rxjs/operators";
+import {HttpClient} from '@angular/common/http';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {DataTranslateService} from '../_services/data-translate.service';
+import {SharedService} from '../_services/shared.service';
+import {Lightbox} from 'ngx-lightbox';
+import {TranslateService} from '@ngx-translate/core';
+import {Subscription} from 'rxjs';
 import {faCartPlus, faDna, faSearch, faSortAmountDownAlt, faSortAmountUp} from '@fortawesome/free-solid-svg-icons';
-import {SessionService} from "../_services/session.service";
-import {Product} from "../_models/product";
-import {Category} from "../_models/category";
-import {Type} from "../_models/type";
+import {SessionService} from '../_services/session.service';
+import {Product} from '../_models/product';
+import {Category} from '../_models/category';
+import {Type} from '../_models/type';
 
 @Component({
 	selector: 'app-store',
@@ -25,7 +23,6 @@ export class StoreComponent implements OnInit, OnDestroy {
 	faDna = faDna;
 	faSortAmountUp = faSortAmountUp;
 	faSortAmountDownAlt = faSortAmountDownAlt;
-	timeOutHttpRequest = 2000;
 	modalRef: BsModalRef;
 	products: Product[] = [];
 	categories: Category[] = [];
@@ -55,7 +52,6 @@ export class StoreComponent implements OnInit, OnDestroy {
 	            private sharedService: SharedService,
 	            private sessionService: SessionService,
 	            private lightbox: Lightbox,
-	            private spinner: NgxSpinnerService,
 	            public translate: TranslateService) {
 	}
 
@@ -74,8 +70,7 @@ export class StoreComponent implements OnInit, OnDestroy {
 	}
 
 	getProducts() {
-		this.spinner.show();
-		this.http.get<Product[]>('/api/product').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+		this.http.get<Product[]>('/api/product').subscribe(data => {
 			if (!!data) {
 				this.products = data;
 				this.products.forEach(product => {
@@ -91,14 +86,11 @@ export class StoreComponent implements OnInit, OnDestroy {
 			console.log(`Error: ${error}`);
 			this.products = [];
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
 	getCategories() {
-		this.spinner.show();
-		this.http.get<Category[]>('/api/category').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+		this.http.get<Category[]>('/api/category').subscribe(data => {
 			if (!!data) {
 				this.categories = data;
 				this.searchForm.categoryName = this.categories[0].name;
@@ -108,14 +100,11 @@ export class StoreComponent implements OnInit, OnDestroy {
 			this.categories = [];
 			this.searchForm.categoryName = '';
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
 	getTypes() {
-		this.spinner.show();
-		this.http.get<Type[]>('/api/type').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+		this.http.get<Type[]>('/api/type').subscribe(data => {
 			if (!!data) {
 				this.types = data;
 				this.searchForm.typeName = this.types[0].name;
@@ -125,8 +114,6 @@ export class StoreComponent implements OnInit, OnDestroy {
 			this.types = [];
 			this.searchForm.typeName = '';
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
@@ -141,7 +128,7 @@ export class StoreComponent implements OnInit, OnDestroy {
 	}
 
 	onSearch() {
-		let searchResults: Product[] = [];
+		const searchResults: Product[] = [];
 		this.products.forEach(product => {
 			if (this.searchForm.name === '' && this.searchForm.typeName === product.typeName && this.searchForm.categoryName === product.categoryName) {
 				searchResults.push(product);
@@ -167,7 +154,7 @@ export class StoreComponent implements OnInit, OnDestroy {
 	}
 
 	onOpenImage(index: number) {
-		let album: {
+		const album: {
 			src: string;
 			caption: string;
 			thumb: string;
@@ -187,9 +174,9 @@ export class StoreComponent implements OnInit, OnDestroy {
 		description = this.displayProducts[index].description;
 		caption += '</b> - (' + category + ' - ' + type + ').<br><i>' + description + '</i>';
 		album.push({
-			src: src,
-			caption: caption,
-			thumb: thumb
+			src,
+			caption,
+			thumb
 		});
 		this.lightbox.open(album, 0);
 	}

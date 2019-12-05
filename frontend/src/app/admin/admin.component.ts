@@ -1,18 +1,16 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {faFileDownload, faFileUpload, faPen, faPlusSquare, faSearch, faTrash, faSortAmountUp, faSortAmountDownAlt} from '@fortawesome/free-solid-svg-icons';
-import {DataTranslateService} from "../_services/data-translate.service";
-import {TranslateService} from "@ngx-translate/core";
-import {SharedService} from "../_services/shared.service";
+import {faFileDownload, faFileUpload, faPen, faPlusSquare, faSearch, faSortAmountDownAlt, faSortAmountUp, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {DataTranslateService} from '../_services/data-translate.service';
+import {TranslateService} from '@ngx-translate/core';
+import {SharedService} from '../_services/shared.service';
 import * as XLSX from 'xlsx';
-import {Lightbox} from "ngx-lightbox";
-import {timeout} from "rxjs/operators";
-import {Subscription} from "rxjs";
-import {NgxSpinnerService} from "ngx-spinner";
-import {Product} from "../_models/product";
-import {Category} from "../_models/category";
-import {Type} from "../_models/type";
+import {Lightbox} from 'ngx-lightbox';
+import {Subscription} from 'rxjs';
+import {Product} from '../_models/product';
+import {Category} from '../_models/category';
+import {Type} from '../_models/type';
 
 @Component({
 	selector: 'app-admin',
@@ -71,19 +69,17 @@ export class AdminComponent implements OnInit, OnDestroy {
 	bgPrimary = '';
 	tcPrimary = '';
 	excelData: any[] = [];
-	timeOutHttpRequest = 2000;
-	private subscriptions = new Subscription();
 	numOfSortableCol = 5; // name, price, quantity, saleAmount, id
 	sortFlip: boolean[] = [];
 	firstTimeSort = true;
 	isSelected: boolean[] = [];
+	private subscriptions = new Subscription();
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
 	            private dataTranslateService: DataTranslateService,
 	            private sharedService: SharedService,
 	            private lightbox: Lightbox,
-	            private spinner: NgxSpinnerService,
 	            public translate: TranslateService) {
 		for (let i = 0; i < this.numOfSortableCol; ++i) {
 			this.sortFlip[i] = false;
@@ -105,8 +101,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	getProducts() {
-		this.spinner.show();
-		this.http.get<Product[]>('/api/product').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+		this.http.get<Product[]>('/api/product').subscribe(data => {
 			if (!!data) {
 				this.data = data;
 				this.productsOriginalDescription.length = 0;
@@ -123,8 +118,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 			console.log(`Error: ${error}`);
 			this.data = [];
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
@@ -147,7 +140,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	onSearch() {
-		let searchResults: Product[] = [];
+		const searchResults: Product[] = [];
 		this.data.forEach(product => {
 			if (this.searchForm.name === '' && this.searchForm.typeName === product.typeName && this.searchForm.categoryName === product.categoryName) {
 				searchResults.push(product);
@@ -177,8 +170,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	getCategories() {
-		this.spinner.show();
-		this.http.get<Category[]>('/api/category').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+		this.http.get<Category[]>('/api/category').subscribe(data => {
 			if (!!data) {
 				this.categories = data;
 				this.createForm.categoryName = this.categories[0].name;
@@ -190,14 +182,11 @@ export class AdminComponent implements OnInit, OnDestroy {
 			this.createForm.categoryName = '';
 			this.searchForm.categoryName = '';
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
 	getTypes() {
-		this.spinner.show();
-		this.http.get<Type[]>('/api/type').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+		this.http.get<Type[]>('/api/type').subscribe(data => {
 			if (!!data) {
 				this.types = data;
 				this.createForm.typeName = this.types[0].name;
@@ -209,8 +198,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 			this.createForm.typeName = '';
 			this.searchForm.typeName = '';
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
@@ -245,18 +232,15 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	onCreate() {
-		this.spinner.show();
 		this.http.post<Product>('/api/product/create', () => {
 			this.createForm.imgUrl = btoa(this.createForm.imgUrl);
 			this.createForm.price = this.dataTranslateService.getPrice(this.createForm.price, 'en');
 			return this.createForm;
-		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(() => {
+		}).subscribe(() => {
 			this.getProducts();
 		}, error => {
 			console.log(`Error: ${error}`);
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
@@ -269,18 +253,15 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	onEdit() {
-		this.spinner.show();
 		this.http.put<Product>(`/api/product/${this.currentId}`, () => {
 			this.editForm.imgUrl = btoa(this.editForm.imgUrl);
 			this.createForm.price = this.dataTranslateService.getPrice(this.createForm.price, 'en');
 			return this.editForm;
-		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(() => {
+		}).subscribe(() => {
 			this.getProducts();
 		}, error => {
 			console.log(`Error: ${error}`);
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
@@ -294,30 +275,25 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	onDelete() {
-		this.spinner.show();
 		if (this.isSelected.length === 1) {
-			this.http.delete<any>(`/api/product/${this.currentId}`).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+			this.http.delete<any>(`/api/product/${this.currentId}`).subscribe(data => {
 				this.getProducts();
 			}, error => {
 				console.log(`Error: ${error}`);
 			}, () => {
-				// Spinner hide
-				this.spinner.hide();
 			});
 		} else {
-			let delProdIds: number[] = [];
+			const delProdIds: number[] = [];
 			for (let i = 0; i < this.isSelected.length; ++i) {
 				if (this.isSelected[i]) {
 					delProdIds.push(this.displayProducts[i].id);
 				}
 			}
-			this.http.request<any>('delete', `/api/product`, {body: delProdIds}).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+			this.http.request<any>('delete', `/api/product`, {body: delProdIds}).subscribe(data => {
 				this.getProducts();
 			}, error => {
 				console.log(`Error: ${error}`);
 			}, () => {
-				// Spinner hide
-				this.spinner.hide();
 			});
 		}
 	}
@@ -328,7 +304,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
 	onFileChange(evt: any) {
 		/* wire up file reader */
-		const target: DataTransfer = <DataTransfer>(evt.target);
+		const target: DataTransfer = (evt.target) as DataTransfer;
 		if (target.files.length !== 1) {
 			throw new Error('Cannot use multiple files');
 		}
@@ -349,7 +325,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 			/* save data */
 			this.excelData = XLSX.utils.sheet_to_json(ws, {header: ['id', 'name', 'description', 'imgUrl', 'price', 'quantity', 'saleAmount', 'typeName', 'categoryName']}).slice(1);
 			if (!!this.excelData && typeof this.excelData === typeof this.data) {
-				this.onImportExcel(<Product[]>this.excelData);
+				this.onImportExcel(this.excelData as Product[]);
 			} else {
 				alert('Wrong Format!');
 			}
@@ -358,13 +334,12 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	onImportExcel(excelData: Product[]) {
-		this.spinner.show();
 		this.http.post<Product[]>('/api/product', () => {
 			this.data.forEach(data => {
 				data.price = this.dataTranslateService.getPrice(data.price, 'en');
 			});
 			return this.data;
-		}).pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+		}).subscribe(data => {
 			if (data === excelData) {
 				alert('Import Successful!');
 				this.getProducts();
@@ -372,8 +347,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 		}, error => {
 			console.log(`Error: ${error}`);
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
@@ -408,7 +381,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	onOpenImage(index: number) {
-		let album: {
+		const album: {
 			src: string;
 			caption: string;
 			thumb: string;
@@ -428,9 +401,9 @@ export class AdminComponent implements OnInit, OnDestroy {
 		description = this.productsOriginalDescription[this.productsOriginalDescription.findIndex(x => x.includes(this.displayProducts[index].description.substring(0, this.displayProducts[index].description.length - 3)))];
 		caption += '</b> - (' + category + ' - ' + type + ').<br><i>' + description + '</i>';
 		album.push({
-			src: src,
-			caption: caption,
-			thumb: thumb
+			src,
+			caption,
+			thumb
 		});
 		this.lightbox.open(album, 0);
 	}

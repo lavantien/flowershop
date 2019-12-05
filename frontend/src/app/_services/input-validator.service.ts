@@ -12,6 +12,11 @@ export class InputValidatorService {
 		return regexEmail.test(email.toLowerCase());
 	}
 
+	isPassword(pw: string): boolean {
+		const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+		return regexPassword.test(pw);
+	}
+
 	isInteger(num: number): boolean {
 		const regexInteger = /^\d+$/;
 		return regexInteger.test(num.toString());

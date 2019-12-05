@@ -1,15 +1,13 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
-import {TranslateService} from "@ngx-translate/core";
-import {faAngleDoubleDown, faAngleDoubleUp, faArrowLeft, faArrowRight, faChartLine, faCubes, faHandshake, faSearch, faShoppingCart, faSignInAlt, faSignOutAlt, faStore, faUser, faWarehouse, faMinus, faPlus} from '@fortawesome/free-solid-svg-icons';
-import {BsModalRef, BsModalService} from "ngx-bootstrap";
-import {HttpClient} from "@angular/common/http";
-import {InputValidatorService} from "./_services/input-validator.service";
-import {SharedService} from "./_services/shared.service";
-import {timeout} from "rxjs/operators";
-import {NgxSpinnerService} from "ngx-spinner";
-import {Subscription} from "rxjs";
-import {SessionService} from "./_services/session.service";
-import {Product} from "./_models/product";
+import {TranslateService} from '@ngx-translate/core';
+import {faAngleDoubleDown, faAngleDoubleUp, faArrowLeft, faArrowRight, faChartLine, faCubes, faHandshake, faMinus, faPlus, faSearch, faShoppingCart, faSignInAlt, faSignOutAlt, faStore, faUser, faWarehouse} from '@fortawesome/free-solid-svg-icons';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {HttpClient} from '@angular/common/http';
+import {InputValidatorService} from './_services/input-validator.service';
+import {SharedService} from './_services/shared.service';
+import {Subscription} from 'rxjs';
+import {SessionService} from './_services/session.service';
+import {Product} from './_models/product';
 
 @Component({
 	selector: 'app-root',
@@ -67,20 +65,18 @@ export class AppComponent implements OnInit, OnDestroy {
 	displayBgs = ['LIGHT', 'BLUE', 'GRAY', 'GREEN', 'RED', 'YELLOW', 'TEAL', 'BLACK', 'WHITE', 'TRANS'];
 	bgs = ['bg-light', 'bg-primary', 'bg-secondary', 'bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-dark', 'bg-white', 'bg-transparent'];
 	tcs = ['text-dark', 'text-white', 'text-white', 'text-white', 'text-white', 'text-dark', 'text-white', 'text-white', 'text-dark', 'text-dark'];
-	timeOutHttpRequest = 2000;
-	private subscriptions = new Subscription();
 	countOfIndividualProduct: number[] = [];
 	totalPriceOfIndividualProduct: number[] = [];
 	addedProducts: Product[] = [];
 	countAddedProduct = 0;
 	totalPriceOfAddedProduct = 0;
+	private subscriptions = new Subscription();
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
 	            private inputValidator: InputValidatorService,
 	            private sharedService: SharedService,
 	            private sessionService: SessionService,
-	            private spinner: NgxSpinnerService,
 	            public translate: TranslateService) {
 		translate.addLangs(['en', 'vi']);
 		translate.setDefaultLang('en');
@@ -119,8 +115,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	getCities() {
-		this.spinner.show();
-		this.http.get<City[]>('../assets/data/cities.json').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+		this.http.get<City[]>('../assets/data/cities.json').subscribe(data => {
 			if (!!data) {
 				this.cities = data;
 				this.signUpForm.city = this.cities[0].name;
@@ -130,14 +125,11 @@ export class AppComponent implements OnInit, OnDestroy {
 			this.cities = [];
 			this.signUpForm.city = '';
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
 	getDistricts() {
-		this.spinner.show();
-		this.http.get<District[]>('../assets/data/districts.json').pipe(timeout(this.timeOutHttpRequest)).subscribe(data => {
+		this.http.get<District[]>('../assets/data/districts.json').subscribe(data => {
 			if (!!data) {
 				this.districts = data;
 				this.signUpForm.district = this.districts[0].name;
@@ -147,8 +139,6 @@ export class AppComponent implements OnInit, OnDestroy {
 			this.districts = [];
 			this.signUpForm.district = '';
 		}, () => {
-			// Spinner hide
-			this.spinner.hide();
 		});
 	}
 
@@ -161,11 +151,16 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	onLogin() {
-		if (this.inputValidator.isEmail(this.loginForm.email)) {
-			alert('Login!');
-		} else {
-			alert('Login Failed!');
+		if (!this.inputValidator.isEmail(this.loginForm.email)) {
+			console.log('wrong email');
 		}
+		if (!this.inputValidator.isPassword(this.loginForm.password)) {
+			console.log('wrong password');
+		}
+	}
+
+	onLogout() {
+		alert('Logout!');
 	}
 
 	openSignUpModal(template: TemplateRef<any>) {

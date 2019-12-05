@@ -4,11 +4,12 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClient, HttpClientModule} from "@angular/common/http";
-import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
-import {TranslateHttpLoader} from "@ngx-translate/http-loader";
-import {SharedModule} from "./shared.module";
-import {CarouselModule, ModalModule, PaginationModule, TooltipModule} from "ngx-bootstrap";
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {SharedModule} from './shared.module';
+import {CarouselModule, ModalModule, PaginationModule, TooltipModule} from 'ngx-bootstrap';
+import {GlobalHttpInterceptor} from './global-http-interceptor';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -37,7 +38,13 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CarouselModule.forRoot(),
 		SharedModule
 	],
-	providers: [],
+	providers: [
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: GlobalHttpInterceptor,
+			multi: true
+		}
+	],
 	bootstrap: [AppComponent]
 })
 export class AppModule {

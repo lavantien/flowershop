@@ -13,36 +13,36 @@
 			<div class="collapse navbar-collapse row" id="navbarSupportedContent">
 				<div class="col-sm-6">
 					<ul class="navbar-nav mr-auto">
-						<li class="nav-item" tooltip="{{'MAIN.SHOP' | translate}}" placement="bottom">
+						<li class="nav-item" placement="bottom" tooltip="{{'MAIN.SHOP' | translate}}">
 							<a class="nav-link" routerLink="/shop" routerLinkActive="active">
 								<fa-icon [icon]="faStore"></fa-icon>
 							</a>
 						</li>
-						<li class="nav-item" tooltip="{{'MAIN.INFO' | translate}}" placement="bottom">
+						<li class="nav-item" placement="bottom" tooltip="{{'MAIN.INFO' | translate}}">
 							<a [tabindex]="isLoggedIn ? null : -1" class="nav-link {{isLoggedIn ? '' : 'disabled'}}"
 							   routerLink="/info"
 							   routerLinkActive="active">
 								<fa-icon [icon]="faUser"></fa-icon>
 							</a>
 						</li>
-						<li class="nav-item" tooltip="{{'MAIN.ADMIN' | translate}}" placement="bottom">
+						<li class="nav-item" placement="bottom" tooltip="{{'MAIN.ADMIN' | translate}}">
 							<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/admin"
 							   routerLinkActive="active">
 								<fa-icon [icon]="faWarehouse"></fa-icon>
 							</a>
 						</li>
-						<li class="nav-item" tooltip="{{'MAIN.SUMMARY' | translate}}" placement="bottom">
+						<li class="nav-item" placement="bottom" tooltip="{{'MAIN.SUMMARY' | translate}}">
 							<a [tabindex]="isAdmin ? null : -1" class="nav-link {{isAdmin ? '' : 'disabled'}}" routerLink="/summary"
 							   routerLinkActive="active">
 								<fa-icon [icon]="faChartLine"></fa-icon>
 							</a>
 						</li>
-						<li class="nav-item" tooltip="{{'MAIN.CONTACT' | translate}}" placement="bottom">
+						<li class="nav-item" placement="bottom" tooltip="{{'MAIN.CONTACT' | translate}}">
 							<a class="nav-link" routerLink="/contact" routerLinkActive="active">
 								<fa-icon [icon]="faHandshake"></fa-icon>
 							</a>
 						</li>
-						<li *ngIf="isTest" class="nav-item" tooltip="{{'MAIN.TEST' | translate}}" placement="bottom">
+						<li *ngIf="isTest" class="nav-item" placement="bottom" tooltip="{{'MAIN.TEST' | translate}}">
 							<a class="nav-link" routerLink="/test" routerLinkActive="active">
 								<fa-icon [icon]="faCubes"></fa-icon>
 							</a>
@@ -52,18 +52,21 @@
 				<div class="col-sm-6">
 					<div class="responsive-float">
 						<select #langSelect (change)="translate.use(langSelect.value)" class="btn btn-outline-dark btn-lang"
-						        tooltip="{{'MAIN.LANGUAGE' | translate}}" placement="bottom">
+						        placement="bottom" tooltip="{{'MAIN.LANGUAGE' | translate}}">
 							<option *ngFor="let lang of translate.getLangs()" [selected]="lang === translate.currentLang"
 							        [value]="lang">{{lang}}</option>
 						</select>
-						<button (click)="openCartModal(cartTemplate)" class="btn btn-dark btn-lang" tooltip="{{'MAIN.CART' | translate}}" placement="bottom">
+						<button (click)="openCartModal(cartTemplate)" class="btn btn-dark btn-lang"
+						        placement="bottom" tooltip="{{'MAIN.CART' | translate}}">
 							<fa-icon [icon]="faShoppingCart"></fa-icon>
 							<span> ({{countAddedProduct}})</span>
 						</button>
-						<button (click)="openLoginModal(loginTemplate)" *ngIf="!isLoggedIn" class="btn btn-dark" tooltip="{{'MAIN.LOGIN' | translate}}" placement="bottom">
+						<button (click)="openLoginModal(loginTemplate)" *ngIf="!isLoggedIn" class="btn btn-dark"
+						        placement="bottom" tooltip="{{'MAIN.LOGIN' | translate}}">
 							<fa-icon [icon]="faSignInAlt"></fa-icon>
 						</button>
-						<button *ngIf="isLoggedIn" class="btn btn-dark" tooltip="{{'MAIN.LOGOUT' | translate}}" placement="bottom">
+						<button (click)="onLogout()" *ngIf="isLoggedIn" class="btn btn-dark" placement="bottom"
+						        tooltip="{{'MAIN.LOGOUT' | translate}}">
 							<fa-icon [icon]="faSignOutAlt"></fa-icon>
 						</button>
 					</div>
@@ -94,10 +97,12 @@
 			<span><b>{{'MAIN.CREDIT' | translate}}</b></span>
 		</div>
 	</div>
-	<button (click)="scrollTop()" class="btn btn-dark fixed-bottom" tooltip="{{'MAIN.SCROLL_TOP' | translate}}" placement="top">
+	<button (click)="scrollTop()" class="btn btn-dark fixed-bottom" placement="top"
+	        tooltip="{{'MAIN.SCROLL_TOP' | translate}}">
 		<fa-icon [icon]="faAngleDoubleUp"></fa-icon>
 	</button>
-	<button (click)="scrollBottom()" class="btn btn-dark fixed-bottom-2" tooltip="{{'MAIN.SCROLL_BOT' | translate}}" placement="top">
+	<button (click)="scrollBottom()" class="btn btn-dark fixed-bottom-2" placement="top"
+	        tooltip="{{'MAIN.SCROLL_BOT' | translate}}">
 		<fa-icon [icon]="faAngleDoubleDown"></fa-icon>
 	</button>
 	<!--	<button (click)="scrollLeft()" class="btn btn-outline-dark fixed-bottom-3" tooltip="{{'MAIN.SCROLL_LEFT' | translate}}" placement="bottom">-->
@@ -270,7 +275,9 @@
 				<th scope="col">{{'ADMIN.PRICE' | translate}}</th>
 				<th scope="col">{{'ADMIN.QUANTITY_CART' | translate}}</th>
 				<th scope="col">{{'ADMIN.TOTAL_PRICE' | translate}}</th>
-				<th scope="col" class="col-hoverable"><fa-icon (click)="cancelAndDecreaseItem(-1)" [icon]="faMinus"></fa-icon></th>
+				<th class="col-hoverable" scope="col">
+					<fa-icon (click)="cancelAndDecreaseItem(-1)" [icon]="faMinus"></fa-icon>
+				</th>
 			</tr>
 			</thead>
 			<tbody>

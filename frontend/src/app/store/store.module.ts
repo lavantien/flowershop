@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 
 import {StoreRoutingModule} from './store-routing.module';
 import {StoreComponent} from './store.component';
-import {SharedModule} from "../shared.module";
+import {SharedModule} from '../shared.module';
 
 
 @NgModule({

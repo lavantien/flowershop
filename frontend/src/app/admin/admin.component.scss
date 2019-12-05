@@ -2,6 +2,7 @@
 	$lap-inner-width: 1313px;
 	$pc-inner-width: 1868px;
 	margin: 10px;
+
 	.wrapper-filter {
 		width: $lap-inner-width;
 		@media only screen and (min-width: 1920px) {
@@ -21,6 +22,7 @@
 			}
 		}
 	}
+
 	table {
 		th, td {
 			text-align: center;
@@ -31,53 +33,71 @@
 			margin: 5px;
 		}
 	}
+
 	.product-img {
 		max-height: 50px;
 	}
+
 	.table-product {
 		width: $lap-inner-width;
 		@media only screen and (min-width: 1920px) {
 			width: $pc-inner-width;
 		}
+
 		.row-selected {
-			background-color: rgba(0,0,255,.075);
+			background-color: #007bff;
+			color: white;
+
 			&:hover {
-				background-color: rgba(0,0,175,.085);
+				background-color: #007bff;
+				opacity: 0.85;
+				color: white
 			}
 		}
+
 		.col-sortable {
 			&:hover {
 				color: #212529;
-				background-color: rgba(0,0,0,.075);
+				background-color: rgba(0, 0, 0, .075);
 			}
 		}
+
 		.col-index {
 			width: 4%;
 		}
+
 		.col-name {
 			width: 12%;
 		}
+
 		.col-description {
 			width: 20%;
 		}
+
 		.col-price {
 			width: 8%;
 		}
+
 		.col-image {
 			width: 8%;
 		}
+
 		.col-quantity {
 			width: 9%;
 		}
+
 		.col-sale-amount {
 			width: 9%;
 		}
+
 		.col-type {
 			width: 11%;
 		}
+
 		.col-category {
 			width: 9%;
 		}
+
 		.col-actions {
 			width: 10%;
 		}
@@ -88,6 +108,7 @@
 	max-height: 600px;
 	overflow: auto;
 }
+
 @media only screen and (min-width: 1920px) {
 	.wrapper-delete-table {
 		max-height: 800px;

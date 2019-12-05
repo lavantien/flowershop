@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {timeout} from "rxjs/operators";
-import {NgxSpinnerService} from "ngx-spinner";
+import {HttpClient} from '@angular/common/http';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
 	selector: 'app-test',
@@ -22,16 +21,10 @@ export class TestComponent implements OnInit {
 
 	getTests() {
 		this.spinner.show();
-		this.http.get<Test[]>('/api/test').pipe(timeout(this.timeOutHttpRequest)).subscribe(rs => {
+		this.http.get<Test[]>('/api/test').subscribe(rs => {
 			if (!!rs) {
 				this.tests = rs;
 			}
-		}, error => {
-			console.log(`Error: ${error}`);
-			this.tests = [];
-		}, () => {
-			//Spinner hide
-			this.spinner.hide();
 		});
 	}
 }

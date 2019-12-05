@@ -22,16 +22,20 @@
 				</select>
 			</div>
 			<div class="form-group col-2">
-				<button (click)="onSearch()" class="btn btn-dark" tooltip="{{'ADMIN.SEARCH_ADVANCED' | translate}}" placement="bottom">
+				<button (click)="onSearch()" class="btn btn-dark" placement="bottom"
+				        tooltip="{{'ADMIN.SEARCH_ADVANCED' | translate}}">
 					<fa-icon [icon]="faSearch"></fa-icon>
 				</button>
-				<button (click)="openCreateModal(createTemplate)" class="btn btn-dark btn-create" tooltip="{{'ADMIN.CREATE_PRODUCT' | translate}}" placement="bottom">
+				<button (click)="openCreateModal(createTemplate)" class="btn btn-dark btn-create"
+				        placement="bottom" tooltip="{{'ADMIN.CREATE_PRODUCT' | translate}}">
 					<fa-icon [icon]="faPlusSquare"></fa-icon>
 				</button>
-				<button (click)="openImportExcelModal(importExcelTemplate)" class="btn btn-dark btn-create" tooltip="{{'ADMIN.IMPORT_EXCEL' | translate}}" placement="bottom">
+				<button (click)="openImportExcelModal(importExcelTemplate)" class="btn btn-dark btn-create"
+				        placement="bottom" tooltip="{{'ADMIN.IMPORT_EXCEL' | translate}}">
 					<fa-icon [icon]="faFileUpload"></fa-icon>
 				</button>
-				<button (click)="onExportExcel()" class="btn btn-dark btn-create" tooltip="{{'ADMIN.EXPORT_EXCEL' | translate}}" placement="bottom">
+				<button (click)="onExportExcel()" class="btn btn-dark btn-create" placement="bottom"
+				        tooltip="{{'ADMIN.EXPORT_EXCEL' | translate}}">
 					<fa-icon [icon]="faFileDownload"></fa-icon>
 				</button>
 			</div>
@@ -49,7 +53,8 @@
 			</div>
 			<div class="form-group col-1">
 				<select (change)="paging(searchResults)" [(ngModel)]="pagination.itemPerPage"
-				        class="btn btn-outline-dark float-right" tooltip="{{'ADMIN.ITEMS_PER_PAGE' | translate}}" placement="bottom">
+				        class="btn btn-outline-dark float-right" placement="bottom"
+				        tooltip="{{'ADMIN.ITEMS_PER_PAGE' | translate}}">
 					<option *ngFor="let val of [5, 10, 20, 50, 100, 200, 500, 1000]; let i = index" [selected]="i === 0"
 					        [value]="val">{{val}}</option>
 				</select>
@@ -102,10 +107,12 @@
 					<td>{{'DATA.' + product.categoryName | translate}}</td>
 					<td>{{'DATA.' + product.typeName | translate}}</td>
 					<td>
-						<button (click)="openEditModal(editTemplate, product.id)" class="btn btn-info btn-edit" tooltip="{{'ADMIN.EDIT_PRODUCT' | translate}}" placement="bottom">
+						<button (click)="openEditModal(editTemplate, product.id)" class="btn btn-info btn-edit"
+						        placement="bottom" tooltip="{{'ADMIN.EDIT_PRODUCT' | translate}}">
 							<fa-icon [icon]="faPen"></fa-icon>
 						</button>
-						<button (click)="openDeleteModal(deleteTemplate, product.id)" class="btn btn-warning btn-edit" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}" placement="bottom">
+						<button (click)="openDeleteModal(deleteTemplate, product.id)" class="btn btn-warning btn-edit"
+						        placement="bottom" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}">
 							<fa-icon [icon]="faTrash"></fa-icon>
 						</button>
 					</td>
@@ -303,7 +310,8 @@
 		</table>
 	</div>
 	<div class="modal-footer bg-light">
-		<button (click)="onDelete()" class="btn btn-danger pull-right" tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}" placement="bottom">
+		<button (click)="onDelete()" class="btn btn-danger pull-right" placement="bottom"
+		        tooltip="{{'ADMIN.DELETE_PRODUCT' | translate}}">
 			<fa-icon [icon]="faTrash"></fa-icon>
 		</button>
 	</div>

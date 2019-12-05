@@ -5,7 +5,7 @@ import {RouterModule, Routes} from '@angular/router';
 const routes: Routes = [
 	{
 		path: '',
-		redirectTo: 'shop',
+		redirectTo: 'test',
 		pathMatch: 'full'
 	},
 	{path: 'test', loadChildren: () => import('./test/test.module').then(m => m.TestModule)},
