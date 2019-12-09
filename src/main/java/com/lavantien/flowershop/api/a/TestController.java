@@ -1,5 +1,6 @@
 package com.lavantien.flowershop.api.a;
 
+import com.lavantien.flowershop.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,14 +12,18 @@ import java.util.Optional;
 @RequestMapping("/api/test")
 public class TestController {
 	private TestRepository testRepository;
+	private MailService mailService;
 
 	@Autowired
-	public TestController(TestRepository testRepository) {
+	public TestController(TestRepository testRepository,
+	                      MailService mailService) {
 		this.testRepository = testRepository;
+		this.mailService = mailService;
 	}
 
 	@GetMapping
 	public ResponseEntity<List<Test>> getAll() {
+		mailService.sendMessage("chuatebongdem666@gmail.com", "Order Confirmation", "Please confirm your order.");
 		return ResponseEntity.ok(testRepository.findAll());
 	}
 
