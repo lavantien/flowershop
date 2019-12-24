@@ -19,7 +19,7 @@
 		"SIGN_UP": "Đăng ký",
 		"LOGOUT": "Đăng xuất",
 		"FORGOT_PASSWORD": "Quên mật khẩu",
-		"VERIFY_EMAIL": "Xác nhận email",
+		"VERIFY_EMAIL": "Cập nhật mật khẩu",
 		"SHOP": "Cửa hàng",
 		"INFO": "Thông tin tài khoản",
 		"ADMIN": "Kho hàng",
@@ -44,7 +44,11 @@
 		"TRANS": "Trong suốt",
 		"CART": "Giỏ hàng",
 		"CONFIRM_ORDER": "Xác nhận đơn hàng",
-		"CREDIT": "Dự án của lavantien @12/2019 - mã nguồn ở: https://github.com/lavantien"
+		"CREDIT": "Dự án của lavantien @12/2019 - mã nguồn ở: https://github.com/lavantien",
+		"ANSWER": "Mật khẩu cấp 2",
+		"RE_ANSWER": "Nhập lại mật khẩu cấp 2",
+		"WRONG_INPUT": "Sai định dạng nhập!",
+		"WRONG_INPUT_OR_DUPLICATE": "Sai định dạng nhập hay nhập lại không khớp!"
 	},
 	"ADMIN": {
 		"NAME": "Tên",

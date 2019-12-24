@@ -23,7 +23,7 @@ public class TestController {
 
 	@GetMapping
 	public ResponseEntity<List<Test>> getAll() {
-		mailService.sendMessage("chuatebongdem666@gmail.com", "Order Confirmation", "Please confirm your order.");
+//		mailService.sendMessage("chuatebongdem666@gmail.com", "Order Confirmation", "Please confirm your order.");
 		return ResponseEntity.ok(testRepository.findAll());
 	}
 

@@ -14,9 +14,9 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
 		// In production you would get the token value from an auth service
 		const hardcodedToken = '1d38d128-0671-4121-8084-f6332a992a40';
 		req = req.clone({
-		  setHeaders: {
-		    Authorization: `Basic ${hardcodedToken}`
-		  }
+			setHeaders: {
+				Authorization: `Basic ${hardcodedToken}`
+			}
 		});
 		this.spinner.show();
 		return next.handle(req).pipe(
@@ -24,7 +24,7 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
 			retry(2),
 			catchError((error: HttpErrorResponse) => {
 				// TODO: Add error handling logic here
-				alert(`HTTP Error: ${req.url}`);
+				console.log(`HTTP Error ${error.status}: ${req.url}`);
 				return throwError(error);
 			}),
 			// PROFILING

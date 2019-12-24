@@ -19,7 +19,7 @@
 		"SIGN_UP": "Sign up",
 		"LOGOUT": "Sign out",
 		"FORGOT_PASSWORD": "Forgot password",
-		"VERIFY_EMAIL": "Verify email",
+		"VERIFY_EMAIL": "Update password",
 		"SHOP": "Shop",
 		"INFO": "Account information",
 		"ADMIN": "Warehouse",
@@ -44,7 +44,11 @@
 		"TRANS": "Transparent",
 		"CART": "Shopping cart",
 		"CONFIRM_ORDER": "Confirm order",
-		"CREDIT": "lavantien's project @12/2019 - source code at: https://github.com/lavantien"
+		"CREDIT": "lavantien's project @12/2019 - source code at: https://github.com/lavantien",
+		"ANSWER": "2nd password",
+		"RE_ANSWER": "Re-enter 2nd password",
+		"WRONG_INPUT": "Wrong input format!",
+		"WRONG_INPUT_OR_DUPLICATE": "Wrong input format or unmatched re-enter!"
 	},
 	"ADMIN": {
 		"NAME": "Name",

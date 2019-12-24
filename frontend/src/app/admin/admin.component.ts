@@ -1,7 +1,16 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {faFileDownload, faFileUpload, faPen, faPlusSquare, faSearch, faSortAmountDownAlt, faSortAmountUp, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {
+	faFileDownload,
+	faFileUpload,
+	faPen,
+	faPlusSquare,
+	faSearch,
+	faSortAmountDownAlt,
+	faSortAmountUp,
+	faTrash
+} from '@fortawesome/free-solid-svg-icons';
 import {DataTranslateService} from '../_services/data-translate.service';
 import {TranslateService} from '@ngx-translate/core';
 import {SharedService} from '../_services/shared.service';
@@ -11,6 +20,7 @@ import {Subscription} from 'rxjs';
 import {Product} from '../_models/product';
 import {Category} from '../_models/category';
 import {Type} from '../_models/type';
+import {Router} from "@angular/router";
 
 @Component({
 	selector: 'app-admin',
@@ -73,9 +83,11 @@ export class AdminComponent implements OnInit, OnDestroy {
 	sortFlip: boolean[] = [];
 	firstTimeSort = true;
 	isSelected: boolean[] = [];
+	isAdmin = false;
 	private subscriptions = new Subscription();
 
 	constructor(private http: HttpClient,
+	            private router: Router,
 	            private modalService: BsModalService,
 	            private dataTranslateService: DataTranslateService,
 	            private sharedService: SharedService,
@@ -94,6 +106,10 @@ export class AdminComponent implements OnInit, OnDestroy {
 			this.bgPrimary = bg[0];
 			this.tcPrimary = bg[1];
 		}));
+		this.isAdmin = localStorage.getItem('token') !== null && atob(localStorage.getItem('token')).substring(atob(localStorage.getItem('token')).indexOf('+') + 1) === 'ADMIN';
+		if (!this.isAdmin) {
+			this.router.navigate(['/shop']);
+		}
 	}
 
 	ngOnDestroy() {

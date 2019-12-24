@@ -1,13 +1,31 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {faAngleDoubleDown, faAngleDoubleUp, faArrowLeft, faArrowRight, faChartLine, faCubes, faHandshake, faMinus, faPlus, faSearch, faShoppingCart, faSignInAlt, faSignOutAlt, faStore, faUser, faWarehouse} from '@fortawesome/free-solid-svg-icons';
+import {
+	faAngleDoubleDown,
+	faAngleDoubleUp,
+	faArrowLeft,
+	faArrowRight,
+	faChartLine,
+	faCubes,
+	faHandshake,
+	faMinus,
+	faPlus,
+	faSearch,
+	faShoppingCart,
+	faSignInAlt,
+	faSignOutAlt,
+	faStore,
+	faUser,
+	faWarehouse
+} from '@fortawesome/free-solid-svg-icons';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {InputValidatorService} from './_services/input-validator.service';
 import {SharedService} from './_services/shared.service';
 import {Subscription} from 'rxjs';
 import {SessionService} from './_services/session.service';
 import {Product} from './_models/product';
+import {Router} from "@angular/router";
 
 @Component({
 	selector: 'app-root',
@@ -46,16 +64,18 @@ export class AppComponent implements OnInit, OnDestroy {
 		reEmail: '',
 		password: '',
 		rePassword: '',
+		answer: '',
+		reAnswer: '',
 		phone: '',
 		address: '',
 		district: 'Bình Thạnh',
-		city: 'Hồ Chí Minh',
-		type: 'USER'
+		city: 'Hồ Chí Minh'
 	};
 	forgotPasswordForm = {
 		email: '',
-		newPassword: '',
-		reNewPassword: ''
+		answer: '',
+		password: '',
+		rePassword: ''
 	};
 	cities: City[] = [];
 	districts: District[] = [];
@@ -70,9 +90,13 @@ export class AppComponent implements OnInit, OnDestroy {
 	addedProducts: Product[] = [];
 	countAddedProduct = 0;
 	totalPriceOfAddedProduct = 0;
+	wrongLogin = false;
+	wrongCreate = false;
+	wrongForgot = false;
 	private subscriptions = new Subscription();
 
 	constructor(private http: HttpClient,
+	            private router: Router,
 	            private modalService: BsModalService,
 	            private inputValidator: InputValidatorService,
 	            private sharedService: SharedService,
@@ -108,6 +132,11 @@ export class AppComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.getCities();
 		this.getDistricts();
+		this.isLoggedIn = localStorage.getItem('token') !== null && atob(localStorage.getItem('token')) !== '0+GUESS';
+		this.isAdmin = localStorage.getItem('token') !== null && atob(localStorage.getItem('token')).substring(atob(localStorage.getItem('token')).indexOf('+') + 1) === 'ADMIN';
+		if (this.isAdmin) {
+			this.router.navigate(['/admin']);
+		}
 	}
 
 	ngOnDestroy() {
@@ -151,16 +180,37 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	onLogin() {
-		if (!this.inputValidator.isEmail(this.loginForm.email)) {
-			console.log('wrong email');
+		if (this.inputValidator.isEmail(this.loginForm.email) || this.inputValidator.isPassword(this.loginForm.password)) {
+			this.wrongLogin = true;
+			this.onRefreshLoginForm();
+			return;
 		}
-		if (!this.inputValidator.isPassword(this.loginForm.password)) {
-			console.log('wrong password');
-		}
+		this.wrongLogin = false;
+		this.http.post<TokenDto>('/api/user/login', btoa(this.loginForm.email + 'j0z' + this.loginForm.password), {headers: new HttpHeaders({'Content-Type': 'text/plain'})}).subscribe((rs) => {
+			localStorage.setItem('token', rs.token);
+			this.isLoggedIn = true;
+			this.isAdmin = localStorage.getItem('token') !== null && atob(localStorage.getItem('token')).substring(atob(localStorage.getItem('token')).indexOf('+') + 1) === 'ADMIN';
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+			this.modalRef.hide();
+		});
 	}
 
 	onLogout() {
-		alert('Logout!');
+		let tokenDto: TokenDto = {
+			token: localStorage.getItem('token')
+		};
+		console.log(tokenDto);
+		this.http.post<TokenDto>('/api/user/logout', tokenDto).subscribe((rs) => {
+			localStorage.setItem('token', rs.token);
+			this.isLoggedIn = false;
+			this.isAdmin = false;
+			this.router.navigate(['/shop']);
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+		});
 	}
 
 	openSignUpModal(template: TemplateRef<any>) {
@@ -168,16 +218,52 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	onCreateUser() {
-		alert('Created!');
+		if (this.inputValidator.isEmail(this.signUpForm.email) || this.inputValidator.isPassword(this.signUpForm.password) || this.signUpForm.password !== this.signUpForm.rePassword || this.signUpForm.email !== this.signUpForm.reEmail || this.signUpForm.answer !== this.signUpForm.reAnswer) {
+			this.wrongCreate = true;
+			this.onRefreshSignUpForm();
+			return;
+		}
+		this.wrongCreate = false;
+		this.http.post<User>('/api/user/create', this.signUpForm).subscribe(() => {
+			alert('Create user successful!');
+			this.loginForm.email = this.signUpForm.email;
+			this.loginForm.password = this.signUpForm.password;
+			this.onLogin();
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+			this.modalRef2.hide();
+		});
 	}
 
 	openForgotPasswordModal(template: TemplateRef<any>) {
 		this.modalRef2 = this.modalService.show(template);
 	}
 
-	onVerifyEmail() {
-		// TODO: Implement verify email for forgot password.
-		alert('Verified!');
+	onVerify() {
+		if (this.inputValidator.isEmail(this.forgotPasswordForm.email) || this.inputValidator.isPassword(this.forgotPasswordForm.password) || this.forgotPasswordForm.password !== this.forgotPasswordForm.rePassword) {
+			this.wrongForgot = true;
+			this.onRefreshForgotPasswordForm();
+			return;
+		}
+		this.wrongForgot = false;
+		this.forgotPasswordForm.answer = btoa(this.forgotPasswordForm.answer);
+		this.forgotPasswordForm.password = btoa(this.forgotPasswordForm.password);
+		this.forgotPasswordForm.rePassword = btoa(this.forgotPasswordForm.rePassword);
+		this.http.post<TokenDto>('/api/user/resetPassword', this.forgotPasswordForm).subscribe((rs) => {
+			if (atob(rs.token) === '0+GUESS') {
+				alert('Reset password failed!');
+			} else {
+				alert('Reset password successful!');
+				this.loginForm.email = this.forgotPasswordForm.email;
+				this.loginForm.password = atob(this.forgotPasswordForm.password);
+				this.onLogin();
+			}
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+			this.modalRef2.hide();
+		});
 	}
 
 	openCartModal(template: TemplateRef<any>) {
@@ -229,19 +315,21 @@ export class AppComponent implements OnInit, OnDestroy {
 			reEmail: '',
 			password: '',
 			rePassword: '',
+			answer: '',
+			reAnswer: '',
 			phone: '',
 			address: '',
 			district: 'Bình Thạnh',
-			city: 'Hồ Chí Minh',
-			type: 'USER'
+			city: 'Hồ Chí Minh'
 		};
 	}
 
 	onRefreshForgotPasswordForm() {
 		this.forgotPasswordForm = {
 			email: '',
-			newPassword: '',
-			reNewPassword: ''
+			answer: '',
+			password: '',
+			rePassword: ''
 		};
 	}
 
@@ -269,4 +357,19 @@ interface City {
 interface District {
 	name: string;
 	cityName: string;
+}
+
+interface User {
+	name: string,
+	email: string,
+	password: string,
+	answer: string,
+	phone: string,
+	address: string,
+	district: string,
+	city: string
+}
+
+interface TokenDto {
+	token: string;
 }

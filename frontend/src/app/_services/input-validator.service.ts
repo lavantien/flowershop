@@ -13,8 +13,7 @@ export class InputValidatorService {
 	}
 
 	isPassword(pw: string): boolean {
-		const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-		return regexPassword.test(pw);
+		return pw.length > 6;
 	}
 
 	isInteger(num: number): boolean {

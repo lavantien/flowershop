@@ -4,8 +4,8 @@ FlowerShop
 
 #### Requirements:
 1. `JDK 11`
-2. `Node 13.12.0`
-3. `NPM 6.13.1`
+2. `Node 13.5.0`
+3. `NPM 6.13.4`
 4. `MySQL Server 8`
 5. `IntelliJ IDEA`
 6. `Postman`
