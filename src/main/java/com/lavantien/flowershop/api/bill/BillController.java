@@ -67,4 +67,13 @@ public class BillController {
 		billRepository.deleteById(id);
 		return ResponseEntity.ok().build();
 	}
+
+	@GetMapping("/user/{id}")
+	public ResponseEntity<List<Bill>> getByUserId(@PathVariable Long id) {
+		List<Bill> bills = billRepository.findByUserId(id);
+		if (bills.isEmpty()) {
+			return ResponseEntity.badRequest().build();
+		}
+		return ResponseEntity.ok(bills);
+	}
 }

@@ -11,6 +11,7 @@ import {SessionService} from '../_services/session.service';
 import {Product} from '../_models/product';
 import {Category} from '../_models/category';
 import {Type} from '../_models/type';
+import {Router} from "@angular/router";
 
 @Component({
 	selector: 'app-store',
@@ -45,9 +46,12 @@ export class StoreComponent implements OnInit, OnDestroy {
 	sortFlip = false;
 	firstTimeSort = true;
 	private subscriptions = new Subscription();
+	isAdmin = false;
+	isLoggedIn = false;
 
 	constructor(private http: HttpClient,
 	            private modalService: BsModalService,
+	            private router: Router,
 	            private dataTranslateService: DataTranslateService,
 	            private sharedService: SharedService,
 	            private sessionService: SessionService,
@@ -56,6 +60,14 @@ export class StoreComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
+		this.isLoggedIn = localStorage.getItem('token') !== null && atob(localStorage.getItem('token')) !== '0+GUESS';
+		this.isAdmin = localStorage.getItem('token') !== null && atob(localStorage.getItem('token')).substring(atob(localStorage.getItem('token')).indexOf('+') + 1) === 'ADMIN';
+		if (this.isAdmin) {
+			this.router.navigate(['/admin']);
+		}
+		if (!this.isLoggedIn) {
+			this.router.navigate(['/shop']);
+		}
 		this.getProducts();
 		this.getCategories();
 		this.getTypes();

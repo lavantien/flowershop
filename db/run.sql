@@ -59,4 +59,6 @@ insert into type (id, name, category_name)
 values (25, 'ORCHIDS & TROPICALS', 'PLANTS');
 
 insert into user values (1, 'Đường Đời', 'Hồ Chí Minh', 'Bình Thạnh', 'flowershop.noreply@gmail.com', true, 'lavantien', 'MTIzNHF3ZXI=', '0960960096', 'ADMIN');
-insert into user values (2, 'Đường Phan Đăng Lưu', 'Hồ Chí Minh', 'Phú Nhuận', 'chuatebongdem666@gmail.com', true, 'chuatebongdem', 'MTIzNDU2Nzg=', '0900900090', 'USER');
+insert into user values (2, 'Đường Đời', 'Hồ Chí Minh', 'Bình Thạnh', 'flowershop1.noreply@gmail.com', true, 'nguyentuanphuongnam', 'MTIzNHF3ZXI=', '0960960096', 'ADMIN');
+insert into user values (3, 'Đường Đời', 'Hồ Chí Minh', 'Bình Thạnh', 'flowershop2.noreply@gmail.com', true, 'leviethuynh', 'MTIzNHF3ZXI=', '0960960096', 'ADMIN');
+insert into user values (4, 'Đường Phan Đăng Lưu', 'Hồ Chí Minh', 'Phú Nhuận', 'chuatebongdem666@gmail.com', true, 'chuatebongdem', 'MTIzNDU2Nzg=', '0900900090', 'USER');

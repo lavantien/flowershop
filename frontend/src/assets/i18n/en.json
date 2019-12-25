@@ -44,7 +44,7 @@
 		"TRANS": "Transparent",
 		"CART": "Shopping cart",
 		"CONFIRM_ORDER": "Confirm order",
-		"CREDIT": "lavantien's project @12/2019 - source code at: https://github.com/lavantien",
+		"CREDIT": "lavantien's project @12/2019 - source code at: https://github.com/lavantien/flowershop",
 		"ANSWER": "2nd password",
 		"RE_ANSWER": "Re-enter 2nd password",
 		"WRONG_INPUT": "Wrong input format!",
@@ -75,7 +75,9 @@
 		"IMPORT_EXCEL_NOTE": "Excel file only. Import data start from 2nd row of the file.",
 		"ITEMS_PER_PAGE": "Number of items displayed per page",
 		"TOTAL_PRICE": "Total price",
-		"QUANTITY_CART": "Quantity"
+		"QUANTITY_CART": "Quantity",
+		"ORDER_DATE": "Order date",
+		"USER_ID": "Account ID"
 	},
 	"SHOP": {
 		"DETAILS": "Details",

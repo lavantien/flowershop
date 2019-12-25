@@ -44,7 +44,7 @@
 		"TRANS": "Trong suốt",
 		"CART": "Giỏ hàng",
 		"CONFIRM_ORDER": "Xác nhận đơn hàng",
-		"CREDIT": "Dự án của lavantien @12/2019 - mã nguồn ở: https://github.com/lavantien",
+		"CREDIT": "Dự án của lavantien @12/2019 - mã nguồn ở: https://github.com/lavantien/flowershop",
 		"ANSWER": "Mật khẩu cấp 2",
 		"RE_ANSWER": "Nhập lại mật khẩu cấp 2",
 		"WRONG_INPUT": "Sai định dạng nhập!",
@@ -75,7 +75,9 @@
 		"IMPORT_EXCEL_NOTE": "Chỉ nhận tệp Excel. Tính từ dòng thứ 2 trở đi của tệp.",
 		"ITEMS_PER_PAGE": "Số sản phẩm hiển thị trong một trang",
 		"TOTAL_PRICE": "Tổng giá",
-		"QUANTITY_CART": "Số lượng"
+		"QUANTITY_CART": "Số lượng",
+		"ORDER_DATE": "Ngày đặt",
+		"USER_ID": "ID tài khoản"
 	},
 	"SHOP": {
 		"DETAILS": "Chi tiết",

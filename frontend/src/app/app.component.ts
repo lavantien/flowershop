@@ -27,6 +27,8 @@ import {SessionService} from './_services/session.service';
 import {Product} from './_models/product';
 import {Router} from "@angular/router";
 import {absCeil} from "ngx-bootstrap/chronos/utils/abs-ceil";
+import {User} from "./_models/user";
+import {Bill} from "./_models/bill";
 
 @Component({
 	selector: 'app-root',
@@ -34,8 +36,8 @@ import {absCeil} from "ngx-bootstrap/chronos/utils/abs-ceil";
 	styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-	isAdmin = true;
-	isTest = true;
+	isAdmin = false;
+	isTest = false;
 	isLoggedIn = false;
 	faAngleDoubleUp = faAngleDoubleUp;
 	faAngleDoubleDown = faAngleDoubleDown;
@@ -150,12 +152,11 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.subscriptions.add(this.translate.stream('ALERT.ORDER_SUCCESSFUL').subscribe(rs => {
 			this.translate_ORDER_SUCCESSFUL = rs;
 		}));
-		localStorage.removeItem('token');
-		localStorage.setItem('token', btoa('0+GUESS'));
-		localStorage.removeItem('phone');
-		localStorage.setItem('phone', '0');
-		localStorage.removeItem('detailAddress');
-		localStorage.setItem('detailAddress', 'A, Bình Thạnh, Hồ Chí Minh');
+		if (!localStorage.getItem('token')) {
+			localStorage.setItem('token', btoa('0+GUESS'));
+			localStorage.setItem('phone', '0');
+			localStorage.setItem('detailAddress', 'A, Bình Thạnh, Hồ Chí Minh');
+		}
 	}
 
 	ngOnInit() {
@@ -428,29 +429,6 @@ interface City {
 interface District {
 	name: string;
 	cityName: string;
-}
-
-interface User {
-	name: string,
-	email: string,
-	password: string,
-	answer: string,
-	phone: string,
-	address: string,
-	district: string,
-	city: string
-}
-
-interface Bill {
-	placementDate: string;
-	productId: number;
-	productQuantity: number;
-	price: number;
-	settlementDate: string;
-	status: string;
-	userId: number;
-	phone: string;
-	detailAddress: string;
 }
 
 interface TokenDto {
