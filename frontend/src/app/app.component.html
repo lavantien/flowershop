@@ -332,7 +332,37 @@
 			</tbody>
 		</table>
 		<div class="personal-info">
-
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label" for="inputPhoneC"><b>{{'MAIN.PHONE' | translate}}</b></label>
+				<div class="col-sm-8">
+					<input [(ngModel)]="cartForm.phone" class="form-control" id="inputPhoneC" type="text">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label" for="inputAddressC"><b>{{'MAIN.ADDRESS' | translate}}</b></label>
+				<div class="col-sm-8">
+					<input [(ngModel)]="cartForm.address" class="form-control" id="inputAddressC" type="text">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label" for="inputCityC"><b>{{'MAIN.CITY' | translate}}</b></label>
+				<div class="col-sm-8">
+					<select [(ngModel)]="cartForm.city" class="form-control" id="inputCityC">
+						<option *ngFor="let city of cities" [value]="city.name">{{city.name}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label" for="inputDistrictC"><b>{{'MAIN.DISTRICT' | translate}}</b></label>
+				<div class="col-sm-8">
+					<select [(ngModel)]="cartForm.district" class="form-control" id="inputDistrictC">
+						<ng-container *ngFor="let district of districts">
+							<option *ngIf="district.cityName === cartForm.city"
+							        [value]="district.name">{{district.name}}</option>
+						</ng-container>
+					</select>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="modal-footer bg-light">

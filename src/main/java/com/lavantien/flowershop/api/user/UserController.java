@@ -88,12 +88,14 @@ public class UserController {
 		User foundUser = userRepository.findByEmail(email);
 		String foundEncodedPassword = foundUser != null ? userRepository.findByEmail(email).getPassword() : "ajB6";
 		String foundPassword = new String(Base64.getDecoder().decode(foundEncodedPassword));
-		TokenDto tokenDto = new TokenDto(Base64.getEncoder().encodeToString("0+GUESS".getBytes()));
+		TokenDto tokenDto = new TokenDto(Base64.getEncoder().encodeToString("0+GUESS".getBytes()), "0", "A, Bình Thạnh, Hồ Chí Minh");
 		if (foundPassword.compareTo(password) == 0) {
 			if (userService.loggedInIds.isEmpty() || userService.loggedInIds.indexOf(foundUser.getId()) == -1) {
 				userService.loggedInIds.add(foundUser.getId());
 			}
 			tokenDto.setToken(Base64.getEncoder().encodeToString((foundUser.getId() + "+" + foundUser.getType()).getBytes()));
+			tokenDto.setPhone(foundUser.getPhone());
+			tokenDto.setDetailAddress(foundUser.getAddress() + ", " + foundUser.getDistrict() + ", " + foundUser.getCity());
 		}
 		return ResponseEntity.ok(tokenDto);
 	}
@@ -107,29 +109,33 @@ public class UserController {
 		if (!userService.loggedInIds.isEmpty()) {
 			userService.loggedInIds.remove(id);
 		}
-		return ResponseEntity.ok(new TokenDto(Base64.getEncoder().encodeToString("0+GUESS".getBytes())));
+		return ResponseEntity.ok(new TokenDto(Base64.getEncoder().encodeToString("0+GUESS".getBytes()), "0", "A, Bình Thạnh, Hồ Chí MinhA, Bình Thạnh, Hồ Chí Minh"));
 	}
 
 	@PostMapping("/resetPassword")
 	public ResponseEntity<TokenDto> doResetPassword(@RequestBody ForgotDto forgotDto) {
 		User foundUser = userRepository.findByEmail(forgotDto.getEmail());
 		if (foundUser == null || foundUser.getAnswer().compareTo(forgotDto.getAnswer()) != 0) {
-			return ResponseEntity.ok(new TokenDto(Base64.getEncoder().encodeToString("0+GUESS".getBytes())));
+			return ResponseEntity.ok(new TokenDto(Base64.getEncoder().encodeToString("0+GUESS".getBytes()), "0", "A, Bình Thạnh, Hồ Chí Minh"));
 		}
 		foundUser.setPassword(forgotDto.getPassword());
 		userRepository.save(foundUser);
-		return ResponseEntity.ok(new TokenDto(Base64.getEncoder().encodeToString((foundUser.getId() + "+" + foundUser.getType()).getBytes())));
+		return ResponseEntity.ok(new TokenDto(Base64.getEncoder().encodeToString((foundUser.getId() + "+" + foundUser.getType()).getBytes()), foundUser.getPhone(), foundUser.getAddress() + ", " + foundUser.getDistrict() + ", " + foundUser.getCity()));
 	}
 }
 
 class TokenDto {
 	private String token;
+	private String phone;
+	private String detailAddress;
 
 	public TokenDto() {
 	}
 
-	public TokenDto(String token) {
+	public TokenDto(String token, String phone, String detailAddress) {
 		this.token = token;
+		this.phone = phone;
+		this.detailAddress = detailAddress;
 	}
 
 	public String getToken() {
@@ -138,6 +144,22 @@ class TokenDto {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getDetailAddress() {
+		return detailAddress;
+	}
+
+	public void setDetailAddress(String detailAddress) {
+		this.detailAddress = detailAddress;
 	}
 }
 

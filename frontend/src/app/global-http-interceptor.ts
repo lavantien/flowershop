@@ -11,8 +11,7 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		// Add Auth Token
-		// In production you would get the token value from an auth service
-		const hardcodedToken = '1d38d128-0671-4121-8084-f6332a992a40';
+		const hardcodedToken = 'VUlULiBTRTM0Ny5LMTEuUE1DTCAtIEdWLiBUcmFuIEFuaCBEdW5nLiBOaG9tIDEgLSBMYSBWYW4gVGllbiwgTmd1eWVuIFR1YW4gUGh1b25nIE5hbSwgTGUgVmlldCBIdXluaC4=';
 		req = req.clone({
 			setHeaders: {
 				Authorization: `Basic ${hardcodedToken}`
@@ -29,8 +28,8 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
 			}),
 			// PROFILING
 			finalize(() => {
-				const profilingMsg = `${req.method} "${req.urlWithParams}"`;
-				console.log(profilingMsg);
+				// const profilingMsg = `${req.method} "${req.urlWithParams}"`;
+				// console.log(profilingMsg);
 				this.spinner.hide();
 			}));
 	}

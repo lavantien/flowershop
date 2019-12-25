@@ -46,6 +46,7 @@ public class User {
 			", address='" + address + '\'' +
 			", district='" + district + '\'' +
 			", city='" + city + '\'' +
+			", answer='" + answer + '\'' +
 			", type='" + type + '\'' +
 			", enable=" + enable +
 			'}';

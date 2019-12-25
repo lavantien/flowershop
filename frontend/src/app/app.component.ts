@@ -26,6 +26,7 @@ import {Subscription} from 'rxjs';
 import {SessionService} from './_services/session.service';
 import {Product} from './_models/product';
 import {Router} from "@angular/router";
+import {absCeil} from "ngx-bootstrap/chronos/utils/abs-ceil";
 
 @Component({
 	selector: 'app-root',
@@ -77,6 +78,12 @@ export class AppComponent implements OnInit, OnDestroy {
 		password: '',
 		rePassword: ''
 	};
+	cartForm = {
+		phone: '',
+		address: '',
+		district: 'Bình Thạnh',
+		city: 'Hồ Chí Minh'
+	};
 	cities: City[] = [];
 	districts: District[] = [];
 	bgPrimary = '';
@@ -94,6 +101,10 @@ export class AppComponent implements OnInit, OnDestroy {
 	wrongCreate = false;
 	wrongForgot = false;
 	private subscriptions = new Subscription();
+	translate_CREATE_USER_SUCCESSFUL = '';
+	translate_RESET_PASSWORD_FAILED = '';
+	translate_RESET_PASSWORD_SUCCESSFUL = '';
+	translate_ORDER_SUCCESSFUL = '';
 
 	constructor(private http: HttpClient,
 	            private router: Router,
@@ -127,6 +138,24 @@ export class AppComponent implements OnInit, OnDestroy {
 				this.countAddedProduct = 0;
 			}
 		}));
+		this.subscriptions.add(this.translate.stream('ALERT.CREATE_USER_SUCCESSFUL').subscribe(rs => {
+			this.translate_CREATE_USER_SUCCESSFUL = rs;
+		}));
+		this.subscriptions.add(this.translate.stream('ALERT.RESET_PASSWORD_FAILED').subscribe(rs => {
+			this.translate_RESET_PASSWORD_FAILED = rs;
+		}));
+		this.subscriptions.add(this.translate.stream('ALERT.RESET_PASSWORD_SUCCESSFUL').subscribe(rs => {
+			this.translate_RESET_PASSWORD_SUCCESSFUL = rs;
+		}));
+		this.subscriptions.add(this.translate.stream('ALERT.ORDER_SUCCESSFUL').subscribe(rs => {
+			this.translate_ORDER_SUCCESSFUL = rs;
+		}));
+		localStorage.removeItem('token');
+		localStorage.setItem('token', btoa('0+GUESS'));
+		localStorage.removeItem('phone');
+		localStorage.setItem('phone', '0');
+		localStorage.removeItem('detailAddress');
+		localStorage.setItem('detailAddress', 'A, Bình Thạnh, Hồ Chí Minh');
 	}
 
 	ngOnInit() {
@@ -180,14 +209,19 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	onLogin() {
-		if (this.inputValidator.isEmail(this.loginForm.email) || this.inputValidator.isPassword(this.loginForm.password)) {
+		if (!this.inputValidator.isEmail(this.loginForm.email) || !this.inputValidator.isPassword(this.loginForm.password)) {
 			this.wrongLogin = true;
 			this.onRefreshLoginForm();
 			return;
 		}
 		this.wrongLogin = false;
 		this.http.post<TokenDto>('/api/user/login', btoa(this.loginForm.email + 'j0z' + this.loginForm.password), {headers: new HttpHeaders({'Content-Type': 'text/plain'})}).subscribe((rs) => {
+			localStorage.removeItem('token');
 			localStorage.setItem('token', rs.token);
+			localStorage.removeItem('phone');
+			localStorage.setItem('phone', rs.phone);
+			localStorage.removeItem('detailAddress');
+			localStorage.setItem('detailAddress', rs.detailAddress);
 			this.isLoggedIn = true;
 			this.isAdmin = localStorage.getItem('token') !== null && atob(localStorage.getItem('token')).substring(atob(localStorage.getItem('token')).indexOf('+') + 1) === 'ADMIN';
 		}, error => {
@@ -199,11 +233,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	onLogout() {
 		let tokenDto: TokenDto = {
-			token: localStorage.getItem('token')
+			token: localStorage.getItem('token'),
+			phone: localStorage.getItem('phone'),
+			detailAddress: localStorage.getItem('detailAddress')
 		};
-		console.log(tokenDto);
 		this.http.post<TokenDto>('/api/user/logout', tokenDto).subscribe((rs) => {
+			localStorage.removeItem('token');
 			localStorage.setItem('token', rs.token);
+			localStorage.removeItem('phone');
+			localStorage.setItem('phone', rs.phone);
+			localStorage.removeItem('detailAddress');
+			localStorage.setItem('detailAddress', rs.detailAddress);
 			this.isLoggedIn = false;
 			this.isAdmin = false;
 			this.router.navigate(['/shop']);
@@ -218,14 +258,14 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	onCreateUser() {
-		if (this.inputValidator.isEmail(this.signUpForm.email) || this.inputValidator.isPassword(this.signUpForm.password) || this.signUpForm.password !== this.signUpForm.rePassword || this.signUpForm.email !== this.signUpForm.reEmail || this.signUpForm.answer !== this.signUpForm.reAnswer) {
+		if (!this.inputValidator.isEmail(this.signUpForm.email) || !this.inputValidator.isPassword(this.signUpForm.password) || this.signUpForm.password !== this.signUpForm.rePassword || this.signUpForm.email !== this.signUpForm.reEmail || this.signUpForm.answer !== this.signUpForm.reAnswer) {
 			this.wrongCreate = true;
 			this.onRefreshSignUpForm();
 			return;
 		}
 		this.wrongCreate = false;
 		this.http.post<User>('/api/user/create', this.signUpForm).subscribe(() => {
-			alert('Create user successful!');
+			alert(this.translate_CREATE_USER_SUCCESSFUL);
 			this.loginForm.email = this.signUpForm.email;
 			this.loginForm.password = this.signUpForm.password;
 			this.onLogin();
@@ -241,7 +281,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	onVerify() {
-		if (this.inputValidator.isEmail(this.forgotPasswordForm.email) || this.inputValidator.isPassword(this.forgotPasswordForm.password) || this.forgotPasswordForm.password !== this.forgotPasswordForm.rePassword) {
+		if (!this.inputValidator.isEmail(this.forgotPasswordForm.email) || !this.inputValidator.isPassword(this.forgotPasswordForm.password) || this.forgotPasswordForm.password !== this.forgotPasswordForm.rePassword) {
 			this.wrongForgot = true;
 			this.onRefreshForgotPasswordForm();
 			return;
@@ -252,9 +292,9 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.forgotPasswordForm.rePassword = btoa(this.forgotPasswordForm.rePassword);
 		this.http.post<TokenDto>('/api/user/resetPassword', this.forgotPasswordForm).subscribe((rs) => {
 			if (atob(rs.token) === '0+GUESS') {
-				alert('Reset password failed!');
+				alert(this.translate_RESET_PASSWORD_FAILED);
 			} else {
-				alert('Reset password successful!');
+				alert(this.translate_RESET_PASSWORD_SUCCESSFUL);
 				this.loginForm.email = this.forgotPasswordForm.email;
 				this.loginForm.password = atob(this.forgotPasswordForm.password);
 				this.onLogin();
@@ -267,6 +307,13 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	openCartModal(template: TemplateRef<any>) {
+		this.cartForm.phone = localStorage.getItem('phone');
+		let detailAddress = localStorage.getItem('detailAddress');
+		let endAddress = detailAddress.indexOf(', ');
+		let endDistrict = detailAddress.lastIndexOf(', ');
+		this.cartForm.address = detailAddress.substring(0, endAddress);
+		this.cartForm.district = detailAddress.substring(endAddress + 2, endDistrict);
+		this.cartForm.city = detailAddress.substring(endDistrict + 2);
 		this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
 	}
 
@@ -298,7 +345,31 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	onSettle() {
-		alert('confirmed transaction!');
+		let bills: Bill[] = [];
+		let today = new Date();
+		let todayStr = today.getUTCFullYear() + '-' + today.getUTCMonth() + '-' + today.getUTCDate() + ', ' + today.getUTCHours() + ':' + today.getUTCMinutes() + ':' + today.getUTCSeconds();
+		let userId = parseInt(atob(localStorage.getItem('token')).substr(0, 1));
+		for (let i = 0; i < this.addedProducts.length; ++i) {
+			let bill: Bill = {
+				placementDate: todayStr,
+				productId: this.addedProducts[i].id,
+				productQuantity: this.countOfIndividualProduct[i],
+				price: Math.ceil(this.totalPriceOfIndividualProduct[i]),
+				userId: userId,
+				settlementDate: todayStr,
+				status: 'SUCCESS',
+				phone: this.cartForm.phone,
+				detailAddress: this.cartForm.address + ', ' + this.cartForm.district + ', ' + this.cartForm.city
+			};
+			bills.push(bill);
+		}
+		this.http.post<Bill[]>('/api/bill', bills).subscribe(() => {
+			alert(this.translate_ORDER_SUCCESSFUL);
+		}, error => {
+			console.log(`Error: ${error}`);
+		}, () => {
+			this.modalRef.hide();
+		});
 	}
 
 	onRefreshLoginForm() {
@@ -370,6 +441,20 @@ interface User {
 	city: string
 }
 
+interface Bill {
+	placementDate: string;
+	productId: number;
+	productQuantity: number;
+	price: number;
+	settlementDate: string;
+	status: string;
+	userId: number;
+	phone: string;
+	detailAddress: string;
+}
+
 interface TokenDto {
 	token: string;
+	phone: string;
+	detailAddress: string;
 }

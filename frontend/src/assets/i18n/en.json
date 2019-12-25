@@ -110,5 +110,14 @@
 		"BLOOMING PLANTS": "Blooming Plants",
 		"GREEN PLANTS": "Green Plants",
 		"ORCHIDS & TROPICALS": "Orchids & Tropicals"
+	},
+	"ALERT": {
+		"CREATE_USER_SUCCESSFUL": "Create account Successful!",
+		"RESET_PASSWORD_FAILED": "Reset password Failed!",
+		"RESET_PASSWORD_SUCCESSFUL": "Reset password Successful!",
+		"ORDER_SUCCESSFUL": "Order Successful! Your order will be delivered in 2 hours!",
+		"NOT_EXCEL": "Not Excel!",
+		"WRONG_FORMAT": "Wrong Format!",
+		"IMPORT_SUCCESSFUL": "Import Successful!"
 	}
 }

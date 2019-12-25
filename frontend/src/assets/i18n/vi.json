@@ -110,5 +110,14 @@
 		"BLOOMING PLANTS": "Cây nở rộ",
 		"GREEN PLANTS": "Cây xanh",
 		"ORCHIDS & TROPICALS": "Lan & Loài Nhiệt đới"
+	},
+	"ALERT": {
+		"CREATE_USER_SUCCESSFUL": "Tạo tài khoản Thành công!",
+		"RESET_PASSWORD_FAILED": "Đổi mật khẩu Thất bại!",
+		"RESET_PASSWORD_SUCCESSFUL": "Đổi mật khẩu Thành công!",
+		"ORDER_SUCCESSFUL": "Đặt hàng Thành công! Đơn hàng sẽ được giao trong 2 tiếng!",
+		"NOT_EXCEL": "Không phải Excel!",
+		"WRONG_FORMAT": "Sai Định dạng!",
+		"IMPORT_SUCCESSFUL": "Nạp vào Thành công!"
 	}
 }

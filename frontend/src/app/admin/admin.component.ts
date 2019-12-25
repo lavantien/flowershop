@@ -85,6 +85,9 @@ export class AdminComponent implements OnInit, OnDestroy {
 	isSelected: boolean[] = [];
 	isAdmin = false;
 	private subscriptions = new Subscription();
+	translateWrongExcel = '';
+	translateWrongFormat = '';
+	translateImportSuccessful = '';
 
 	constructor(private http: HttpClient,
 	            private router: Router,
@@ -96,16 +99,25 @@ export class AdminComponent implements OnInit, OnDestroy {
 		for (let i = 0; i < this.numOfSortableCol; ++i) {
 			this.sortFlip[i] = false;
 		}
+		this.subscriptions.add(this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
+			this.bgPrimary = bg[0];
+			this.tcPrimary = bg[1];
+		}));
+		this.subscriptions.add(this.translate.stream('ALERT.NOT_EXCEL').subscribe(rs => {
+			this.translateWrongExcel = rs;
+		}));
+		this.subscriptions.add(this.translate.stream('ALERT.WRONG_FORMAT').subscribe(rs => {
+			this.translateWrongFormat = rs;
+		}));
+		this.subscriptions.add(this.translate.stream('ALERT.IMPORT_SUCCESSFUL').subscribe(rs => {
+			this.translateImportSuccessful = rs;
+		}));
 	}
 
 	ngOnInit() {
 		this.getProducts();
 		this.getCategories();
 		this.getTypes();
-		this.subscriptions.add(this.sharedService.getGlobalBackgroundPrimary().subscribe(bg => {
-			this.bgPrimary = bg[0];
-			this.tcPrimary = bg[1];
-		}));
 		this.isAdmin = localStorage.getItem('token') !== null && atob(localStorage.getItem('token')).substring(atob(localStorage.getItem('token')).indexOf('+') + 1) === 'ADMIN';
 		if (!this.isAdmin) {
 			this.router.navigate(['/shop']);
@@ -325,7 +337,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 			throw new Error('Cannot use multiple files');
 		}
 		if (target.files.item(0).type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-			alert('Not Excel!');
+			alert(this.translateWrongExcel);
 			return;
 		}
 		const reader: FileReader = new FileReader();
@@ -343,7 +355,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 			if (!!this.excelData && typeof this.excelData === typeof this.data) {
 				this.onImportExcel(this.excelData as Product[]);
 			} else {
-				alert('Wrong Format!');
+				alert(this.translateWrongFormat);
 			}
 		};
 		reader.readAsBinaryString(target.files[0]);
@@ -357,7 +369,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 			return this.data;
 		}).subscribe(data => {
 			if (data === excelData) {
-				alert('Import Successful!');
+				alert(this.translateImportSuccessful);
 				this.getProducts();
 			}
 		}, error => {

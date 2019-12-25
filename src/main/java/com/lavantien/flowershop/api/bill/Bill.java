@@ -14,14 +14,16 @@ public class Bill {
 	private Long productId;
 	private Long productQuantity;
 	private Double price;
-	private Long userId;
 	private String settlementDate;
 	private String status;
+	private Long userId;
+	private String phone;
+	private String detailAddress;
 
 	public Bill() {
 	}
 
-	public Bill(String placementDate, Long productId, Long productQuantity, Double price, Long userId, String settlementDate, String status) {
+	public Bill(String placementDate, Long productId, Long productQuantity, Double price, Long userId, String settlementDate, String status, String phone, String detailAddress) {
 		this.placementDate = placementDate;
 		this.productId = productId;
 		this.productQuantity = productQuantity;
@@ -29,6 +31,8 @@ public class Bill {
 		this.userId = userId;
 		this.settlementDate = settlementDate;
 		this.status = status;
+		this.phone = phone;
+		this.detailAddress = detailAddress;
 	}
 
 	@Override
@@ -39,9 +43,11 @@ public class Bill {
 			", productId=" + productId +
 			", productQuantity=" + productQuantity +
 			", price=" + price +
-			", userId=" + userId +
 			", settlementDate='" + settlementDate + '\'' +
 			", status='" + status + '\'' +
+			", userId=" + userId +
+			", phone='" + phone + '\'' +
+			", detailAddress='" + detailAddress + '\'' +
 			'}';
 	}
 
@@ -107,5 +113,21 @@ public class Bill {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getDetailAddress() {
+		return detailAddress;
+	}
+
+	public void setDetailAddress(String detailAddress) {
+		this.detailAddress = detailAddress;
 	}
 }
